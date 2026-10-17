@@ -513,11 +513,11 @@ var ES={};Object.keys(EN).forEach(function(k){if(!Object.prototype.hasOwnPropert
 function trText(text){var t=text.trim();if(!t)return text;var dict=lang==='en'?EN:ES;var v=dict[t];if(v!==undefined)return text.replace(t,v);return text;}
 function translateTree(root){
  var walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null),nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);
- nodes.forEach(function(n){n.nodeValue=trText(n.nodeValue);});
+ nodes.forEach(function(n){var translated=trText(n.nodeValue);if(translated!==n.nodeValue)n.nodeValue=translated;});
  if(root.nodeType===1){['placeholder','aria-label','title'].forEach(function(a){if(root.hasAttribute(a)){var v=root.getAttribute(a),dict=lang==='en'?EN:ES;if(dict[v]!==undefined)root.setAttribute(a,dict[v]);}});}
  if(root.querySelectorAll)root.querySelectorAll('[placeholder],[aria-label],[title]').forEach(function(el){['placeholder','aria-label','title'].forEach(function(a){if(el.hasAttribute(a)){var v=el.getAttribute(a),dict=lang==='en'?EN:ES;if(dict[v]!==undefined)el.setAttribute(a,dict[v]);}});});
 }
-function applyLanguage(){document.documentElement.lang=lang;translateTree(document.body);var b=$('#lang-toggle');if(b){b.textContent=lang==='es'?'EN':'ES';b.setAttribute('aria-label',lang==='es'?'Switch to English':'Cambiar a español');}try{localStorage.setItem(LANG_KEY,lang);}catch(e){}}
+function applyLanguage(){document.documentElement.lang=lang;translateTree(document.body);var b=$('#lang-toggle');if(b){var label=lang==='es'?'EN':'ES';var aria=lang==='es'?'Switch to English':'Cambiar a español';if(b.textContent!==label)b.textContent=label;if(b.getAttribute('aria-label')!==aria)b.setAttribute('aria-label',aria);}try{localStorage.setItem(LANG_KEY,lang);}catch(e){}}
 function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 function pad(n){return String(n).padStart(2,'0');}
 function ds(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
