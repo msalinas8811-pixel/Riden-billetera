@@ -1199,8 +1199,9 @@ $('#save-target').addEventListener('change',function(e){
 
 /* Traduce también los textos que la aplicación genera al actualizar listas y formularios. */
 $('#lang-toggle').addEventListener('click',function(){lang=lang==='es'?'en':'es';applyLanguage();renderAll();applyLanguage();});
-var langObserver=new MutationObserver(function(records){if(records.some(function(r){return r.type==='childList'||r.type==='characterData';}))applyLanguage();});
-langObserver.observe(document.body,{subtree:true,childList:true,characterData:true});
+/* Observe only inserted/removed elements. Do not observe characterData: translating text changes characterData and can retrigger translation repeatedly. */
+var langObserver=new MutationObserver(function(records){if(records.some(function(r){return r.type==='childList';}))applyLanguage();});
+langObserver.observe(document.body,{subtree:true,childList:true,characterData:false});
 
 /* ---------- arranque ---------- */
 state=loadLocal();
