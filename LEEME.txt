@@ -1,12 +1,12 @@
-RINDE — MI BOLSILLO | VERSIÓN BILINGÜE
+RINDE — MI BOLSILLO | VERSIÓN EN ESPAÑOL
 ======================================
 
-Esta carpeta contiene la aplicación web instalable (PWA) Rinde. Incluye gastos, gastos fijos, gastos por proyectos con presupuesto y saldo disponible, tareas, metas, ahorro y copia de seguridad. Se agregó un botón EN/ES para cambiar el idioma de la interfaz; la preferencia de idioma se guarda por separado de los movimientos financieros.
+Esta carpeta contiene la aplicación web instalable (PWA) Rinde. Incluye gastos, gastos fijos, gastos por proyectos con presupuesto y saldo disponible, tareas, metas, ahorro y copia de seguridad. Se retiró el traductor automático para priorizar la estabilidad. La interfaz queda fija en español.
 
 PROBAR EN WEB
 1. Descomprime el ZIP.
 2. Publica el contenido de la carpeta en un alojamiento HTTPS (por ejemplo Netlify Drop: https://app.netlify.com/drop).
-3. Abre la URL publicada y prueba todas las pestañas, crea un proyecto, agrega gastos de materiales/mano de obra, verifica el presupuesto restante, prueba el cambio de idioma y exportar/importar copia.
+3. Abre la URL publicada y prueba todas las pestañas, crea un proyecto, agrega gastos de materiales/mano de obra, verifica el presupuesto restante, y exportar/importar copia.
 
 INSTALAR COMO PWA
 - Android: abre la URL en Chrome y usa el menú ⋮ > Instalar app.
@@ -22,10 +22,10 @@ ACTUALIZACIONES
 Si cambias archivos después de publicar, incrementa VERSION en sw.js para que el service worker descargue la nueva versión.
 
 ARCHIVOS
-- index.html: aplicación y traducción ES/EN.
+- index.html: aplicación en español.
 - manifest.webmanifest: identidad de la PWA.
 - sw.js: caché y modo sin conexión.
 - icons/: iconos de instalación.
 
 NOTA DE VALIDACIÓN
-Esta entrega prepara la base y añade el selector de idioma. Antes de publicar, prueba en navegador móvil la navegación, los formularios, las copias de seguridad y los textos en ambos idiomas. La compilación y firma final del APK/AAB depende de la URL pública y de las credenciales de publicación.
+Esta entrega retira el traductor automático. Antes de publicar, prueba en navegador móvil la navegación, los formularios y las copias de seguridad. La compilación y firma final del APK/AAB depende de la URL pública y de las credenciales de publicación.
