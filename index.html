@@ -67,6 +67,7 @@ button{cursor:pointer}
 .sync[data-s="saved"]::before{background:#8DF0BE}
 .sync[data-s="saving"]::before{background:#FFD98A}
 .sync:empty{display:none}
+.lang-toggle{font:600 13px system-ui;min-height:38px}
 
 .months{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px}
 .months strong{font-family:var(--f-display);font-weight:700;font-size:16px}
@@ -170,7 +171,7 @@ details summary{cursor:pointer;color:var(--muted);font-size:13px;font-weight:600
 
 .tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);
   padding:6px max(10px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(10px,env(safe-area-inset-left,0px))}
-.tabs-in{max-width:640px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:2px}
+.tabs-in{max-width:640px;margin:0 auto;display:grid;grid-template-columns:repeat(6,1fr);gap:2px}
 .tab{border:0;background:transparent;display:grid;justify-items:center;gap:3px;padding:6px 2px;color:var(--muted);font-size:11px;font-weight:600;border-radius:10px}
 .tab svg{width:40px;height:26px;padding:3px 11px;border-radius:99px;box-sizing:border-box}
 .tab[aria-selected="true"]{color:var(--accent)}
@@ -214,6 +215,7 @@ details summary{cursor:pointer;color:var(--muted);font-size:13px;font-weight:600
         <h1>Rinde</h1>
         <p class="sub">Gastos, tareas, metas y ahorro</p>
       </div>
+      <button type="button" id="lang-toggle" class="lang-toggle" aria-label="Change language" style="border:1px solid rgba(255,255,255,.55);background:rgba(255,255,255,.14);color:#fff;border-radius:10px;padding:8px 10px;font-weight:700;white-space:nowrap">EN</button>
       <span class="sync" id="sync" data-s="" aria-live="polite"></span>
     </div>
   </header>
@@ -335,6 +337,25 @@ details summary{cursor:pointer;color:var(--muted);font-size:13px;font-weight:600
       </div>
     </section>
 
+    <!-- PROYECTOS -->
+    <section class="panel" id="tab-proyectos" hidden>
+      <div class="card">
+        <div class="card-head"><h2>Gastos por proyectos</h2></div>
+        <p class="hint">Crea un presupuesto para cada proyecto y registra los gastos de cada avance.</p>
+        <form id="project-form" novalidate>
+          <label class="field"><span>Nombre del proyecto</span><input id="project-name" type="text" maxlength="80" placeholder="Remodelación de casa"></label>
+          <div class="fields">
+            <label class="field"><span>Presupuesto total ($)</span><input id="project-budget" type="number" inputmode="decimal" min="0.01" step="0.01" placeholder="5000.00"></label>
+            <label class="field"><span>Fecha de inicio (opcional)</span><input id="project-date" type="date"></label>
+          </div>
+          <label class="field"><span>Descripción (opcional)</span><input id="project-note" type="text" maxlength="160" placeholder="Materiales, mano de obra y acabados"></label>
+          <p class="err" id="project-err" hidden></p>
+          <button class="btn" type="submit">Crear proyecto</button>
+        </form>
+      </div>
+      <div id="project-list"></div>
+    </section>
+
     <!-- TAREAS -->
     <section class="panel" id="tab-tareas" hidden>
       <div class="seg" role="group" aria-label="Vista de tareas">
@@ -446,6 +467,8 @@ details summary{cursor:pointer;color:var(--muted);font-size:13px;font-weight:600
       <svg viewBox="0 0 40 26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18v-5M20 18V8M26 18v-3"/></svg>Resumen</button>
     <button class="tab" role="tab" type="button" data-act="tab" data-tab="gastos" aria-selected="false">
       <svg viewBox="0 0 40 26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="12" y="7" width="16" height="12" rx="2.5"/><path d="M12 11h16M24 15h1.5"/></svg>Gastos</button>
+    <button class="tab" role="tab" type="button" data-act="tab" data-tab="proyectos" aria-selected="false">
+      <svg viewBox="0 0 40 26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="10" y="6" width="20" height="15" rx="2"/><path d="M10 11h20M16 6V4h8v2M17 15h6"/></svg>Proyectos</button>
     <button class="tab" role="tab" type="button" data-act="tab" data-tab="tareas" aria-selected="false">
       <svg viewBox="0 0 40 26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 13.5l3.2 3.2 7.8-8"/></svg>Tareas</button>
     <button class="tab" role="tab" type="button" data-act="tab" data-tab="metas" aria-selected="false">
@@ -462,12 +485,39 @@ details summary{cursor:pointer;color:var(--muted);font-size:13px;font-weight:600
 /* ---------- utilidades ---------- */
 var KEY='mibolsillo.v1';
 var CATS={g:['Comida','Transporte','Hogar','Servicios','Salud','Ocio','Educación','Otros'],i:['Salario','Extra','Otros ingresos']};
-var TABS=['resumen','gastos','tareas','metas','ahorro'];
+var TABS=['resumen','gastos','proyectos','tareas','metas','ahorro'];
 var PRIO={a:'Alta',m:'Media',b:'Baja'};
 var TRASH='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg>';
 var CHECK='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg>';
 
 function $(s){return document.querySelector(s);}
+/* Idioma de interfaz. El idioma se guarda por separado de los datos financieros. */
+var LANG_KEY='rinde.language.v1';
+var lang=(function(){try{return localStorage.getItem(LANG_KEY)==='en'?'en':'es';}catch(e){return 'es';}})();
+var EN={
+'Gastos por proyectos':'Project expenses','Crea un presupuesto para cada proyecto y registra los gastos de cada avance.':'Set a budget for each project and record expenses as work progresses.','Nombre del proyecto':'Project name','Presupuesto total ($)':'Total budget ($)','Fecha de inicio (opcional)':'Start date (optional)','Descripción (opcional)':'Description (optional)','Materiales, mano de obra y acabados':'Materials, labor, and finishing','Crear proyecto':'Create project','Presupuesto':'Budget','Gastado':'Spent','Disponible':'Remaining','Avance del presupuesto':'Budget used','Agregar gasto al proyecto':'Add project expense','Concepto':'Item / description','Ej. compra de ladrillo':'E.g. brick purchase','Tipo de gasto':'Expense type','Materiales':'Materials','Mano de obra':'Labor','Transporte':'Transport','Permisos':'Permits','Otros':'Other','Agregar gasto':'Add expense','Sin gastos registrados':'No expenses recorded','Aún no tienes proyectos':'You do not have any projects yet','Crea un proyecto arriba para comenzar a controlar su presupuesto.':'Create a project above to start tracking its budget.','El proyecto supera el presupuesto por':'The project is over budget by','Fecha':'Date','Monto':'Amount','Eliminar gasto':'Delete expense','Escribe el nombre del proyecto.':'Enter a project name.','Ingresa un presupuesto mayor a 0.':'Enter a budget greater than 0.','Escribe el concepto del gasto.':'Enter an expense description.','El gasto se agregó al proyecto':'Expense added to project','Proyecto creado':'Project created','Gasto eliminado':'Expense deleted','Proyectos':'Projects','Gastos, tareas, metas y ahorro':'Expenses, projects, tasks, goals and savings',
+'Gastos, tareas, metas y ahorro':'Expenses, tasks, goals and savings','Mes anterior':'Previous month','Mes siguiente':'Next month',
+'Estás viendo datos de ejemplo.':'You are viewing sample data.','Empezar con mis datos':'Start with my data','Te quedan este mes':'Left this month','Presupuesto mensual':'Monthly budget',
+'Ingresos':'Income','Gastos':'Expenses','Balance':'Balance','En qué se va el dinero':'Where your money goes','Lo que sigue':'Coming up','Ver tareas':'View tasks','Metas':'Goals','Ver metas':'View goals','Ahorro':'Savings','Ver ahorro':'View savings','Respaldo':'Backup',
+'Guarda una copia de tus datos en un archivo, o recupérala si cambias de teléfono.':'Save a copy of your data to a file, or restore it if you change phones.','Exportar copia':'Export backup','Importar copia':'Import backup','Instalar en este teléfono':'Install on this phone',
+'Movimientos':'Transactions','Gastos fijos':'Recurring expenses','Gasto':'Expense','Ingreso':'Income','Monto':'Amount','Categoría':'Category','Fecha':'Date','Nota (opcional)':'Note (optional)','Agregar gasto':'Add expense','Agregar ingreso':'Add income',
+'Nombre del gasto fijo':'Recurring expense name','Monto al mes':'Monthly amount','Día del mes':'Day of month','Se anota solo como gasto cada mes, en el día que elijas. Si el mes tiene menos días, se anota el último.':'It is recorded automatically as an expense each month on your chosen day. If a month has fewer days, it uses the last day.','Anotarlo también este mes si el día ya pasó':'Record it this month too if the day has passed','Agregar gasto fijo':'Add recurring expense',
+'Tareas':'Tasks','Frecuentes':'Recurring','Tarea':'Task','Fecha límite (opcional)':'Due date (optional)','Prioridad':'Priority','Alta':'High','Media':'Medium','Baja':'Low','Agregar tarea':'Add task','Recordatorio mensual':'Monthly reminder','Cada mes aparece en tus pendientes, con su fecha límite en el día que elijas. Si el mes tiene menos días, usa el último.':'It appears in your to-do list each month, due on your chosen day. If a month has fewer days, it uses the last day.','Crearla también este mes si el día ya pasó':'Create it this month too if the day has passed','Agregar tarea frecuente':'Add recurring task','Tus tareas frecuentes':'Your recurring tasks',
+'Nombre de la meta':'Goal name','Monto a lograr':'Target amount','Ya tengo':'Already saved','Crear meta':'Create goal','Total ahorrado':'Total saved','Este mes':'This month','Meta de ahorro por mes':'Monthly savings goal','Últimos 6 meses':'Last 6 months','neto':'net','Depósito':'Deposit','Retiro':'Withdrawal','Guardar depósito':'Save deposit','Guardar retiro':'Save withdrawal','Deshacer':'Undo','Resumen':'Overview',
+'Comida':'Food','Transporte':'Transport','Hogar':'Home','Servicios':'Utilities','Salud':'Health','Ocio':'Leisure','Educación':'Education','Otros':'Other','Salario':'Salary','Extra':'Extra income','Otros ingresos':'Other income',
+'Escribe un monto mayor a 0.':'Enter an amount greater than 0.','No puedes retirar más de lo ahorrado (':'You cannot withdraw more than your savings (','Escribe el nombre del gasto.':'Enter the expense name.','El día debe estar entre 1 y 31.':'The day must be between 1 and 31.','Escribe qué quieres recordar cada mes.':'Enter what you want to remember each month.',
+'Guardado':'Saved','Guardando…':'Saving…','Solo en este dispositivo':'On this device only','Hoy':'Today','Ayer':'Yesterday','Eliminado':'Deleted','Listo. Ahora todo es tuyo.':'Done. It is all yours now.','Gasto fijo agregado':'Recurring expense added','Tarea frecuente agregada':'Recurring task added','Copia guardada':'Backup saved','Copia descargada':'Backup downloaded','Copia importada':'Backup imported','No se pudo guardar la copia.':'Could not save the backup.','Ese archivo no es una copia de Rinde.':'That file is not a Rinde backup.','No se pudo leer el archivo.':'Could not read the file.',
+'Aún no hay movimientos en ':'There are no transactions in ','Usa el formulario de arriba para agregar el primero.':'Use the form above to add the first one.','Aún no tienes metas':'You do not have any goals yet','Crea la primera con el formulario de arriba.':'Create your first one using the form above.','Sin gastos fijos':'No recurring expenses','Agrega el alquiler, el internet o cualquier pago que se repita cada mes.':'Add rent, internet, or any payment that repeats each month.','Sin tareas frecuentes':'No recurring tasks','Agrega lo que debas recordar cada mes: pagos, trámites, revisiones.':'Add anything you need to remember each month: payments, paperwork, checkups.','Fijos al mes':'Recurring per month','Por anotar este mes':'To record this month','activas':'active','Ahorrado en ':'Saved in ','Te pasaste del presupuesto':'You are over budget','Gastos del mes':'Expenses this month','Escribe tu presupuesto mensual abajo para ver cuánto te queda.':'Enter your monthly budget below to see how much you have left.','Gastaste ':'You spent ',' de ':' of '
+};
+var ES={};Object.keys(EN).forEach(function(k){if(!Object.prototype.hasOwnProperty.call(ES,EN[k]))ES[EN[k]]=k;});
+function trText(text){var t=text.trim();if(!t)return text;var dict=lang==='en'?EN:ES;var v=dict[t];if(v!==undefined)return text.replace(t,v);return text;}
+function translateTree(root){
+ var walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null),nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);
+ nodes.forEach(function(n){n.nodeValue=trText(n.nodeValue);});
+ if(root.nodeType===1){['placeholder','aria-label','title'].forEach(function(a){if(root.hasAttribute(a)){var v=root.getAttribute(a),dict=lang==='en'?EN:ES;if(dict[v]!==undefined)root.setAttribute(a,dict[v]);}});}
+ if(root.querySelectorAll)root.querySelectorAll('[placeholder],[aria-label],[title]').forEach(function(el){['placeholder','aria-label','title'].forEach(function(a){if(el.hasAttribute(a)){var v=el.getAttribute(a),dict=lang==='en'?EN:ES;if(dict[v]!==undefined)el.setAttribute(a,dict[v]);}});});
+}
+function applyLanguage(){document.documentElement.lang=lang;translateTree(document.body);var b=$('#lang-toggle');if(b){b.textContent=lang==='es'?'EN':'ES';b.setAttribute('aria-label',lang==='es'?'Switch to English':'Cambiar a español');}try{localStorage.setItem(LANG_KEY,lang);}catch(e){}}
 function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 function pad(n){return String(n).padStart(2,'0');}
 function ds(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
@@ -478,14 +528,14 @@ function money(n){var a=Math.abs(n);return (n<0?'−':'')+'$'+a.toLocaleString('
 function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
 function addMonths(vm,n){var p=vm.split('-').map(Number);var d=new Date(p[0],p[1]-1+n,1);return d.getFullYear()+'-'+pad(d.getMonth()+1);}
 function dayCount(vm){var p=vm.split('-').map(Number);return new Date(p[0],p[1],0).getDate();}
-function monthName(vm){return parse(vm+'-01').toLocaleDateString('es',{month:'long',year:'numeric'});}
-function shortDate(s){return parse(s).toLocaleDateString('es',{day:'numeric',month:'short'});}
+function monthName(vm){return parse(vm+'-01').toLocaleDateString(lang==='en'?'en-US':'es',{month:'long',year:'numeric'});}
+function shortDate(s){return parse(s).toLocaleDateString(lang==='en'?'en-US':'es',{day:'numeric',month:'short'});}
 function dayLabel(s){
   var t=today();
   if(s===t) return 'Hoy';
   var y=new Date();y.setDate(y.getDate()-1);
   if(s===ds(y)) return 'Ayer';
-  return cap(parse(s).toLocaleDateString('es',{weekday:'long',day:'numeric',month:'long'}));
+  return cap(parse(s).toLocaleDateString(lang==='en'?'en-US':'es',{weekday:'long',day:'numeric',month:'long'}));
 }
 function daysFromToday(s){return Math.round((parse(s)-parse(today()))/864e5);}
 
@@ -496,7 +546,7 @@ function norm(s){
   s=(s&&typeof s==='object')?s:{};
   function arr(x){return Array.isArray(x)?x:[];}
   return {v:1,demo:!!s.demo,budget:+s.budget||0,saveTarget:+s.saveTarget||0,
-    tx:arr(s.tx),tasks:arr(s.tasks),goals:arr(s.goals),sav:arr(s.sav),fixed:arr(s.fixed),rec:arr(s.rec)};
+    tx:arr(s.tx),tasks:arr(s.tasks),goals:arr(s.goals),sav:arr(s.sav),fixed:arr(s.fixed),rec:arr(s.rec),projects:arr(s.projects)};
 }
 function seed(){
   var now=new Date(), first=new Date(now.getFullYear(),now.getMonth(),1);
@@ -704,7 +754,7 @@ function dueInfo(s){
 /* ---------- render ---------- */
 function renderHeader(){
   $('#monthLabel').textContent=cap(monthName(viewMonth));
-  $('#months').hidden=(tab==='tareas'||tab==='metas');
+  $('#months').hidden=(tab==='tareas'||tab==='metas'||tab==='proyectos');
   $('#demoBanner').hidden=!state.demo;
   var b=$('#budget'); if(document.activeElement!==b) b.value=state.budget?state.budget:'';
   var s=$('#save-target'); if(document.activeElement!==s) s.value=state.saveTarget?state.saveTarget:'';
@@ -880,7 +930,23 @@ function renderRec(){
   }).join('')+'</ul>';
 }
 
-function renderAll(){renderHeader();renderResumen();renderGastos();renderFijos();renderTareas();renderRec();renderMetas();renderAhorro();}
+function projectSpent(p){return (p.expenses||[]).reduce(function(sum,x){return sum+(+x.amount||0);},0);}
+function renderProjects(){
+  var root=$('#project-list'); if(!root)return;
+  if(!state.projects.length){root.innerHTML='<div class="card"><div class="empty"><strong>Aún no tienes proyectos</strong>Crea un proyecto arriba para comenzar a controlar su presupuesto.</div></div>';return;}
+  root.innerHTML=state.projects.map(function(p){
+    p.expenses=Array.isArray(p.expenses)?p.expenses:[];
+    var spent=projectSpent(p), budget=+p.budget||0, remaining=budget-spent, pct=budget>0?Math.min(100,spent/budget*100):0;
+    var expenses=p.expenses.slice().sort(function(a,b){return (b.date||'').localeCompare(a.date||'');});
+    var list=expenses.length?'<ul class="list">'+expenses.map(function(x){return '<li class="row"><div class="grow"><div class="t">'+esc(x.name)+'</div><div class="meta">'+esc(x.type||'Otros')+' · '+esc(shortDate(x.date||today()))+'</div></div><strong class="num">'+money(x.amount)+'</strong><button class="icon-btn" type="button" data-act="del-project-expense" data-project="'+p.id+'" data-id="'+x.id+'" aria-label="Eliminar gasto">'+TRASH+'</button></li>';}).join('')+'</ul>':'<div class="empty"><strong>Sin gastos registrados</strong></div>';
+    return '<div class="card project-card"><div class="card-head"><div class="grow"><h2>'+esc(p.name)+'</h2><div class="meta">'+(p.date?esc(shortDate(p.date))+' · ':'')+esc(p.note||'')+'</div></div><button class="icon-btn" type="button" data-act="del" data-key="projects" data-id="'+p.id+'" aria-label="Eliminar proyecto">'+TRASH+'</button></div>'+ 
+      '<div class="stats"><div class="stat"><span class="eyebrow">Presupuesto</span><span class="num">'+money(budget)+'</span></div><div class="stat"><span class="eyebrow">Gastado</span><span class="num">'+money(spent)+'</span></div><div class="stat"><span class="eyebrow">Disponible</span><span class="num" style="color:'+(remaining<0?'var(--bad)':'var(--good)')+'">'+money(remaining)+'</span></div></div>'+ 
+      '<div class="meta">Avance del presupuesto · '+pct.toFixed(1)+'%</div><div class="bar"><i style="width:'+pct+'%;background:'+(remaining<0?'var(--bad)':'var(--accent)')+'"></i></div>'+(remaining<0?'<p class="err">El proyecto supera el presupuesto por '+money(-remaining)+'.</p>':'')+
+      '<form class="project-expense-form" data-project-form="'+p.id+'" novalidate><div class="fields"><label class="field"><span>Concepto</span><input name="name" type="text" maxlength="100" required placeholder="Ej. compra de ladrillo"></label><label class="field"><span>Monto ($)</span><input name="amount" type="number" min="0.01" step="0.01" inputmode="decimal" required placeholder="0.00"></label></div><div class="fields"><label class="field"><span>Tipo de gasto</span><select name="type"><option>Materiales</option><option>Mano de obra</option><option>Transporte</option><option>Permisos</option><option>Otros</option></select></label><label class="field"><span>Fecha</span><input name="date" type="date" value="'+today()+'"></label></div><p class="err" data-form-error hidden></p><button class="btn" type="submit">Agregar gasto al proyecto</button></form><div class="card-head" style="margin-top:16px"><h3>Movimientos ('+expenses.length+')</h3></div>'+list+'</div>';
+  }).join('');
+}
+
+function renderAll(){renderHeader();renderResumen();renderGastos();renderFijos();renderProjects();renderTareas();renderRec();renderMetas();renderAhorro();}
 
 /* ---------- pestañas, formularios y acciones ---------- */
 function setTab(t){
@@ -926,6 +992,10 @@ document.addEventListener('click',function(e){
   else if(act==='go'){setTab(el.getAttribute('data-tab'));}
   else if(act==='month'){viewMonth=addMonths(viewMonth,+el.getAttribute('data-d'));renderAll();}
   else if(act==='del') removeFrom(el.getAttribute('data-key'),el.getAttribute('data-id'));
+  else if(act==='del-project-expense'){
+    var project=state.projects.find(function(x){return x.id===el.getAttribute('data-project');});
+    if(project&&Array.isArray(project.expenses)){var ei=project.expenses.findIndex(function(x){return x.id===el.getAttribute('data-id');});if(ei>=0){var removed=project.expenses.splice(ei,1)[0];commit();toast('Gasto eliminado',function(){project.expenses.splice(Math.min(ei,project.expenses.length),0,removed);commit();});}}
+  }
   else if(act==='toggle-task'){
     var t=state.tasks.find(function(x){return x.id===el.getAttribute('data-id');});
     if(t){t.done=!t.done;commit();}
@@ -984,6 +1054,28 @@ $('#task-form').addEventListener('submit',function(e){
   $('#task-text').value='';$('#task-due').value='';
   commit();
 });
+$('#project-form').addEventListener('submit',function(e){
+  e.preventDefault();clearErr('#project-err');
+  var name=$('#project-name').value.trim(), budget=num('#project-budget');
+  if(!name){showErr('#project-err','Escribe el nombre del proyecto.');return;}
+  if(!(budget>0)){showErr('#project-err','Ingresa un presupuesto mayor a 0.');return;}
+  state.projects.push({id:uid(),name:name,budget:Math.round(budget*100)/100,date:$('#project-date').value||today(),note:$('#project-note').value.trim(),expenses:[]});
+  ['#project-name','#project-budget','#project-date','#project-note'].forEach(function(id){$(id).value='';});
+  commit();toast('Proyecto creado');
+});
+$('#project-list').addEventListener('submit',function(e){
+  var f=e.target.closest('form[data-project-form]');if(!f)return;e.preventDefault();
+  var id=f.getAttribute('data-project-form'),p=state.projects.find(function(x){return x.id===id;});
+  var name=f.elements.name.value.trim(),amount=parseFloat(f.elements.amount.value),err=f.querySelector('[data-form-error]');
+  err.hidden=true;
+  if(!p)return;
+  if(!name){err.textContent='Escribe el concepto del gasto.';err.hidden=false;return;}
+  if(!(amount>0)){err.textContent='Escribe un monto mayor a 0.';err.hidden=false;return;}
+  if(!Array.isArray(p.expenses))p.expenses=[];
+  p.expenses.push({id:uid(),name:name,amount:Math.round(amount*100)/100,type:f.elements.type.value,date:f.elements.date.value||today()});
+  commit();toast('El gasto se agregó al proyecto');
+});
+
 $('#goal-form').addEventListener('submit',function(e){
   e.preventDefault();clearErr('#goal-err');
   var name=$('#goal-name').value.trim(), target=num('#goal-target'), saved=num('#goal-saved');
@@ -1105,6 +1197,11 @@ $('#save-target').addEventListener('change',function(e){
   commit();
 });
 
+/* Traduce también los textos que la aplicación genera al actualizar listas y formularios. */
+$('#lang-toggle').addEventListener('click',function(){lang=lang==='es'?'en':'es';applyLanguage();renderAll();applyLanguage();});
+var langObserver=new MutationObserver(function(records){if(records.some(function(r){return r.type==='childList'||r.type==='characterData';}))applyLanguage();});
+langObserver.observe(document.body,{subtree:true,childList:true,characterData:true});
+
 /* ---------- arranque ---------- */
 state=loadLocal();
 if(!state){state=seed();}
@@ -1113,6 +1210,7 @@ saveLocal();
 $('#tx-date').value=today();$('#sav-date').value=today();
 fillCats();
 renderAll();
+applyLanguage();
 var h=(location.hash||'').slice(1);
 if(TABS.indexOf(h)>=0) setTab(h);
 if(state.demo===false&&loadLocal()) setSync('local');

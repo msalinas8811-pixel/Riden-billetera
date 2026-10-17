@@ -1,37 +1,31 @@
-RINDE: INSTALAR EN ANDROID
-==========================
+RINDE — MI BOLSILLO | VERSIÓN BILINGÜE
+======================================
 
-Esta carpeta es una app web instalable (PWA). Para que Android la instale hay que
-publicarla una vez en una dirección https. Es gratis y toma unos 5 minutos.
+Esta carpeta contiene la aplicación web instalable (PWA) Rinde. Incluye gastos, gastos fijos, gastos por proyectos con presupuesto y saldo disponible, tareas, metas, ahorro y copia de seguridad. Se agregó un botón EN/ES para cambiar el idioma de la interfaz; la preferencia de idioma se guarda por separado de los movimientos financieros.
 
-OPCIÓN A: Netlify Drop (la más fácil)
-  1. En tu computadora, descomprime este archivo zip.
-  2. Entra a https://app.netlify.com/drop e inicia sesión (puedes usar tu correo).
-  3. Arrastra la carpeta "rinde-android" completa a la página.
-  4. Netlify te da una dirección como https://algo.netlify.app. Esa es tu app.
+PROBAR EN WEB
+1. Descomprime el ZIP.
+2. Publica el contenido de la carpeta en un alojamiento HTTPS (por ejemplo Netlify Drop: https://app.netlify.com/drop).
+3. Abre la URL publicada y prueba todas las pestañas, crea un proyecto, agrega gastos de materiales/mano de obra, verifica el presupuesto restante, prueba el cambio de idioma y exportar/importar copia.
 
-OPCIÓN B: GitHub Pages
-  1. Crea un repositorio nuevo y sube todo el contenido de esta carpeta.
-  2. En Settings > Pages, elige la rama principal y guarda.
-  3. Espera un minuto y abre la dirección que te muestra GitHub.
+INSTALAR COMO PWA
+- Android: abre la URL en Chrome y usa el menú ⋮ > Instalar app.
+- iPhone: abre la URL en Safari, toca Compartir > Añadir a pantalla de inicio.
 
-INSTALAR EN EL TELÉFONO
-  1. Abre la dirección de tu app en Chrome para Android.
-  2. Toca el botón "Instalar en este teléfono" que aparece al final de la pestaña
-     Resumen, o el menú de Chrome (tres puntos) > "Instalar app".
-  3. Rinde queda en tu pantalla de inicio y abre a pantalla completa.
+PREPARAR APK / GOOGLE PLAY
+La carpeta es una PWA y todavía no contiene un APK firmado. Para generar un paquete Android: publica primero la app en HTTPS, entra a https://www.pwabuilder.com/, indica la URL pública, revisa los requisitos que marque la herramienta y genera el paquete Android. Para publicar en Google Play normalmente se necesita un Android App Bundle (.aab) firmado y una ficha de Play Console; el APK de prueba no sustituye ese proceso. Verifica también que el dominio final y el identificador de aplicación sean los definitivos antes de publicar.
 
-IMPORTANTE
-  - Tus datos se guardan en ese teléfono (almacenamiento del navegador). Si borras
-    los datos de Chrome o cambias de teléfono se pierden. Por eso la pestaña Resumen
-    tiene "Exportar copia" e "Importar copia". Haz una copia de vez en cuando.
-  - Cuando publiques una versión nueva de index.html, cambia VERSION en sw.js
-    (por ejemplo a rinde-v2) para que los teléfonos descarguen la actualización.
-  - Si quieres un archivo .apk para la Play Store, puedes generarlo desde la
-    dirección ya publicada con PWABuilder (pwabuilder.com).
+DATOS Y COPIAS
+Los datos se guardan localmente en el navegador de cada dispositivo; esta versión no sincroniza automáticamente entre teléfonos. Usa Exportar copia e Importar copia para trasladar tus datos. No borres los datos del navegador sin antes exportar una copia.
 
-CONTENIDO
-  index.html            la app completa
-  manifest.webmanifest  nombre, colores e íconos
-  sw.js                 permite usarla sin conexión
-  icons/                íconos de la app
+ACTUALIZACIONES
+Si cambias archivos después de publicar, incrementa VERSION en sw.js para que el service worker descargue la nueva versión.
+
+ARCHIVOS
+- index.html: aplicación y traducción ES/EN.
+- manifest.webmanifest: identidad de la PWA.
+- sw.js: caché y modo sin conexión.
+- icons/: iconos de instalación.
+
+NOTA DE VALIDACIÓN
+Esta entrega prepara la base y añade el selector de idioma. Antes de publicar, prueba en navegador móvil la navegación, los formularios, las copias de seguridad y los textos en ambos idiomas. La compilación y firma final del APK/AAB depende de la URL pública y de las credenciales de publicación.
