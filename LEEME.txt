@@ -1,0 +1,37 @@
+RINDE: INSTALAR EN ANDROID
+==========================
+
+Esta carpeta es una app web instalable (PWA). Para que Android la instale hay que
+publicarla una vez en una dirección https. Es gratis y toma unos 5 minutos.
+
+OPCIÓN A: Netlify Drop (la más fácil)
+  1. En tu computadora, descomprime este archivo zip.
+  2. Entra a https://app.netlify.com/drop e inicia sesión (puedes usar tu correo).
+  3. Arrastra la carpeta "rinde-android" completa a la página.
+  4. Netlify te da una dirección como https://algo.netlify.app. Esa es tu app.
+
+OPCIÓN B: GitHub Pages
+  1. Crea un repositorio nuevo y sube todo el contenido de esta carpeta.
+  2. En Settings > Pages, elige la rama principal y guarda.
+  3. Espera un minuto y abre la dirección que te muestra GitHub.
+
+INSTALAR EN EL TELÉFONO
+  1. Abre la dirección de tu app en Chrome para Android.
+  2. Toca el botón "Instalar en este teléfono" que aparece al final de la pestaña
+     Resumen, o el menú de Chrome (tres puntos) > "Instalar app".
+  3. Rinde queda en tu pantalla de inicio y abre a pantalla completa.
+
+IMPORTANTE
+  - Tus datos se guardan en ese teléfono (almacenamiento del navegador). Si borras
+    los datos de Chrome o cambias de teléfono se pierden. Por eso la pestaña Resumen
+    tiene "Exportar copia" e "Importar copia". Haz una copia de vez en cuando.
+  - Cuando publiques una versión nueva de index.html, cambia VERSION en sw.js
+    (por ejemplo a rinde-v2) para que los teléfonos descarguen la actualización.
+  - Si quieres un archivo .apk para la Play Store, puedes generarlo desde la
+    dirección ya publicada con PWABuilder (pwabuilder.com).
+
+CONTENIDO
+  index.html            la app completa
+  manifest.webmanifest  nombre, colores e íconos
+  sw.js                 permite usarla sin conexión
+  icons/                íconos de la app
