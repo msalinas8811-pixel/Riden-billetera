@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0A7BC4">
-<meta name="description" content="Rinde: gastos, gastos fijos, tareas, metas y ahorro en un solo lugar.">
+<meta name="description" content="Rinde: gastos, presupuestos por proyecto, tareas, metas y ahorro en un solo lugar.">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="manifest" href="manifest.webmanifest">
@@ -67,6 +67,7 @@ button{cursor:pointer}
 .sync[data-s="saved"]::before{background:#8DF0BE}
 .sync[data-s="saving"]::before{background:#FFD98A}
 .sync:empty{display:none}
+
 .months{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px}
 .months strong{font-family:var(--f-display);font-weight:700;font-size:16px}
 .step{width:44px;height:40px;border:0;background:transparent;border-radius:9px;display:grid;place-items:center;color:var(--muted)}
@@ -169,8 +170,8 @@ details summary{cursor:pointer;color:var(--muted);font-size:13px;font-weight:600
 
 .tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);
   padding:6px max(10px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(10px,env(safe-area-inset-left,0px))}
-.tabs-in{max-width:640px;margin:0 auto;display:grid;grid-template-columns:repeat(6,1fr);gap:2px}
-.tab{border:0;background:transparent;display:grid;justify-items:center;gap:3px;padding:6px 2px;color:var(--muted);font-size:11px;font-weight:600;border-radius:10px}
+.tabs-in{max-width:700px;margin:0 auto;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:2px}
+.tab{border:0;background:transparent;display:grid;justify-items:center;gap:3px;padding:6px 1px;color:var(--muted);font-size:10px;font-weight:600;border-radius:10px;min-width:0}
 .tab svg{width:40px;height:26px;padding:3px 11px;border-radius:99px;box-sizing:border-box}
 .tab[aria-selected="true"]{color:var(--accent)}
 .tab[aria-selected="true"] svg{background:var(--accent);color:var(--accent-ink)}
@@ -192,7 +193,7 @@ details summary{cursor:pointer;color:var(--muted);font-size:13px;font-weight:600
 .backup{display:flex;gap:10px;flex-wrap:wrap}
 .backup .btn{flex:1;min-width:140px}
 .hint{font-size:13px;color:var(--muted)}
-.file-in{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.file-in{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}\n.project-card{display:grid;gap:12px}.project-title{font-size:17px;font-weight:700;overflow-wrap:anywhere}.project-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.project-metric{background:var(--surface2);border-radius:10px;padding:9px;min-width:0}.project-metric span{display:block;font-size:11px;color:var(--muted);margin-bottom:4px}.project-metric b{font-size:13px;overflow-wrap:anywhere}.project-note{font-size:13px;color:var(--muted)}.project-expenses{border-top:1px solid var(--line);padding-top:8px}
 @media (prefers-reduced-motion:reduce){.bar>i{transition:none}}
 @media (max-width:380px){.hero-amount{font-size:44px}.total{font-size:38px}}
 </style>
@@ -213,7 +214,7 @@ details summary{cursor:pointer;color:var(--muted);font-size:13px;font-weight:600
         <h1>Rinde</h1>
         <p class="sub">Gastos, tareas, metas y ahorro</p>
       </div>
-<span class="sync" id="sync" data-s="" aria-live="polite"></span>
+      <span class="sync" id="sync" data-s="" aria-live="polite"></span>
     </div>
   </header>
 
@@ -334,25 +335,6 @@ details summary{cursor:pointer;color:var(--muted);font-size:13px;font-weight:600
       </div>
     </section>
 
-    <!-- PROYECTOS -->
-    <section class="panel" id="tab-proyectos" hidden>
-      <div class="card">
-        <div class="card-head"><h2>Gastos por proyectos</h2></div>
-        <p class="hint">Crea un presupuesto para cada proyecto y registra los gastos de cada avance.</p>
-        <form id="project-form" novalidate>
-          <label class="field"><span>Nombre del proyecto</span><input id="project-name" type="text" maxlength="80" placeholder="Remodelación de casa"></label>
-          <div class="fields">
-            <label class="field"><span>Presupuesto total ($)</span><input id="project-budget" type="number" inputmode="decimal" min="0.01" step="0.01" placeholder="5000.00"></label>
-            <label class="field"><span>Fecha de inicio (opcional)</span><input id="project-date" type="date"></label>
-          </div>
-          <label class="field"><span>Descripción (opcional)</span><input id="project-note" type="text" maxlength="160" placeholder="Materiales, mano de obra y acabados"></label>
-          <p class="err" id="project-err" hidden></p>
-          <button class="btn" type="submit">Crear proyecto</button>
-        </form>
-      </div>
-      <div id="project-list"></div>
-    </section>
-
     <!-- TAREAS -->
     <section class="panel" id="tab-tareas" hidden>
       <div class="seg" role="group" aria-label="Vista de tareas">
@@ -453,6 +435,39 @@ details summary{cursor:pointer;color:var(--muted);font-size:13px;font-weight:600
         <div id="sav-list"></div>
       </div>
     </section>
+
+    <!-- PRESUPUESTO POR PROYECTO -->
+    <section class="panel" id="tab-proyectos" hidden>
+      <div class="card">
+        <div class="card-head"><h2>Crear proyecto</h2></div>
+        <p class="hint">Define un presupuesto y registra cada gasto para saber cuánto has usado y cuánto te queda.</p>
+        <form id="project-form" novalidate>
+          <label class="field"><span>Nombre del proyecto</span><input id="project-name" type="text" maxlength="80" placeholder="Remodelación, construcción, viaje…"></label>
+          <div class="fields">
+            <label class="field"><span>Presupuesto total ($)</span><input id="project-budget" type="number" inputmode="decimal" min="0.01" step="0.01" placeholder="5000.00"></label>
+            <label class="field"><span>Fecha de inicio</span><input id="project-date" type="date"></label>
+          </div>
+          <label class="field"><span>Nota (opcional)</span><input id="project-note" type="text" maxlength="160" placeholder="Detalles del proyecto"></label>
+          <p class="err" id="project-err" hidden></p>
+          <button class="btn" type="submit">Crear proyecto</button>
+        </form>
+      </div>
+      <div class="card">
+        <div class="card-head"><h2>Registrar gasto del proyecto</h2></div>
+        <form id="project-expense-form" novalidate>
+          <label class="field"><span>Proyecto</span><select id="pe-project"></select></label>
+          <label class="field"><span>Descripción</span><input id="pe-description" type="text" maxlength="100" placeholder="Compra de cemento, mano de obra…"></label>
+          <div class="fields">
+            <label class="field"><span>Monto ($)</span><input id="pe-amount" type="number" inputmode="decimal" min="0.01" step="0.01" placeholder="125.00"></label>
+            <label class="field"><span>Categoría</span><select id="pe-category"><option>Materiales</option><option>Mano de obra</option><option>Transporte</option><option>Permisos</option><option>Herramientas</option><option>Otros</option></select></label>
+            <label class="field"><span>Fecha</span><input id="pe-date" type="date"></label>
+          </div>
+          <p class="err" id="pe-err" hidden></p>
+          <button class="btn" type="submit">Agregar gasto</button>
+        </form>
+      </div>
+      <div id="project-list" class="panel"></div>
+    </section>
   </main>
 </div>
 
@@ -464,14 +479,14 @@ details summary{cursor:pointer;color:var(--muted);font-size:13px;font-weight:600
       <svg viewBox="0 0 40 26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18v-5M20 18V8M26 18v-3"/></svg>Resumen</button>
     <button class="tab" role="tab" type="button" data-act="tab" data-tab="gastos" aria-selected="false">
       <svg viewBox="0 0 40 26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="12" y="7" width="16" height="12" rx="2.5"/><path d="M12 11h16M24 15h1.5"/></svg>Gastos</button>
-    <button class="tab" role="tab" type="button" data-act="tab" data-tab="proyectos" aria-selected="false">
-      <svg viewBox="0 0 40 26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="10" y="6" width="20" height="15" rx="2"/><path d="M10 11h20M16 6V4h8v2M17 15h6"/></svg>Proyectos</button>
     <button class="tab" role="tab" type="button" data-act="tab" data-tab="tareas" aria-selected="false">
       <svg viewBox="0 0 40 26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 13.5l3.2 3.2 7.8-8"/></svg>Tareas</button>
     <button class="tab" role="tab" type="button" data-act="tab" data-tab="metas" aria-selected="false">
       <svg viewBox="0 0 40 26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="13" r="7"/><circle cx="20" cy="13" r="3"/></svg>Metas</button>
     <button class="tab" role="tab" type="button" data-act="tab" data-tab="ahorro" aria-selected="false">
       <svg viewBox="0 0 40 26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20v-9M16.5 14.5L20 11l3.5 3.5M14 7h12"/></svg>Ahorro</button>
+    <button class="tab" role="tab" type="button" data-act="tab" data-tab="proyectos" aria-selected="false">
+      <svg viewBox="0 0 40 26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="11" y="6" width="18" height="14" rx="2"/><path d="M11 11h18M16 6V4M24 6V4M16 15h3M22 15h2"/></svg>Proyectos</button>
   </div>
 </nav>
 
@@ -482,14 +497,12 @@ details summary{cursor:pointer;color:var(--muted);font-size:13px;font-weight:600
 /* ---------- utilidades ---------- */
 var KEY='mibolsillo.v1';
 var CATS={g:['Comida','Transporte','Hogar','Servicios','Salud','Ocio','Educación','Otros'],i:['Salario','Extra','Otros ingresos']};
-var TABS=['resumen','gastos','proyectos','tareas','metas','ahorro'];
+var TABS=['resumen','gastos','tareas','metas','ahorro','proyectos'];
 var PRIO={a:'Alta',m:'Media',b:'Baja'};
 var TRASH='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg>';
 var CHECK='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg>';
 
 function $(s){return document.querySelector(s);}
-/* Interfaz fija en español. Se retiró el traductor automático para evitar bloqueos. */
-var lang='es';
 function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 function pad(n){return String(n).padStart(2,'0');}
 function ds(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
@@ -518,7 +531,7 @@ function norm(s){
   s=(s&&typeof s==='object')?s:{};
   function arr(x){return Array.isArray(x)?x:[];}
   return {v:1,demo:!!s.demo,budget:+s.budget||0,saveTarget:+s.saveTarget||0,
-    tx:arr(s.tx),tasks:arr(s.tasks),goals:arr(s.goals),sav:arr(s.sav),fixed:arr(s.fixed),rec:arr(s.rec),projects:arr(s.projects)};
+    tx:arr(s.tx),tasks:arr(s.tasks),goals:arr(s.goals),sav:arr(s.sav),fixed:arr(s.fixed),rec:arr(s.rec),projects:arr(s.projects),projectExpenses:arr(s.projectExpenses)};
 }
 function seed(){
   var now=new Date(), first=new Date(now.getFullYear(),now.getMonth(),1);
@@ -902,23 +915,36 @@ function renderRec(){
   }).join('')+'</ul>';
 }
 
-function projectSpent(p){return (p.expenses||[]).reduce(function(sum,x){return sum+(+x.amount||0);},0);}
-function renderProjects(){
-  var root=$('#project-list'); if(!root)return;
-  if(!state.projects.length){root.innerHTML='<div class="card"><div class="empty"><strong>Aún no tienes proyectos</strong>Crea un proyecto arriba para comenzar a controlar su presupuesto.</div></div>';return;}
-  root.innerHTML=state.projects.map(function(p){
-    p.expenses=Array.isArray(p.expenses)?p.expenses:[];
-    var spent=projectSpent(p), budget=+p.budget||0, remaining=budget-spent, pct=budget>0?Math.min(100,spent/budget*100):0;
-    var expenses=p.expenses.slice().sort(function(a,b){return (b.date||'').localeCompare(a.date||'');});
-    var list=expenses.length?'<ul class="list">'+expenses.map(function(x){return '<li class="row"><div class="grow"><div class="t">'+esc(x.name)+'</div><div class="meta">'+esc(x.type||'Otros')+' · '+esc(shortDate(x.date||today()))+'</div></div><strong class="num">'+money(x.amount)+'</strong><button class="icon-btn" type="button" data-act="del-project-expense" data-project="'+p.id+'" data-id="'+x.id+'" aria-label="Eliminar gasto">'+TRASH+'</button></li>';}).join('')+'</ul>':'<div class="empty"><strong>Sin gastos registrados</strong></div>';
-    return '<div class="card project-card"><div class="card-head"><div class="grow"><h2>'+esc(p.name)+'</h2><div class="meta">'+(p.date?esc(shortDate(p.date))+' · ':'')+esc(p.note||'')+'</div></div><button class="icon-btn" type="button" data-act="del" data-key="projects" data-id="'+p.id+'" aria-label="Eliminar proyecto">'+TRASH+'</button></div>'+ 
-      '<div class="stats"><div class="stat"><span class="eyebrow">Presupuesto</span><span class="num">'+money(budget)+'</span></div><div class="stat"><span class="eyebrow">Gastado</span><span class="num">'+money(spent)+'</span></div><div class="stat"><span class="eyebrow">Disponible</span><span class="num" style="color:'+(remaining<0?'var(--bad)':'var(--good)')+'">'+money(remaining)+'</span></div></div>'+ 
-      '<div class="meta">Avance del presupuesto · '+pct.toFixed(1)+'%</div><div class="bar"><i style="width:'+pct+'%;background:'+(remaining<0?'var(--bad)':'var(--accent)')+'"></i></div>'+(remaining<0?'<p class="err">El proyecto supera el presupuesto por '+money(-remaining)+'.</p>':'')+
-      '<form class="project-expense-form" data-project-form="'+p.id+'" novalidate><div class="fields"><label class="field"><span>Concepto</span><input name="name" type="text" maxlength="100" required placeholder="Ej. compra de ladrillo"></label><label class="field"><span>Monto ($)</span><input name="amount" type="number" min="0.01" step="0.01" inputmode="decimal" required placeholder="0.00"></label></div><div class="fields"><label class="field"><span>Tipo de gasto</span><select name="type"><option>Materiales</option><option>Mano de obra</option><option>Transporte</option><option>Permisos</option><option>Otros</option></select></label><label class="field"><span>Fecha</span><input name="date" type="date" value="'+today()+'"></label></div><p class="err" data-form-error hidden></p><button class="btn" type="submit">Agregar gasto al proyecto</button></form><div class="card-head" style="margin-top:16px"><h3>Movimientos ('+expenses.length+')</h3></div>'+list+'</div>';
+
+function projectSpent(id){
+  return state.projectExpenses.reduce(function(total,e){return total+(e.projectId===id?(+e.amount||0):0);},0);
+}
+function renderProyectos(){
+  var sel=$('#pe-project'), previous=sel.value;
+  sel.innerHTML=state.projects.length?state.projects.map(function(p){return '<option value="'+esc(p.id)+'">'+esc(p.name)+'</option>';}).join(''):'<option value="">Primero crea un proyecto</option>';
+  if(state.projects.some(function(p){return p.id===previous;})) sel.value=previous;
+  $('#pe-project').disabled=!state.projects.length;
+  $('#project-expense-form button[type="submit"]').disabled=!state.projects.length;
+  if(!state.projects.length){
+    $('#project-list').innerHTML='<div class="card"><div class="empty"><strong>Aún no hay proyectos</strong>Crea un proyecto arriba para empezar a controlar su presupuesto.</div></div>';
+    return;
+  }
+  $('#project-list').innerHTML=state.projects.slice().reverse().map(function(p){
+    var expenses=state.projectExpenses.filter(function(e){return e.projectId===p.id;}).slice().sort(function(a,b){return a.date<b.date?1:a.date>b.date?-1:0;});
+    var spent=projectSpent(p.id), left=(+p.budget||0)-spent, ratio=p.budget>0?spent/p.budget:0;
+    var status=left<0?'<span class="chip a">Presupuesto excedido</span>':ratio>=.8?'<span class="chip m">Cerca del límite</span>':'<span class="chip ok">Dentro del presupuesto</span>';
+    var items=expenses.length?'<ul class="list">'+expenses.map(function(e){
+      return '<li class="row"><div class="grow"><div class="t">'+esc(e.description)+'</div><div class="meta">'+esc(e.category)+' · '+esc(shortDate(e.date))+'</div></div><span class="amt">'+money(e.amount)+'</span><button class="icon-btn" type="button" data-act="del" data-key="projectExpenses" data-id="'+esc(e.id)+'" aria-label="Eliminar gasto del proyecto">'+TRASH+'</button></li>';
+    }).join('')+'</ul>':'<div class="empty">Todavía no hay gastos registrados.</div>';
+    return '<div class="card project-card"><div class="goal-top"><div class="grow"><div class="project-title">'+esc(p.name)+'</div><div class="meta">'+(p.date?'Inicio: '+esc(shortDate(p.date)):'Sin fecha de inicio')+'</div></div><button class="icon-btn" type="button" data-act="del-project" data-id="'+esc(p.id)+'" aria-label="Eliminar proyecto">'+TRASH+'</button></div>'+
+      (p.note?'<div class="project-note">'+esc(p.note)+'</div>':'')+
+      '<div class="project-metrics"><div class="project-metric"><span>Presupuesto</span><b>'+money(+p.budget||0)+'</b></div><div class="project-metric"><span>Gastado</span><b>'+money(spent)+'</b></div><div class="project-metric"><span>Disponible</span><b class="'+(left<0?'neg':'pos')+'">'+money(left)+'</b></div></div>'+
+      '<div class="bar"><i class="'+(ratio>=1?'bad':ratio>=.8?'warn':'')+'" style="width:'+Math.min(100,Math.max(0,ratio*100))+'%"></i></div><div class="goal-nums"><span>'+Math.round(ratio*100)+'% utilizado</span>'+status+'</div>'+
+      '<div class="project-expenses"><div class="card-head"><h2>Gastos registrados</h2><span class="eyebrow">'+expenses.length+'</span></div>'+items+'</div></div>';
   }).join('');
 }
 
-function renderAll(){renderHeader();renderResumen();renderGastos();renderFijos();renderProjects();renderTareas();renderRec();renderMetas();renderAhorro();}
+function renderAll(){renderHeader();renderResumen();renderGastos();renderFijos();renderTareas();renderRec();renderMetas();renderAhorro();renderProyectos();}
 
 /* ---------- pestañas, formularios y acciones ---------- */
 function setTab(t){
@@ -955,6 +981,20 @@ function removeFrom(key,id){
   commit();
   toast('Eliminado',function(){state[key].splice(Math.min(i,state[key].length),0,it);commit();});
 }
+function removeProject(id){
+  var i=state.projects.findIndex(function(p){return p.id===id;});
+  if(i<0) return;
+  var project=state.projects.splice(i,1)[0];
+  var removed=[], kept=[];
+  state.projectExpenses.forEach(function(e){if(e.projectId===id) removed.push(e);else kept.push(e);});
+  state.projectExpenses=kept;
+  commit();
+  toast('Proyecto eliminado',function(){
+    state.projects.splice(Math.min(i,state.projects.length),0,project);
+    state.projectExpenses=state.projectExpenses.concat(removed);
+    commit();
+  });
+}
 
 document.addEventListener('click',function(e){
   var el=e.target.closest('[data-act]');
@@ -964,10 +1004,7 @@ document.addEventListener('click',function(e){
   else if(act==='go'){setTab(el.getAttribute('data-tab'));}
   else if(act==='month'){viewMonth=addMonths(viewMonth,+el.getAttribute('data-d'));renderAll();}
   else if(act==='del') removeFrom(el.getAttribute('data-key'),el.getAttribute('data-id'));
-  else if(act==='del-project-expense'){
-    var project=state.projects.find(function(x){return x.id===el.getAttribute('data-project');});
-    if(project&&Array.isArray(project.expenses)){var ei=project.expenses.findIndex(function(x){return x.id===el.getAttribute('data-id');});if(ei>=0){var removed=project.expenses.splice(ei,1)[0];commit();toast('Gasto eliminado',function(){project.expenses.splice(Math.min(ei,project.expenses.length),0,removed);commit();});}}
-  }
+  else if(act==='del-project') removeProject(el.getAttribute('data-id'));
   else if(act==='toggle-task'){
     var t=state.tasks.find(function(x){return x.id===el.getAttribute('data-id');});
     if(t){t.done=!t.done;commit();}
@@ -1026,28 +1063,6 @@ $('#task-form').addEventListener('submit',function(e){
   $('#task-text').value='';$('#task-due').value='';
   commit();
 });
-$('#project-form').addEventListener('submit',function(e){
-  e.preventDefault();clearErr('#project-err');
-  var name=$('#project-name').value.trim(), budget=num('#project-budget');
-  if(!name){showErr('#project-err','Escribe el nombre del proyecto.');return;}
-  if(!(budget>0)){showErr('#project-err','Ingresa un presupuesto mayor a 0.');return;}
-  state.projects.push({id:uid(),name:name,budget:Math.round(budget*100)/100,date:$('#project-date').value||today(),note:$('#project-note').value.trim(),expenses:[]});
-  ['#project-name','#project-budget','#project-date','#project-note'].forEach(function(id){$(id).value='';});
-  commit();toast('Proyecto creado');
-});
-$('#project-list').addEventListener('submit',function(e){
-  var f=e.target.closest('form[data-project-form]');if(!f)return;e.preventDefault();
-  var id=f.getAttribute('data-project-form'),p=state.projects.find(function(x){return x.id===id;});
-  var name=f.elements.name.value.trim(),amount=parseFloat(f.elements.amount.value),err=f.querySelector('[data-form-error]');
-  err.hidden=true;
-  if(!p)return;
-  if(!name){err.textContent='Escribe el concepto del gasto.';err.hidden=false;return;}
-  if(!(amount>0)){err.textContent='Escribe un monto mayor a 0.';err.hidden=false;return;}
-  if(!Array.isArray(p.expenses))p.expenses=[];
-  p.expenses.push({id:uid(),name:name,amount:Math.round(amount*100)/100,type:f.elements.type.value,date:f.elements.date.value||today()});
-  commit();toast('El gasto se agregó al proyecto');
-});
-
 $('#goal-form').addEventListener('submit',function(e){
   e.preventDefault();clearErr('#goal-err');
   var name=$('#goal-name').value.trim(), target=num('#goal-target'), saved=num('#goal-saved');
@@ -1067,6 +1082,26 @@ $('#goal-list').addEventListener('submit',function(e){
   g.saved=Math.max(0,Math.round((g.saved+v)*100)/100);
   commit();
 });
+$('#project-form').addEventListener('submit',function(e){
+  e.preventDefault();clearErr('#project-err');
+  var name=$('#project-name').value.trim(), budget=num('#project-budget'), date=$('#project-date').value||today();
+  if(!name){showErr('#project-err','Escribe el nombre del proyecto.');return;}
+  if(!(budget>0)){showErr('#project-err','El presupuesto debe ser mayor a 0.');return;}
+  state.projects.push({id:uid(),name:name,budget:Math.round(budget*100)/100,date:date,note:$('#project-note').value.trim()});
+  $('#project-name').value='';$('#project-budget').value='';$('#project-note').value='';
+  commit();toast('Proyecto creado');
+});
+$('#project-expense-form').addEventListener('submit',function(e){
+  e.preventDefault();clearErr('#pe-err');
+  var projectId=$('#pe-project').value, description=$('#pe-description').value.trim(), amount=num('#pe-amount'), date=$('#pe-date').value||today();
+  if(!state.projects.some(function(p){return p.id===projectId;})){showErr('#pe-err','Primero crea un proyecto.');return;}
+  if(!description){showErr('#pe-err','Escribe una descripción para el gasto.');return;}
+  if(!(amount>0)){showErr('#pe-err','El monto debe ser mayor a 0.');return;}
+  state.projectExpenses.push({id:uid(),projectId:projectId,description:description,amount:Math.round(amount*100)/100,category:$('#pe-category').value,date:date});
+  $('#pe-description').value='';$('#pe-amount').value='';
+  commit();toast('Gasto agregado al proyecto');
+});
+
 $('#sav-form').addEventListener('submit',function(e){
   e.preventDefault();clearErr('#sav-err');
   var amount=num('#sav-amount');
@@ -1169,14 +1204,12 @@ $('#save-target').addEventListener('change',function(e){
   commit();
 });
 
-/* Traduce también los textos que la aplicación genera al actualizar listas y formularios. */
-
 /* ---------- arranque ---------- */
 state=loadLocal();
 if(!state){state=seed();}
 applyAuto();
 saveLocal();
-$('#tx-date').value=today();$('#sav-date').value=today();
+$('#tx-date').value=today();$('#sav-date').value=today();$('#project-date').value=today();$('#pe-date').value=today();
 fillCats();
 renderAll();
 var h=(location.hash||'').slice(1);

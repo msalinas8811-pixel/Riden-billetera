@@ -1,7 +1,7 @@
 {
   "name": "Rinde",
   "short_name": "Rinde",
-  "description": "Personal finance: expenses, recurring bills, tasks, goals and savings.",
+  "description": "Gastos, gastos fijos, tareas, metas y ahorro en un solo lugar.",
   "lang": "es",
   "start_url": "./",
   "scope": "./",

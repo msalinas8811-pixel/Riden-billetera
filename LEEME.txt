@@ -1,31 +1,13 @@
-RINDE — MI BOLSILLO | VERSIÓN EN ESPAÑOL
-======================================
+RINDE — PRESUPUESTO POR PROYECTO
 
-Esta carpeta contiene la aplicación web instalable (PWA) Rinde. Incluye gastos, gastos fijos, gastos por proyectos con presupuesto y saldo disponible, tareas, metas, ahorro y copia de seguridad. Se retiró el traductor automático para priorizar la estabilidad. La interfaz queda fija en español.
+Esta versión parte del archivo proporcionado y agrega la sección Proyectos.
 
-PROBAR EN WEB
-1. Descomprime el ZIP.
-2. Publica el contenido de la carpeta en un alojamiento HTTPS (por ejemplo Netlify Drop: https://app.netlify.com/drop).
-3. Abre la URL publicada y prueba todas las pestañas, crea un proyecto, agrega gastos de materiales/mano de obra, verifica el presupuesto restante, y exportar/importar copia.
+Funciones nuevas:
+- Crear proyectos con nombre, presupuesto, fecha de inicio y nota.
+- Registrar gastos por proyecto con descripción, monto, categoría y fecha.
+- Ver presupuesto, total gastado, saldo disponible y porcentaje utilizado.
+- Aviso visual cuando el presupuesto se acerca al límite o se excede.
+- Eliminar gastos y proyectos; al eliminar un proyecto se eliminan sus gastos asociados, con opción Deshacer.
+- Los proyectos y sus gastos se incluyen en el respaldo JSON y se conservan en el almacenamiento de Rinde.
 
-INSTALAR COMO PWA
-- Android: abre la URL en Chrome y usa el menú ⋮ > Instalar app.
-- iPhone: abre la URL en Safari, toca Compartir > Añadir a pantalla de inicio.
-
-PREPARAR APK / GOOGLE PLAY
-La carpeta es una PWA y todavía no contiene un APK firmado. Para generar un paquete Android: publica primero la app en HTTPS, entra a https://www.pwabuilder.com/, indica la URL pública, revisa los requisitos que marque la herramienta y genera el paquete Android. Para publicar en Google Play normalmente se necesita un Android App Bundle (.aab) firmado y una ficha de Play Console; el APK de prueba no sustituye ese proceso. Verifica también que el dominio final y el identificador de aplicación sean los definitivos antes de publicar.
-
-DATOS Y COPIAS
-Los datos se guardan localmente en el navegador de cada dispositivo; esta versión no sincroniza automáticamente entre teléfonos. Usa Exportar copia e Importar copia para trasladar tus datos. No borres los datos del navegador sin antes exportar una copia.
-
-ACTUALIZACIONES
-Si cambias archivos después de publicar, incrementa VERSION en sw.js para que el service worker descargue la nueva versión.
-
-ARCHIVOS
-- index.html: aplicación en español.
-- manifest.webmanifest: identidad de la PWA.
-- sw.js: caché y modo sin conexión.
-- icons/: iconos de instalación.
-
-NOTA DE VALIDACIÓN
-Esta entrega retira el traductor automático. Antes de publicar, prueba en navegador móvil la navegación, los formularios y las copias de seguridad. La compilación y firma final del APK/AAB depende de la URL pública y de las credenciales de publicación.
+Para actualizar la versión web, sustituye los archivos del sitio por los incluidos en esta carpeta. Si el navegador muestra una versión anterior, cierra la app y vuelve a abrirla; si sigue igual, exporta primero una copia y luego limpia los datos del sitio.
