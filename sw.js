@@ -1,5 +1,5 @@
 /* Rinde: funciona sin conexión. Sube el número de VERSION cuando cambies index.html. */
-const VERSION = 'rinde-v3-project-budget';
+const VERSION = 'rinde-v4-es-en';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png'];
 
 self.addEventListener('install', (e) => {

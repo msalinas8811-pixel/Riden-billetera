@@ -60,9 +60,13 @@ button{cursor:pointer}
 .hdr-in{display:flex;align-items:center;gap:14px}
 .logo{width:56px;height:56px;flex:none;border-radius:16px;box-shadow:0 2px 8px rgba(8,30,70,.25)}
 .hdr-t{flex:1;min-width:0}
+.lang{display:flex;gap:2px;flex:none;align-self:flex-start;background:rgba(255,255,255,.18);border-radius:99px;padding:3px}
+.lang button{border:0;background:transparent;color:rgba(255,255,255,.92);font:600 12px var(--f-mono);letter-spacing:.04em;min-width:36px;height:34px;padding:0 6px;border-radius:99px}
+.lang button[aria-pressed="true"]{background:#fff;color:var(--hdr-b)}
+.lang button:focus-visible{outline:2px solid #fff;outline-offset:2px}
 .hdr h1{font-size:32px;font-weight:800;letter-spacing:-.025em;line-height:1.05;color:#fff}
 .sub{color:rgba(255,255,255,.88);font-size:13px;margin-top:3px}
-.sync{font-family:var(--f-mono);font-size:10.5px;color:rgba(255,255,255,.9);display:inline-flex;align-items:center;gap:6px;white-space:nowrap;align-self:flex-start;background:rgba(255,255,255,.16);border-radius:99px;padding:4px 9px}
+.sync{font-family:var(--f-mono);font-size:10.5px;color:rgba(255,255,255,.9);display:inline-flex;align-items:center;gap:6px;white-space:nowrap;background:rgba(255,255,255,.16);border-radius:99px;padding:4px 9px;margin-top:10px}
 .sync::before{content:"";width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.7)}
 .sync[data-s="saved"]::before{background:#8DF0BE}
 .sync[data-s="saving"]::before{background:#FFD98A}
@@ -193,7 +197,8 @@ details summary{cursor:pointer;color:var(--muted);font-size:13px;font-weight:600
 .backup{display:flex;gap:10px;flex-wrap:wrap}
 .backup .btn{flex:1;min-width:140px}
 .hint{font-size:13px;color:var(--muted)}
-.file-in{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}\n.project-card{display:grid;gap:12px}.project-title{font-size:17px;font-weight:700;overflow-wrap:anywhere}.project-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.project-metric{background:var(--surface2);border-radius:10px;padding:9px;min-width:0}.project-metric span{display:block;font-size:11px;color:var(--muted);margin-bottom:4px}.project-metric b{font-size:13px;overflow-wrap:anywhere}.project-note{font-size:13px;color:var(--muted)}.project-expenses{border-top:1px solid var(--line);padding-top:8px}
+.file-in{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.project-card{display:grid;gap:12px}.project-title{font-size:17px;font-weight:700;overflow-wrap:anywhere}.project-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.project-metric{background:var(--surface2);border-radius:10px;padding:9px;min-width:0}.project-metric span{display:block;font-size:11px;color:var(--muted);margin-bottom:4px}.project-metric b{font-size:13px;overflow-wrap:anywhere}.project-note{font-size:13px;color:var(--muted)}.project-expenses{border-top:1px solid var(--line);padding-top:8px}
 @media (prefers-reduced-motion:reduce){.bar>i{transition:none}}
 @media (max-width:380px){.hero-amount{font-size:44px}.total{font-size:38px}}
 </style>
@@ -212,72 +217,76 @@ details summary{cursor:pointer;color:var(--muted);font-size:13px;font-weight:600
       </svg>
       <div class="hdr-t">
         <h1>Rinde</h1>
-        <p class="sub">Gastos, tareas, metas y ahorro</p>
+        <p class="sub" data-i18n="hdr.sub">Gastos, tareas, metas y ahorro</p>
       </div>
-      <span class="sync" id="sync" data-s="" aria-live="polite"></span>
+      <div class="lang" role="group" aria-label="Idioma / Language">
+        <button type="button" data-act="lang" data-lang="es" lang="es" title="Español" aria-pressed="true">ES</button>
+        <button type="button" data-act="lang" data-lang="en" lang="en" title="English" aria-pressed="false">EN</button>
+      </div>
     </div>
+    <span class="sync" id="sync" data-s="" aria-live="polite"></span>
   </header>
 
   <div class="months" id="months">
-    <button class="step" type="button" data-act="month" data-d="-1" aria-label="Mes anterior"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <button class="step" type="button" data-act="month" data-d="-1" aria-label="Mes anterior" data-i18n-aria="month.prev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
     <strong id="monthLabel"></strong>
-    <button class="step" type="button" data-act="month" data-d="1" aria-label="Mes siguiente"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+    <button class="step" type="button" data-act="month" data-d="1" aria-label="Mes siguiente" data-i18n-aria="month.next"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
   </div>
 
   <div class="banner" id="demoBanner" hidden>
-    <span>Estás viendo datos de ejemplo.</span>
-    <button type="button" data-act="clear-demo">Empezar con mis datos</button>
+    <span data-i18n="demo.msg">Estás viendo datos de ejemplo.</span>
+    <button type="button" data-act="clear-demo" data-i18n="demo.clear">Empezar con mis datos</button>
   </div>
 
   <main>
     <!-- RESUMEN -->
     <section class="panel" id="tab-resumen">
       <div class="card hero">
-        <span class="eyebrow" id="hero-label">Te quedan este mes</span>
+        <span class="eyebrow" id="hero-label" data-i18n="hero.left">Te quedan este mes</span>
         <div class="hero-amount" id="hero-amount">$0.00</div>
         <p class="hero-sub" id="hero-sub"></p>
         <div class="bar" id="hero-bar"><i></i></div>
         <p class="pace" id="hero-pace"></p>
         <div class="hero-set">
-          <label for="budget">Presupuesto mensual</label>
+          <label for="budget" data-i18n="budget.label">Presupuesto mensual</label>
           <input id="budget" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00">
         </div>
       </div>
 
       <div class="stats">
-        <div class="stat"><span class="eyebrow">Ingresos</span><span class="num pos" id="stat-i">$0.00</span></div>
-        <div class="stat"><span class="eyebrow">Gastos</span><span class="num" id="stat-g">$0.00</span></div>
-        <div class="stat"><span class="eyebrow">Balance</span><span class="num" id="stat-b">$0.00</span></div>
+        <div class="stat"><span class="eyebrow" data-i18n="stat.inc">Ingresos</span><span class="num pos" id="stat-i">$0.00</span></div>
+        <div class="stat"><span class="eyebrow" data-i18n="nav.expenses">Gastos</span><span class="num" id="stat-g">$0.00</span></div>
+        <div class="stat"><span class="eyebrow" data-i18n="stat.bal">Balance</span><span class="num" id="stat-b">$0.00</span></div>
       </div>
 
       <div class="card">
-        <div class="card-head"><h2>En qué se va el dinero</h2></div>
+        <div class="card-head"><h2 data-i18n="card.where">En qué se va el dinero</h2></div>
         <div class="cats" id="cat-list"></div>
       </div>
 
       <div class="card">
-        <div class="card-head"><h2>Lo que sigue</h2><button class="link" type="button" data-act="go" data-tab="tareas">Ver tareas</button></div>
+        <div class="card-head"><h2 data-i18n="card.next">Lo que sigue</h2><button class="link" type="button" data-act="go" data-tab="tareas" data-i18n="link.tasks">Ver tareas</button></div>
         <ul class="list" id="peek-tasks"></ul>
       </div>
 
       <div class="card">
-        <div class="card-head"><h2>Metas</h2><button class="link" type="button" data-act="go" data-tab="metas">Ver metas</button></div>
+        <div class="card-head"><h2 data-i18n="nav.goals">Metas</h2><button class="link" type="button" data-act="go" data-tab="metas" data-i18n="link.goals">Ver metas</button></div>
         <div class="cats" id="peek-goals"></div>
       </div>
 
       <div class="card">
-        <div class="card-head"><h2>Ahorro</h2><button class="link" type="button" data-act="go" data-tab="ahorro">Ver ahorro</button></div>
+        <div class="card-head"><h2 data-i18n="nav.savings">Ahorro</h2><button class="link" type="button" data-act="go" data-tab="ahorro" data-i18n="link.savings">Ver ahorro</button></div>
         <div id="peek-sav"></div>
       </div>
 
       <div class="card">
-        <div class="card-head"><h2>Respaldo</h2></div>
-        <p class="hint" style="margin-bottom:12px">Guarda una copia de tus datos en un archivo, o recupérala si cambias de teléfono.</p>
+        <div class="card-head"><h2 data-i18n="backup.title">Respaldo</h2></div>
+        <p class="hint" style="margin-bottom:12px" data-i18n="backup.hint">Guarda una copia de tus datos en un archivo, o recupérala si cambias de teléfono.</p>
         <div class="backup">
-          <button class="btn ghost small" type="button" id="bk-export">Exportar copia</button>
-          <label class="btn ghost small" for="bk-file" style="display:grid;place-items:center;cursor:pointer">Importar copia</label>
+          <button class="btn ghost small" type="button" id="bk-export" data-i18n="backup.export">Exportar copia</button>
+          <label class="btn ghost small" for="bk-file" style="display:grid;place-items:center;cursor:pointer" data-i18n="backup.import">Importar copia</label>
           <input class="file-in" id="bk-file" type="file" accept=".json,application/json">
-          <button class="btn small" type="button" id="bk-install" hidden>Instalar en este teléfono</button>
+          <button class="btn small" type="button" id="bk-install" hidden data-i18n="backup.install">Instalar en este teléfono</button>
         </div>
         <p class="err" id="bk-err" hidden></p>
       </div>
@@ -285,26 +294,26 @@ details summary{cursor:pointer;color:var(--muted);font-size:13px;font-weight:600
 
     <!-- GASTOS -->
     <section class="panel" id="tab-gastos" hidden>
-      <div class="seg" role="group" aria-label="Vista de gastos">
-        <button type="button" data-act="seg" data-kind="gview" data-val="mov" aria-pressed="true">Movimientos</button>
-        <button type="button" data-act="seg" data-kind="gview" data-val="fix" aria-pressed="false">Gastos fijos</button>
+      <div class="seg" role="group" aria-label="Vista de gastos" data-i18n-aria="aria.expView">
+        <button type="button" data-act="seg" data-kind="gview" data-val="mov" aria-pressed="true" data-i18n="view.movements">Movimientos</button>
+        <button type="button" data-act="seg" data-kind="gview" data-val="fix" aria-pressed="false" data-i18n="view.fixed">Gastos fijos</button>
       </div>
 
       <div class="panel" id="gx-mov">
       <div class="card">
         <form id="tx-form" novalidate>
-          <div class="seg" role="group" aria-label="Tipo de movimiento">
-            <button type="button" data-act="seg" data-kind="tx" data-val="g" aria-pressed="true">Gasto</button>
-            <button type="button" data-act="seg" data-kind="tx" data-val="i" aria-pressed="false">Ingreso</button>
+          <div class="seg" role="group" aria-label="Tipo de movimiento" data-i18n-aria="aria.txType">
+            <button type="button" data-act="seg" data-kind="tx" data-val="g" aria-pressed="true" data-i18n="type.expense">Gasto</button>
+            <button type="button" data-act="seg" data-kind="tx" data-val="i" aria-pressed="false" data-i18n="type.income">Ingreso</button>
           </div>
           <div class="fields">
-            <label class="field"><span>Monto</span><input id="tx-amount" type="number" inputmode="decimal" min="0.01" step="0.01" placeholder="0.00"></label>
-            <label class="field"><span>Categoría</span><select id="tx-cat"></select></label>
-            <label class="field"><span>Fecha</span><input id="tx-date" type="date"></label>
+            <label class="field"><span data-i18n="f.amount">Monto</span><input id="tx-amount" type="number" inputmode="decimal" min="0.01" step="0.01" placeholder="0.00"></label>
+            <label class="field"><span data-i18n="f.category">Categoría</span><select id="tx-cat"></select></label>
+            <label class="field"><span data-i18n="f.date">Fecha</span><input id="tx-date" type="date"></label>
           </div>
-          <label class="field"><span>Nota (opcional)</span><input id="tx-note" type="text" maxlength="80" placeholder="Supermercado, bus, almuerzo…"></label>
+          <label class="field"><span data-i18n="f.noteOpt">Nota (opcional)</span><input id="tx-note" type="text" maxlength="80" placeholder="Supermercado, bus, almuerzo…" data-i18n-ph="ph.txNote"></label>
           <p class="err" id="tx-err" hidden></p>
-          <button class="btn" type="submit" id="tx-btn">Agregar gasto</button>
+          <button class="btn" type="submit" id="tx-btn" data-i18n="btn.addExpense">Agregar gasto</button>
         </form>
       </div>
       <div class="card">
@@ -316,16 +325,16 @@ details summary{cursor:pointer;color:var(--muted);font-size:13px;font-weight:600
       <div class="panel" id="gx-fix" hidden>
         <div class="card">
           <form id="fix-form" novalidate>
-            <label class="field"><span>Nombre del gasto fijo</span><input id="fix-name" type="text" maxlength="60" placeholder="Alquiler, internet, suscripción…"></label>
+            <label class="field"><span data-i18n="f.fixName">Nombre del gasto fijo</span><input id="fix-name" type="text" maxlength="60" placeholder="Alquiler, internet, suscripción…" data-i18n-ph="ph.fixName"></label>
             <div class="fields">
-              <label class="field"><span>Monto al mes</span><input id="fix-amount" type="number" inputmode="decimal" min="0.01" step="0.01" placeholder="0.00"></label>
-              <label class="field"><span>Día del mes</span><input id="fix-day" type="number" inputmode="numeric" min="1" max="31" step="1" value="1"></label>
-              <label class="field"><span>Categoría</span><select id="fix-cat"></select></label>
+              <label class="field"><span data-i18n="f.perMonth">Monto al mes</span><input id="fix-amount" type="number" inputmode="decimal" min="0.01" step="0.01" placeholder="0.00"></label>
+              <label class="field"><span data-i18n="f.dayOfMonth">Día del mes</span><input id="fix-day" type="number" inputmode="numeric" min="1" max="31" step="1" value="1"></label>
+              <label class="field"><span data-i18n="f.category">Categoría</span><select id="fix-cat"></select></label>
             </div>
-            <p class="hint">Se anota solo como gasto cada mes, en el día que elijas. Si el mes tiene menos días, se anota el último.</p>
-            <label class="hint" for="fix-now" style="display:flex;gap:10px;align-items:center"><input id="fix-now" type="checkbox" checked style="width:auto;accent-color:var(--accent)"> Anotarlo también este mes si el día ya pasó</label>
+            <p class="hint" data-i18n="fix.hint">Se anota solo como gasto cada mes, en el día que elijas. Si el mes tiene menos días, se anota el último.</p>
+            <label class="hint" for="fix-now" style="display:flex;gap:10px;align-items:center"><input id="fix-now" type="checkbox" checked style="width:auto;accent-color:var(--accent)"> <span data-i18n="fix.now">Anotarlo también este mes si el día ya pasó</span></label>
             <p class="err" id="fix-err" hidden></p>
-            <button class="btn" type="submit">Agregar gasto fijo</button>
+            <button class="btn" type="submit" data-i18n="btn.addFixed">Agregar gasto fijo</button>
           </form>
         </div>
         <div class="card">
@@ -337,23 +346,23 @@ details summary{cursor:pointer;color:var(--muted);font-size:13px;font-weight:600
 
     <!-- TAREAS -->
     <section class="panel" id="tab-tareas" hidden>
-      <div class="seg" role="group" aria-label="Vista de tareas">
-        <button type="button" data-act="seg" data-kind="tview" data-val="main" aria-pressed="true">Tareas</button>
-        <button type="button" data-act="seg" data-kind="tview" data-val="rec" aria-pressed="false">Frecuentes</button>
+      <div class="seg" role="group" aria-label="Vista de tareas" data-i18n-aria="aria.taskView">
+        <button type="button" data-act="seg" data-kind="tview" data-val="main" aria-pressed="true" data-i18n="nav.tasks">Tareas</button>
+        <button type="button" data-act="seg" data-kind="tview" data-val="rec" aria-pressed="false" data-i18n="view.recurring">Frecuentes</button>
       </div>
 
       <div class="panel" id="tk-main">
       <div class="card">
         <form id="task-form" novalidate>
-          <label class="field"><span>Tarea</span><input id="task-text" type="text" maxlength="100" placeholder="Pagar recibo de agua"></label>
+          <label class="field"><span data-i18n="f.task">Tarea</span><input id="task-text" type="text" maxlength="100" placeholder="Pagar recibo de agua" data-i18n-ph="ph.task"></label>
           <div class="fields">
-            <label class="field"><span>Fecha límite (opcional)</span><input id="task-due" type="date"></label>
-            <label class="field"><span>Prioridad</span>
-              <select id="task-prio"><option value="a">Alta</option><option value="m" selected>Media</option><option value="b">Baja</option></select>
+            <label class="field"><span data-i18n="f.dueOpt">Fecha límite (opcional)</span><input id="task-due" type="date"></label>
+            <label class="field"><span data-i18n="f.priority">Prioridad</span>
+              <select id="task-prio"><option value="a" data-i18n="prio.a">Alta</option><option value="m" selected data-i18n="prio.m">Media</option><option value="b" data-i18n="prio.b">Baja</option></select>
             </label>
           </div>
           <p class="err" id="task-err" hidden></p>
-          <button class="btn" type="submit">Agregar tarea</button>
+          <button class="btn" type="submit" data-i18n="btn.addTask">Agregar tarea</button>
         </form>
       </div>
       <div class="card" id="task-card"></div>
@@ -362,21 +371,21 @@ details summary{cursor:pointer;color:var(--muted);font-size:13px;font-weight:600
       <div class="panel" id="tk-rec" hidden>
         <div class="card">
           <form id="rec-form" novalidate>
-            <label class="field"><span>Recordatorio mensual</span><input id="rec-text" type="text" maxlength="100" placeholder="Pagar recibo de luz, revisar el estado de cuenta…"></label>
+            <label class="field"><span data-i18n="f.recText">Recordatorio mensual</span><input id="rec-text" type="text" maxlength="100" placeholder="Pagar recibo de luz, revisar el estado de cuenta…" data-i18n-ph="ph.rec"></label>
             <div class="fields">
-              <label class="field"><span>Día del mes</span><input id="rec-day" type="number" inputmode="numeric" min="1" max="31" step="1" value="1"></label>
-              <label class="field"><span>Prioridad</span>
-                <select id="rec-prio"><option value="a">Alta</option><option value="m" selected>Media</option><option value="b">Baja</option></select>
+              <label class="field"><span data-i18n="f.dayOfMonth">Día del mes</span><input id="rec-day" type="number" inputmode="numeric" min="1" max="31" step="1" value="1"></label>
+              <label class="field"><span data-i18n="f.priority">Prioridad</span>
+                <select id="rec-prio"><option value="a" data-i18n="prio.a">Alta</option><option value="m" selected data-i18n="prio.m">Media</option><option value="b" data-i18n="prio.b">Baja</option></select>
               </label>
             </div>
-            <p class="hint">Cada mes aparece en tus pendientes, con su fecha límite en el día que elijas. Si el mes tiene menos días, usa el último.</p>
-            <label class="hint" for="rec-now" style="display:flex;gap:10px;align-items:center"><input id="rec-now" type="checkbox" style="width:auto;accent-color:var(--accent)"> Crearla también este mes si el día ya pasó</label>
+            <p class="hint" data-i18n="rec.hint">Cada mes aparece en tus pendientes, con su fecha límite en el día que elijas. Si el mes tiene menos días, usa el último.</p>
+            <label class="hint" for="rec-now" style="display:flex;gap:10px;align-items:center"><input id="rec-now" type="checkbox" style="width:auto;accent-color:var(--accent)"> <span data-i18n="rec.now">Crearla también este mes si el día ya pasó</span></label>
             <p class="err" id="rec-err" hidden></p>
-            <button class="btn" type="submit">Agregar tarea frecuente</button>
+            <button class="btn" type="submit" data-i18n="btn.addRec">Agregar tarea frecuente</button>
           </form>
         </div>
         <div class="card">
-          <div class="card-head"><h2>Tus tareas frecuentes</h2><span class="eyebrow" id="rec-count"></span></div>
+          <div class="card-head"><h2 data-i18n="rec.title">Tus tareas frecuentes</h2><span class="eyebrow" id="rec-count"></span></div>
           <div id="rec-list"></div>
         </div>
       </div>
@@ -386,14 +395,14 @@ details summary{cursor:pointer;color:var(--muted);font-size:13px;font-weight:600
     <section class="panel" id="tab-metas" hidden>
       <div class="card">
         <form id="goal-form" novalidate>
-          <label class="field"><span>Nombre de la meta</span><input id="goal-name" type="text" maxlength="60" placeholder="Fondo de emergencia"></label>
+          <label class="field"><span data-i18n="f.goalName">Nombre de la meta</span><input id="goal-name" type="text" maxlength="60" placeholder="Fondo de emergencia" data-i18n-ph="ph.goal"></label>
           <div class="fields">
-            <label class="field"><span>Monto a lograr</span><input id="goal-target" type="number" inputmode="decimal" min="1" step="0.01" placeholder="1000.00"></label>
-            <label class="field"><span>Ya tengo</span><input id="goal-saved" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00"></label>
-            <label class="field"><span>Fecha límite (opcional)</span><input id="goal-due" type="date"></label>
+            <label class="field"><span data-i18n="f.goalTarget">Monto a lograr</span><input id="goal-target" type="number" inputmode="decimal" min="1" step="0.01" placeholder="1000.00"></label>
+            <label class="field"><span data-i18n="f.goalSaved">Ya tengo</span><input id="goal-saved" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00"></label>
+            <label class="field"><span data-i18n="f.dueOpt">Fecha límite (opcional)</span><input id="goal-due" type="date"></label>
           </div>
           <p class="err" id="goal-err" hidden></p>
-          <button class="btn" type="submit">Crear meta</button>
+          <button class="btn" type="submit" data-i18n="btn.createGoal">Crear meta</button>
         </form>
       </div>
       <div id="goal-list" class="panel"></div>
@@ -402,36 +411,36 @@ details summary{cursor:pointer;color:var(--muted);font-size:13px;font-weight:600
     <!-- AHORRO -->
     <section class="panel" id="tab-ahorro" hidden>
       <div class="card">
-        <span class="eyebrow">Total ahorrado</span>
+        <span class="eyebrow" data-i18n="sav.total">Total ahorrado</span>
         <div class="total" id="sav-total" style="margin:6px 0 14px">$0.00</div>
-        <div class="cat-top"><span id="sav-month-label">Este mes</span><span class="num" id="sav-month-val"></span></div>
+        <div class="cat-top"><span id="sav-month-label" data-i18n="sav.thisMonth">Este mes</span><span class="num" id="sav-month-val"></span></div>
         <div class="bar" id="sav-bar"><i></i></div>
         <div class="hero-set">
-          <label for="save-target">Meta de ahorro por mes</label>
+          <label for="save-target" data-i18n="sav.target">Meta de ahorro por mes</label>
           <input id="save-target" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00">
         </div>
       </div>
       <div class="card">
-        <div class="card-head"><h2>Últimos 6 meses</h2><span class="eyebrow">neto</span></div>
+        <div class="card-head"><h2 data-i18n="sav.last6">Últimos 6 meses</h2><span class="eyebrow" data-i18n="sav.net">neto</span></div>
         <div class="chart" id="sav-chart"></div>
       </div>
       <div class="card">
         <form id="sav-form" novalidate>
-          <div class="seg" role="group" aria-label="Tipo de movimiento de ahorro">
-            <button type="button" data-act="seg" data-kind="sav" data-val="d" aria-pressed="true">Depósito</button>
-            <button type="button" data-act="seg" data-kind="sav" data-val="r" aria-pressed="false">Retiro</button>
+          <div class="seg" role="group" aria-label="Tipo de movimiento de ahorro" data-i18n-aria="aria.savType">
+            <button type="button" data-act="seg" data-kind="sav" data-val="d" aria-pressed="true" data-i18n="type.deposit">Depósito</button>
+            <button type="button" data-act="seg" data-kind="sav" data-val="r" aria-pressed="false" data-i18n="type.withdraw">Retiro</button>
           </div>
           <div class="fields">
-            <label class="field"><span>Monto</span><input id="sav-amount" type="number" inputmode="decimal" min="0.01" step="0.01" placeholder="0.00"></label>
-            <label class="field"><span>Fecha</span><input id="sav-date" type="date"></label>
+            <label class="field"><span data-i18n="f.amount">Monto</span><input id="sav-amount" type="number" inputmode="decimal" min="0.01" step="0.01" placeholder="0.00"></label>
+            <label class="field"><span data-i18n="f.date">Fecha</span><input id="sav-date" type="date"></label>
           </div>
-          <label class="field"><span>Nota (opcional)</span><input id="sav-note" type="text" maxlength="80" placeholder="Sobrante de la quincena"></label>
+          <label class="field"><span data-i18n="f.noteOpt">Nota (opcional)</span><input id="sav-note" type="text" maxlength="80" placeholder="Sobrante de la quincena" data-i18n-ph="ph.savNote"></label>
           <p class="err" id="sav-err" hidden></p>
-          <button class="btn" type="submit" id="sav-btn">Guardar depósito</button>
+          <button class="btn" type="submit" id="sav-btn" data-i18n="btn.saveDeposit">Guardar depósito</button>
         </form>
       </div>
       <div class="card">
-        <div class="card-head"><h2>Movimientos</h2></div>
+        <div class="card-head"><h2 data-i18n="view.movements">Movimientos</h2></div>
         <div id="sav-list"></div>
       </div>
     </section>
@@ -439,31 +448,31 @@ details summary{cursor:pointer;color:var(--muted);font-size:13px;font-weight:600
     <!-- PRESUPUESTO POR PROYECTO -->
     <section class="panel" id="tab-proyectos" hidden>
       <div class="card">
-        <div class="card-head"><h2>Crear proyecto</h2></div>
-        <p class="hint">Define un presupuesto y registra cada gasto para saber cuánto has usado y cuánto te queda.</p>
+        <div class="card-head"><h2 data-i18n="proj.create">Crear proyecto</h2></div>
+        <p class="hint" data-i18n="proj.hint">Define un presupuesto y registra cada gasto para saber cuánto has usado y cuánto te queda.</p>
         <form id="project-form" novalidate>
-          <label class="field"><span>Nombre del proyecto</span><input id="project-name" type="text" maxlength="80" placeholder="Remodelación, construcción, viaje…"></label>
+          <label class="field"><span data-i18n="f.projName">Nombre del proyecto</span><input id="project-name" type="text" maxlength="80" placeholder="Remodelación, construcción, viaje…" data-i18n-ph="ph.proj"></label>
           <div class="fields">
-            <label class="field"><span>Presupuesto total ($)</span><input id="project-budget" type="number" inputmode="decimal" min="0.01" step="0.01" placeholder="5000.00"></label>
-            <label class="field"><span>Fecha de inicio</span><input id="project-date" type="date"></label>
+            <label class="field"><span data-i18n="f.projBudget">Presupuesto total ($)</span><input id="project-budget" type="number" inputmode="decimal" min="0.01" step="0.01" placeholder="5000.00"></label>
+            <label class="field"><span data-i18n="f.projStart">Fecha de inicio</span><input id="project-date" type="date"></label>
           </div>
-          <label class="field"><span>Nota (opcional)</span><input id="project-note" type="text" maxlength="160" placeholder="Detalles del proyecto"></label>
+          <label class="field"><span data-i18n="f.noteOpt">Nota (opcional)</span><input id="project-note" type="text" maxlength="160" placeholder="Detalles del proyecto" data-i18n-ph="ph.projNote"></label>
           <p class="err" id="project-err" hidden></p>
-          <button class="btn" type="submit">Crear proyecto</button>
+          <button class="btn" type="submit" data-i18n="proj.create">Crear proyecto</button>
         </form>
       </div>
       <div class="card">
-        <div class="card-head"><h2>Registrar gasto del proyecto</h2></div>
+        <div class="card-head"><h2 data-i18n="proj.logTitle">Registrar gasto del proyecto</h2></div>
         <form id="project-expense-form" novalidate>
-          <label class="field"><span>Proyecto</span><select id="pe-project"></select></label>
-          <label class="field"><span>Descripción</span><input id="pe-description" type="text" maxlength="100" placeholder="Compra de cemento, mano de obra…"></label>
+          <label class="field"><span data-i18n="f.project">Proyecto</span><select id="pe-project"></select></label>
+          <label class="field"><span data-i18n="f.description">Descripción</span><input id="pe-description" type="text" maxlength="100" placeholder="Compra de cemento, mano de obra…" data-i18n-ph="ph.projDesc"></label>
           <div class="fields">
-            <label class="field"><span>Monto ($)</span><input id="pe-amount" type="number" inputmode="decimal" min="0.01" step="0.01" placeholder="125.00"></label>
-            <label class="field"><span>Categoría</span><select id="pe-category"><option>Materiales</option><option>Mano de obra</option><option>Transporte</option><option>Permisos</option><option>Herramientas</option><option>Otros</option></select></label>
-            <label class="field"><span>Fecha</span><input id="pe-date" type="date"></label>
+            <label class="field"><span data-i18n="f.amountUsd">Monto ($)</span><input id="pe-amount" type="number" inputmode="decimal" min="0.01" step="0.01" placeholder="125.00"></label>
+            <label class="field"><span data-i18n="f.category">Categoría</span><select id="pe-category"></select></label>
+            <label class="field"><span data-i18n="f.date">Fecha</span><input id="pe-date" type="date"></label>
           </div>
           <p class="err" id="pe-err" hidden></p>
-          <button class="btn" type="submit">Agregar gasto</button>
+          <button class="btn" type="submit" data-i18n="btn.addExpense">Agregar gasto</button>
         </form>
       </div>
       <div id="project-list" class="panel"></div>
@@ -471,22 +480,22 @@ details summary{cursor:pointer;color:var(--muted);font-size:13px;font-weight:600
   </main>
 </div>
 
-<div class="toast" id="toast" role="status" hidden><span id="toast-msg"></span><button type="button" id="toast-undo" hidden>Deshacer</button></div>
+<div class="toast" id="toast" role="status" hidden><span id="toast-msg"></span><button type="button" id="toast-undo" hidden data-i18n="toast.undo">Deshacer</button></div>
 
-<nav class="tabs" aria-label="Secciones">
+<nav class="tabs" aria-label="Secciones" data-i18n-aria="nav.aria">
   <div class="tabs-in" role="tablist">
     <button class="tab" role="tab" type="button" data-act="tab" data-tab="resumen" aria-selected="true">
-      <svg viewBox="0 0 40 26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18v-5M20 18V8M26 18v-3"/></svg>Resumen</button>
+      <svg viewBox="0 0 40 26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18v-5M20 18V8M26 18v-3"/></svg><span data-i18n="nav.summary">Resumen</span></button>
     <button class="tab" role="tab" type="button" data-act="tab" data-tab="gastos" aria-selected="false">
-      <svg viewBox="0 0 40 26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="12" y="7" width="16" height="12" rx="2.5"/><path d="M12 11h16M24 15h1.5"/></svg>Gastos</button>
+      <svg viewBox="0 0 40 26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="12" y="7" width="16" height="12" rx="2.5"/><path d="M12 11h16M24 15h1.5"/></svg><span data-i18n="nav.expenses">Gastos</span></button>
     <button class="tab" role="tab" type="button" data-act="tab" data-tab="tareas" aria-selected="false">
-      <svg viewBox="0 0 40 26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 13.5l3.2 3.2 7.8-8"/></svg>Tareas</button>
+      <svg viewBox="0 0 40 26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 13.5l3.2 3.2 7.8-8"/></svg><span data-i18n="nav.tasks">Tareas</span></button>
     <button class="tab" role="tab" type="button" data-act="tab" data-tab="metas" aria-selected="false">
-      <svg viewBox="0 0 40 26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="13" r="7"/><circle cx="20" cy="13" r="3"/></svg>Metas</button>
+      <svg viewBox="0 0 40 26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="13" r="7"/><circle cx="20" cy="13" r="3"/></svg><span data-i18n="nav.goals">Metas</span></button>
     <button class="tab" role="tab" type="button" data-act="tab" data-tab="ahorro" aria-selected="false">
-      <svg viewBox="0 0 40 26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20v-9M16.5 14.5L20 11l3.5 3.5M14 7h12"/></svg>Ahorro</button>
+      <svg viewBox="0 0 40 26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20v-9M16.5 14.5L20 11l3.5 3.5M14 7h12"/></svg><span data-i18n="nav.savings">Ahorro</span></button>
     <button class="tab" role="tab" type="button" data-act="tab" data-tab="proyectos" aria-selected="false">
-      <svg viewBox="0 0 40 26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="11" y="6" width="18" height="14" rx="2"/><path d="M11 11h18M16 6V4M24 6V4M16 15h3M22 15h2"/></svg>Proyectos</button>
+      <svg viewBox="0 0 40 26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="11" y="6" width="18" height="14" rx="2"/><path d="M11 11h18M16 6V4M24 6V4M16 15h3M22 15h2"/></svg><span data-i18n="nav.projects">Proyectos</span></button>
   </div>
 </nav>
 
@@ -498,9 +507,279 @@ details summary{cursor:pointer;color:var(--muted);font-size:13px;font-weight:600
 var KEY='mibolsillo.v1';
 var CATS={g:['Comida','Transporte','Hogar','Servicios','Salud','Ocio','Educación','Otros'],i:['Salario','Extra','Otros ingresos']};
 var TABS=['resumen','gastos','tareas','metas','ahorro','proyectos'];
-var PRIO={a:'Alta',m:'Media',b:'Baja'};
 var TRASH='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg>';
 var CHECK='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg>';
+
+/* ---------- idioma / language (ES · EN) ---------- */
+/* Para agregar un texto: una fila [clave, español, English]. En el HTML se usa data-i18n="clave"; en JS, tt('clave',{vars}). */
+var LKEY='rinde.lang', LANG='es';
+var DICT=[
+ ["meta.desc","Rinde: gastos, presupuestos por proyecto, tareas, metas y ahorro en un solo lugar.","Rinde: expenses, project budgets, tasks, goals and savings in one place."],
+ ["hdr.sub","Gastos, tareas, metas y ahorro","Expenses, tasks, goals and savings"],
+ ["month.prev","Mes anterior","Previous month"],
+ ["month.next","Mes siguiente","Next month"],
+ ["demo.msg","Estás viendo datos de ejemplo.","You are viewing sample data."],
+ ["demo.clear","Empezar con mis datos","Start with my data"],
+
+ ["nav.aria","Secciones","Sections"],
+ ["nav.summary","Resumen","Summary"],
+ ["nav.expenses","Gastos","Expenses"],
+ ["nav.tasks","Tareas","Tasks"],
+ ["nav.goals","Metas","Goals"],
+ ["nav.savings","Ahorro","Savings"],
+ ["nav.projects","Proyectos","Projects"],
+
+ ["hero.left","Te quedan este mes","Left this month"],
+ ["hero.over","Te pasaste del presupuesto","You are over budget"],
+ ["hero.monthExp","Gastos del mes","Spending this month"],
+ ["hero.spent","Gastaste {s} de {b}","You spent {s} of {b}"],
+ ["hero.setBudget","Escribe tu presupuesto mensual abajo para ver cuánto te queda.","Enter your monthly budget below to see how much is left."],
+ ["budget.label","Presupuesto mensual","Monthly budget"],
+ ["pace.over","Vas {v} por encima del ritmo de hoy.","You are {v} above today's pace."],
+ ["pace.under","Vas {v} por debajo del ritmo de hoy.","You are {v} below today's pace."],
+ ["pace.fixedLeft","Faltan {v} de gastos fijos por anotar.","{v} of fixed expenses are still to be logged."],
+ ["pace.spend","Puedes gastar cerca de {v} al día.","You can spend about {v} a day."],
+ ["pace.spendFixed","Puedes gastar cerca de {v} al día, ya apartando tus fijos.","You can spend about {v} a day, with your fixed expenses already set aside."],
+ ["pace.fixedCover","Tus fijos pendientes ya cubren lo que queda.","Your pending fixed expenses already use up what is left."],
+ ["stat.inc","Ingresos","Income"],
+ ["stat.bal","Balance","Balance"],
+ ["card.where","En qué se va el dinero","Where your money goes"],
+ ["empty.nospend.t","Sin gastos este mes","No spending this month"],
+ ["empty.nospend.d","Registra el primero en la pestaña Gastos.","Log the first one in the Expenses tab."],
+ ["card.next","Lo que sigue","Coming up"],
+ ["link.tasks","Ver tareas","View tasks"],
+ ["empty.nopend.t","Nada pendiente","Nothing pending"],
+ ["empty.nopend.d","Agrega una tarea cuando la necesites.","Add a task whenever you need one."],
+ ["link.goals","Ver metas","View goals"],
+ ["empty.nogoals.t","Sin metas todavía","No goals yet"],
+ ["empty.nogoals.d","Crea una en la pestaña Metas.","Create one in the Goals tab."],
+ ["link.savings","Ver ahorro","View savings"],
+ ["sav.total","Total ahorrado","Total saved"],
+ ["sav.thisMonth","Este mes","This month"],
+ ["of","{a} de {b}","{a} of {b}"],
+ ["backup.title","Respaldo","Backup"],
+ ["backup.hint","Guarda una copia de tus datos en un archivo, o recupérala si cambias de teléfono.","Save a copy of your data to a file, or restore it if you switch phones."],
+ ["backup.export","Exportar copia","Export backup"],
+ ["backup.import","Importar copia","Import backup"],
+ ["backup.install","Instalar en este teléfono","Install on this phone"],
+
+ ["aria.expView","Vista de gastos","Expenses view"],
+ ["view.movements","Movimientos","Transactions"],
+ ["view.fixed","Gastos fijos","Fixed expenses"],
+ ["aria.txType","Tipo de movimiento","Transaction type"],
+ ["type.expense","Gasto","Expense"],
+ ["type.income","Ingreso","Income"],
+ ["f.amount","Monto","Amount"],
+ ["f.category","Categoría","Category"],
+ ["f.date","Fecha","Date"],
+ ["f.noteOpt","Nota (opcional)","Note (optional)"],
+ ["ph.txNote","Supermercado, bus, almuerzo…","Groceries, bus, lunch…"],
+ ["btn.addExpense","Agregar gasto","Add expense"],
+ ["btn.addIncome","Agregar ingreso","Add income"],
+ ["empty.notx.t","Aún no hay movimientos en {m}","No transactions in {m} yet"],
+ ["empty.notx.d","Usa el formulario de arriba para agregar el primero.","Use the form above to add the first one."],
+ ["chip.fixed","Fijo","Fixed"],
+ ["aria.delTx","Eliminar movimiento","Delete transaction"],
+
+ ["f.fixName","Nombre del gasto fijo","Fixed expense name"],
+ ["ph.fixName","Alquiler, internet, suscripción…","Rent, internet, subscription…"],
+ ["f.perMonth","Monto al mes","Monthly amount"],
+ ["f.dayOfMonth","Día del mes","Day of the month"],
+ ["fix.hint","Se anota solo como gasto cada mes, en el día que elijas. Si el mes tiene menos días, se anota el último.","It is logged automatically as an expense every month, on the day you choose. If the month is shorter, it is logged on the last day."],
+ ["fix.now","Anotarlo también este mes si el día ya pasó","Also log it this month if the day has already passed"],
+ ["btn.addFixed","Agregar gasto fijo","Add fixed expense"],
+ ["fix.monthly","Fijos al mes","Fixed per month"],
+ ["fix.pending","Por anotar este mes","To log this month"],
+ ["empty.nofixed.t","Sin gastos fijos","No fixed expenses"],
+ ["empty.nofixed.d","Agrega el alquiler, el internet o cualquier pago que se repita cada mes.","Add your rent, internet or any payment that repeats every month."],
+ ["chip.paused","Pausado","Paused"],
+ ["chip.logged","Anotado este mes","Logged this month"],
+ ["chip.toLog","Por anotar","To log"],
+ ["fix.meta","Día {d} · {c} · {chip}","Day {d} · {c} · {chip}"],
+ ["act.pause","Pausar","Pause"],
+ ["act.resume","Reanudar","Resume"],
+ ["aria.delFixed","Eliminar gasto fijo","Delete fixed expense"],
+ ["toast.fixedAdded","Gasto fijo agregado","Fixed expense added"],
+
+ ["aria.taskView","Vista de tareas","Tasks view"],
+ ["view.recurring","Frecuentes","Recurring"],
+ ["f.task","Tarea","Task"],
+ ["ph.task","Pagar recibo de agua","Pay the water bill"],
+ ["f.dueOpt","Fecha límite (opcional)","Due date (optional)"],
+ ["f.priority","Prioridad","Priority"],
+ ["prio.a","Alta","High"],
+ ["prio.m","Media","Medium"],
+ ["prio.b","Baja","Low"],
+ ["btn.addTask","Agregar tarea","Add task"],
+ ["f.recText","Recordatorio mensual","Monthly reminder"],
+ ["ph.rec","Pagar recibo de luz, revisar el estado de cuenta…","Pay the electricity bill…"],
+ ["rec.hint","Cada mes aparece en tus pendientes, con su fecha límite en el día que elijas. Si el mes tiene menos días, usa el último.","Every month it shows up in your pending tasks, due on the day you choose. If the month is shorter, the last day is used."],
+ ["rec.now","Crearla también este mes si el día ya pasó","Also create it this month if the day has already passed"],
+ ["btn.addRec","Agregar tarea frecuente","Add recurring task"],
+ ["rec.title","Tus tareas frecuentes","Your recurring tasks"],
+ ["rec.count","{n} activas","{n} active"],
+ ["empty.norec.t","Sin tareas frecuentes","No recurring tasks"],
+ ["empty.norec.d","Agrega lo que debas recordar cada mes: pagos, trámites, revisiones.","Add what you need to remember every month: payments, errands, check-ups."],
+ ["chip.recPaused","Pausada","Paused"],
+ ["chip.recNext","Empieza el mes que viene","Starts next month"],
+ ["chip.recCreated","En tus tareas este mes","In your tasks this month"],
+ ["chip.recToday","Se crea hoy","Created today"],
+ ["rec.meta","Día {d} de cada mes · {p} · {chip}","Day {d} of every month · {p} · {chip}"],
+ ["aria.delRec","Eliminar tarea frecuente","Delete recurring task"],
+ ["toast.recAdded","Tarea frecuente agregada","Recurring task added"],
+ ["tasks.pending","Pendientes","Pending"],
+ ["empty.alldone.t","Todo al día","All caught up"],
+ ["empty.alldone.d","No tienes tareas pendientes.","You have no pending tasks."],
+ ["tasks.done","Hechas ({n})","Done ({n})"],
+ ["chip.monthly","Mensual","Monthly"],
+ ["aria.markPending","Marcar como pendiente","Mark as pending"],
+ ["aria.markDone","Marcar como hecha","Mark as done"],
+ ["aria.delTask","Eliminar tarea","Delete task"],
+ ["due.none","Sin fecha","No date"],
+ ["due.today","Hoy","Today"],
+ ["due.tomorrow","Mañana","Tomorrow"],
+ ["due.overdue1","Venció hace 1 día","Overdue by 1 day"],
+ ["due.overdueN","Venció hace {n} días","Overdue by {n} days"],
+ ["day.yesterday","Ayer","Yesterday"],
+
+ ["f.goalName","Nombre de la meta","Goal name"],
+ ["ph.goal","Fondo de emergencia","Emergency fund"],
+ ["f.goalTarget","Monto a lograr","Target amount"],
+ ["f.goalSaved","Ya tengo","Already saved"],
+ ["btn.createGoal","Crear meta","Create goal"],
+ ["empty.goalsList.t","Aún no tienes metas","You have no goals yet"],
+ ["empty.goalsList.d","Crea la primera con el formulario de arriba.","Create your first one with the form above."],
+ ["goal.overdue","Fecha vencida","Past due date"],
+ ["goal.left1","Faltan 1 día · {m} al mes","1 day left · {m} a month"],
+ ["goal.leftN","Faltan {d} días · {m} al mes","{d} days left · {m} a month"],
+ ["goal.done","Meta cumplida","Goal reached"],
+ ["goal.due","Fecha límite: {d}","Due date: {d}"],
+ ["ph.contrib","Aportar $","Amount $"],
+ ["aria.contrib","Monto a aportar a {n}","Amount to add to {n}"],
+ ["btn.contrib","Aportar","Contribute"],
+ ["aria.delGoal","Eliminar meta","Delete goal"],
+
+ ["sav.target","Meta de ahorro por mes","Monthly savings goal"],
+ ["sav.last6","Últimos 6 meses","Last 6 months"],
+ ["sav.net","neto","net"],
+ ["aria.savType","Tipo de movimiento de ahorro","Savings transaction type"],
+ ["type.deposit","Depósito","Deposit"],
+ ["type.withdraw","Retiro","Withdrawal"],
+ ["ph.savNote","Sobrante de la quincena","Left over from this pay period"],
+ ["btn.saveDeposit","Guardar depósito","Save deposit"],
+ ["btn.saveWithdraw","Guardar retiro","Save withdrawal"],
+ ["sav.savedIn","Ahorrado en {m}","Saved in {m}"],
+ ["empty.nosav.t","Sin movimientos de ahorro","No savings transactions"],
+ ["empty.nosav.d","Guarda tu primer depósito arriba.","Save your first deposit above."],
+
+ ["proj.create","Crear proyecto","Create project"],
+ ["proj.hint","Define un presupuesto y registra cada gasto para saber cuánto has usado y cuánto te queda.","Set a budget and log each expense to see how much you have used and how much is left."],
+ ["f.projName","Nombre del proyecto","Project name"],
+ ["ph.proj","Remodelación, construcción, viaje…","Remodel, construction, trip…"],
+ ["f.projBudget","Presupuesto total ($)","Total budget ($)"],
+ ["f.projStart","Fecha de inicio","Start date"],
+ ["ph.projNote","Detalles del proyecto","Project details"],
+ ["proj.logTitle","Registrar gasto del proyecto","Log a project expense"],
+ ["f.project","Proyecto","Project"],
+ ["f.description","Descripción","Description"],
+ ["ph.projDesc","Compra de cemento, mano de obra…","Cement purchase, labor…"],
+ ["f.amountUsd","Monto ($)","Amount ($)"],
+ ["proj.first","Primero crea un proyecto","Create a project first"],
+ ["empty.noproj.t","Aún no hay proyectos","No projects yet"],
+ ["empty.noproj.d","Crea un proyecto arriba para empezar a controlar su presupuesto.","Create a project above to start tracking its budget."],
+ ["proj.over","Presupuesto excedido","Over budget"],
+ ["proj.near","Cerca del límite","Close to the limit"],
+ ["proj.ok","Dentro del presupuesto","Within budget"],
+ ["proj.noExp","Todavía no hay gastos registrados.","No expenses logged yet."],
+ ["aria.delProjExp","Eliminar gasto del proyecto","Delete project expense"],
+ ["proj.start","Inicio: {d}","Start: {d}"],
+ ["proj.noStart","Sin fecha de inicio","No start date"],
+ ["aria.delProj","Eliminar proyecto","Delete project"],
+ ["m.budget","Presupuesto","Budget"],
+ ["m.spent","Gastado","Spent"],
+ ["m.avail","Disponible","Available"],
+ ["proj.used","{p}% utilizado","{p}% used"],
+ ["proj.logged","Gastos registrados","Logged expenses"],
+
+ ["sync.saved","Guardado","Saved"],
+ ["sync.saving","Guardando…","Saving…"],
+ ["sync.local","Solo en este dispositivo","Only on this device"],
+ ["toast.undo","Deshacer","Undo"],
+ ["toast.deleted","Eliminado","Deleted"],
+ ["toast.cleared","Listo. Ahora todo es tuyo.","Done. Everything here is yours now."],
+ ["toast.projCreated","Proyecto creado","Project created"],
+ ["toast.projExp","Gasto agregado al proyecto","Expense added to the project"],
+ ["toast.projDeleted","Proyecto eliminado","Project deleted"],
+ ["toast.exported","Copia guardada","Backup saved"],
+ ["toast.downloaded","Copia descargada","Backup downloaded"],
+ ["toast.imported","Copia importada","Backup imported"],
+
+ ["err.amount","Escribe un monto mayor a 0.","Enter an amount greater than 0."],
+ ["err.task","Escribe qué hay que hacer.","Write what needs to be done."],
+ ["err.rec","Escribe qué quieres recordar cada mes.","Write what you want to be reminded of every month."],
+ ["err.day","El día debe estar entre 1 y 31.","The day must be between 1 and 31."],
+ ["err.fixName","Escribe el nombre del gasto.","Enter the expense name."],
+ ["err.goalName","Ponle un nombre a la meta.","Give the goal a name."],
+ ["err.goalTarget","Escribe el monto que quieres lograr.","Enter the amount you want to reach."],
+ ["err.savMax","No puedes retirar más de lo ahorrado ({v}).","You cannot withdraw more than you have saved ({v})."],
+ ["err.projName","Escribe el nombre del proyecto.","Enter the project name."],
+ ["err.projBudget","El presupuesto debe ser mayor a 0.","The budget must be greater than 0."],
+ ["err.projDesc","Escribe una descripción para el gasto.","Enter a description for the expense."],
+ ["err.projAmount","El monto debe ser mayor a 0.","The amount must be greater than 0."],
+ ["err.exportFail","No se pudo guardar la copia.","Could not save the backup."],
+ ["err.badBackup","Ese archivo no es una copia de Rinde.","That file is not a Rinde backup."],
+ ["err.readFail","No se pudo leer el archivo.","Could not read the file."]
+];
+var I18N={es:{},en:{}};
+DICT.forEach(function(r){I18N.es[r[0]]=r[1];I18N.en[r[0]]=r[2];});
+
+/* Categorías: lo que se guarda es siempre el nombre en español; solo cambia lo que se ve. */
+var PCATS=['Materiales','Mano de obra','Transporte','Permisos','Herramientas','Otros'];
+var CAT_EN={'Comida':'Food','Transporte':'Transport','Hogar':'Home','Servicios':'Utilities','Salud':'Health','Ocio':'Entertainment','Educación':'Education','Otros':'Other',
+  'Salario':'Salary','Extra':'Extra income','Otros ingresos':'Other income','Materiales':'Materials','Mano de obra':'Labor','Permisos':'Permits','Herramientas':'Tools'};
+/* Datos de ejemplo: se guardan en español y se muestran traducidos mientras sean datos de ejemplo. */
+var SEED_EN={'Pago del mes':'Monthly pay','Supermercado':'Groceries','Pasajes de la semana':'Weekly bus fares','Recibo de luz':'Electricity bill','Almuerzo':'Lunch',
+  'Cine con amigos':'Movies with friends','Filtro de agua':'Water filter','Farmacia':'Pharmacy',
+  'Pagar recibo de agua':'Pay the water bill','Revisar gastos de la semana':'Review this week\'s spending','Comparar seguros de salud':'Compare health insurance plans','Anotar el sueldo del mes':'Log this month\'s salary',
+  'Fondo de emergencia':'Emergency fund','Viaje de fin de año':'Year-end trip','Laptop nueva':'New laptop',
+  'Ahorro del mes':'Monthly savings','Reparación urgente':'Urgent repair',
+  'Alquiler':'Rent','Internet':'Internet','Gimnasio':'Gym','Música en línea':'Music streaming',
+  'Pagar recibo de luz':'Pay the electricity bill','Revisar estado de cuenta del banco':'Check the bank statement','Hacer copia de respaldo de Rinde':'Back up Rinde'};
+
+function tt(k,v){
+  var s=I18N[LANG][k];
+  if(s===undefined) s=I18N.es[k];
+  if(s===undefined) return k;
+  return v?s.replace(/\{(\w+)\}/g,function(m,n){return v[n]!==undefined?v[n]:m;}):s;
+}
+function loc(){return LANG==='en'?'en-US':'es';}
+function prioL(k){return tt('prio.'+k);}
+function catL(c){return (LANG==='en'&&CAT_EN[c])||c;}
+function dt(s){return (LANG==='en'&&state&&state.demo&&SEED_EN[s])||s;}
+function emptyBox(tk,dk,v){return '<div class="empty"><strong>'+tt(tk,v)+'</strong>'+tt(dk,v)+'</div>';}
+function pickLang(){
+  try{var s=localStorage.getItem(LKEY);if(s==='es'||s==='en')return s;}catch(e){}
+  var n=String((navigator.languages&&navigator.languages[0])||navigator.language||'es').toLowerCase();
+  return n.indexOf('en')===0?'en':'es';
+}
+function applyLang(){
+  document.documentElement.lang=LANG;
+  document.querySelectorAll('[data-i18n]').forEach(function(el){el.textContent=tt(el.getAttribute('data-i18n'));});
+  document.querySelectorAll('[data-i18n-ph]').forEach(function(el){el.setAttribute('placeholder',tt(el.getAttribute('data-i18n-ph')));});
+  document.querySelectorAll('[data-i18n-aria]').forEach(function(el){el.setAttribute('aria-label',tt(el.getAttribute('data-i18n-aria')));});
+  document.querySelectorAll('[data-lang]').forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-lang')===LANG));});
+  var md=document.querySelector('meta[name="description"]');if(md) md.setAttribute('content',tt('meta.desc'));
+}
+function setLang(l){
+  if((l!=='es'&&l!=='en')||l===LANG) return;
+  LANG=l;
+  try{localStorage.setItem(LKEY,l);}catch(e){}
+  applyLang();
+  fillCats();
+  setSync(syncState);
+  document.querySelectorAll('.err').forEach(function(e){e.hidden=true;});
+  renderAll();
+}
 
 function $(s){return document.querySelector(s);}
 function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
@@ -513,14 +792,14 @@ function money(n){var a=Math.abs(n);return (n<0?'−':'')+'$'+a.toLocaleString('
 function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
 function addMonths(vm,n){var p=vm.split('-').map(Number);var d=new Date(p[0],p[1]-1+n,1);return d.getFullYear()+'-'+pad(d.getMonth()+1);}
 function dayCount(vm){var p=vm.split('-').map(Number);return new Date(p[0],p[1],0).getDate();}
-function monthName(vm){return parse(vm+'-01').toLocaleDateString('es',{month:'long',year:'numeric'});}
-function shortDate(s){return parse(s).toLocaleDateString('es',{day:'numeric',month:'short'});}
+function monthName(vm){return parse(vm+'-01').toLocaleDateString(loc(),{month:'long',year:'numeric'});}
+function shortDate(s){return parse(s).toLocaleDateString(loc(),{day:'numeric',month:'short'});}
 function dayLabel(s){
   var t=today();
-  if(s===t) return 'Hoy';
+  if(s===t) return tt('due.today');
   var y=new Date();y.setDate(y.getDate()-1);
-  if(s===ds(y)) return 'Ayer';
-  return cap(parse(s).toLocaleDateString('es',{weekday:'long',day:'numeric',month:'long'}));
+  if(s===ds(y)) return tt('day.yesterday');
+  return cap(parse(s).toLocaleDateString(loc(),{weekday:'long',day:'numeric',month:'long'}));
 }
 function daysFromToday(s){return Math.round((parse(s)-parse(today()))/864e5);}
 
@@ -593,10 +872,12 @@ function saveLocal(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(
 
 /* ---------- guardado: cuenta (db) con copia en este navegador ---------- */
 var ref=null, dirty=false, saving=false, retried=false, timer=null;
+var syncState='';
 function setSync(s){
+  syncState=s;
   var el=$('#sync');
   el.setAttribute('data-s',s);
-  el.textContent=s==='saved'?'Guardado':s==='saving'?'Guardando…':s==='local'?'Solo en este dispositivo':'';
+  el.textContent=s==='saved'?tt('sync.saved'):s==='saving'?tt('sync.saving'):s==='local'?tt('sync.local'):'';
 }
 function touch(){
   saveLocal();
@@ -728,11 +1009,11 @@ function sortedTasks(list){
   });
 }
 function dueInfo(s){
-  if(!s) return {text:'Sin fecha',bad:false};
+  if(!s) return {text:tt('due.none'),bad:false};
   var d=daysFromToday(s);
-  if(d<0) return {text:'Venció hace '+(-d)+(d===-1?' día':' días'),bad:true};
-  if(d===0) return {text:'Hoy',bad:false};
-  if(d===1) return {text:'Mañana',bad:false};
+  if(d<0) return {text:d===-1?tt('due.overdue1'):tt('due.overdueN',{n:-d}),bad:true};
+  if(d===0) return {text:tt('due.today'),bad:false};
+  if(d===1) return {text:tt('due.tomorrow'),bad:false};
   return {text:shortDate(s),bad:false};
 }
 
@@ -749,25 +1030,25 @@ function renderResumen(){
   var S=sums(viewMonth), b=state.budget, left=b-S.g, cur=viewMonth===today().slice(0,7);
   var amt=$('#hero-amount'), sub=$('#hero-sub'), pace=$('#hero-pace');
   if(b>0){
-    $('#hero-label').textContent=left<0?'Te pasaste del presupuesto':'Te quedan este mes';
+    $('#hero-label').textContent=left<0?tt('hero.over'):tt('hero.left');
     amt.textContent=money(left<0?-left:left);
     amt.className='hero-amount'+(left<0?' neg':'');
-    sub.textContent='Gastaste '+money(S.g)+' de '+money(b);
+    sub.textContent=tt('hero.spent',{s:money(S.g),b:money(b)});
     setBar('#hero-bar',S.g/b,barState(S.g/b));
     pace.innerHTML='';
     if(cur){
       var dim=dayCount(viewMonth), d=new Date().getDate(), exp=b*d/dim, diff=S.g-exp, parts=[];
-      parts.push(diff>0?'Vas <b>'+money(diff)+'</b> por encima del ritmo de hoy.':'Vas <b>'+money(-diff)+'</b> por debajo del ritmo de hoy.');
+      parts.push(diff>0?tt('pace.over',{v:'<b>'+money(diff)+'</b>'}):tt('pace.under',{v:'<b>'+money(-diff)+'</b>'}));
       var pf=pendingFixed(viewMonth), avail=left-pf;
-      if(pf>0) parts.push('Faltan <b>'+money(pf)+'</b> de gastos fijos por anotar.');
-      if(avail>0) parts.push('Puedes gastar cerca de <b>'+money(avail/(dim-d+1))+'</b> al día'+(pf>0?', ya apartando tus fijos.':'.'));
-      else if(left>0&&pf>0) parts.push('Tus fijos pendientes ya cubren lo que queda.');
+      if(pf>0) parts.push(tt('pace.fixedLeft',{v:'<b>'+money(pf)+'</b>'}));
+      if(avail>0) parts.push(tt(pf>0?'pace.spendFixed':'pace.spend',{v:'<b>'+money(avail/(dim-d+1))+'</b>'}));
+      else if(left>0&&pf>0) parts.push(tt('pace.fixedCover'));
       pace.innerHTML=parts.join(' ');
     }
   }else{
-    $('#hero-label').textContent='Gastos del mes';
+    $('#hero-label').textContent=tt('hero.monthExp');
     amt.textContent=money(S.g);amt.className='hero-amount';
-    sub.textContent='Escribe tu presupuesto mensual abajo para ver cuánto te queda.';
+    sub.textContent=tt('hero.setBudget');
     setBar('#hero-bar',0,'');pace.innerHTML='';
   }
   $('#stat-i').textContent=money(S.i);
@@ -778,43 +1059,43 @@ function renderResumen(){
   var cats=Object.keys(S.by).sort(function(a,b){return S.by[b]-S.by[a];});
   $('#cat-list').innerHTML=cats.length?cats.map(function(c){
     var v=S.by[c],p=S.g?v/S.g:0;
-    return '<div><div class="cat-top"><span>'+esc(c)+'</span><span><span class="num">'+money(v)+'</span> · '+Math.round(p*100)+'%</span></div>'+
+    return '<div><div class="cat-top"><span>'+esc(catL(c))+'</span><span><span class="num">'+money(v)+'</span> · '+Math.round(p*100)+'%</span></div>'+
       '<div class="bar"><i style="width:'+(p*100)+'%"></i></div></div>';
-  }).join(''):'<div class="empty"><strong>Sin gastos este mes</strong>Registra el primero en la pestaña Gastos.</div>';
+  }).join(''):emptyBox('empty.nospend.t','empty.nospend.d');
 
   var pend=sortedTasks(state.tasks.filter(function(t){return !t.done;})).slice(0,3);
   $('#peek-tasks').innerHTML=pend.length?pend.map(function(t){
     var di=dueInfo(t.due);
-    return '<li class="row"><div class="grow"><div class="t">'+esc(t.text)+'</div><div class="meta'+(di.bad?' bad':'')+'">'+esc(di.text)+'</div></div><span class="chip '+t.prio+'">'+PRIO[t.prio]+'</span></li>';
-  }).join(''):'<li class="empty"><strong>Nada pendiente</strong>Agrega una tarea cuando la necesites.</li>';
+    return '<li class="row"><div class="grow"><div class="t">'+esc(dt(t.text))+'</div><div class="meta'+(di.bad?' bad':'')+'">'+esc(di.text)+'</div></div><span class="chip '+t.prio+'">'+prioL(t.prio)+'</span></li>';
+  }).join(''):'<li class="empty"><strong>'+tt('empty.nopend.t')+'</strong>'+tt('empty.nopend.d')+'</li>';
 
   var gl=state.goals.slice(0,3);
   $('#peek-goals').innerHTML=gl.length?gl.map(function(g){
     var p=g.target?Math.min(1,g.saved/g.target):0;
-    return '<div><div class="cat-top"><span>'+esc(g.name)+'</span><span class="num">'+Math.round(p*100)+'%</span></div><div class="bar"><i class="'+(p>=1?'good':'')+'" style="width:'+(p*100)+'%"></i></div></div>';
-  }).join(''):'<div class="empty"><strong>Sin metas todavía</strong>Crea una en la pestaña Metas.</div>';
+    return '<div><div class="cat-top"><span>'+esc(dt(g.name))+'</span><span class="num">'+Math.round(p*100)+'%</span></div><div class="bar"><i class="'+(p>=1?'good':'')+'" style="width:'+(p*100)+'%"></i></div></div>';
+  }).join(''):emptyBox('empty.nogoals.t','empty.nogoals.d');
 
-  var net=savNet(viewMonth), t=state.saveTarget, html='<div class="cat-top"><span>Total ahorrado</span><span class="num">'+money(savTotal())+'</span></div>';
-  html+='<div class="cat-top"><span>Este mes</span><span class="num">'+money(net)+(t?' de '+money(t):'')+'</span></div>';
+  var net=savNet(viewMonth), t=state.saveTarget, html='<div class="cat-top"><span>'+tt('sav.total')+'</span><span class="num">'+money(savTotal())+'</span></div>';
+  html+='<div class="cat-top"><span>'+tt('sav.thisMonth')+'</span><span class="num">'+(t?tt('of',{a:money(net),b:money(t)}):money(net))+'</span></div>';
   if(t) html+='<div class="bar"><i class="'+(net>=t?'good':'')+'" style="width:'+Math.max(0,Math.min(1,net/t))*100+'%"></i></div>';
   $('#peek-sav').innerHTML='<div class="cats">'+html+'</div>';
 }
 
 function renderGastos(){
   var S=sums(viewMonth);
-  $('#tx-summary').innerHTML='<span>Gastos <b class="num" style="color:var(--ink)">'+money(S.g)+'</b></span><span>Ingresos <b class="num pos">'+money(S.i)+'</b></span>';
+  $('#tx-summary').innerHTML='<span>'+tt('nav.expenses')+' <b class="num" style="color:var(--ink)">'+money(S.g)+'</b></span><span>'+tt('stat.inc')+' <b class="num pos">'+money(S.i)+'</b></span>';
   var list=monthTx(viewMonth).slice().reverse().sort(function(a,b){return a.date<b.date?1:a.date>b.date?-1:0;});
   if(!list.length){
-    $('#tx-list').innerHTML='<div class="empty"><strong>Aún no hay movimientos en '+esc(monthName(viewMonth))+'</strong>Usa el formulario de arriba para agregar el primero.</div>';
+    $('#tx-list').innerHTML=emptyBox('empty.notx.t','empty.notx.d',{m:esc(monthName(viewMonth))});
     return;
   }
   var html='<ul class="list">',last='';
   list.forEach(function(t){
     if(t.date!==last){last=t.date;html+='<li class="day eyebrow">'+esc(dayLabel(t.date))+'</li>';}
     var inc=t.type==='i';
-    html+='<li class="row"><div class="grow"><div class="t">'+esc(t.note||t.cat)+'</div><div class="meta">'+esc(t.cat)+(t.fx?' · <span class="chip fx">Fijo</span>':'')+'</div></div>'+
+    html+='<li class="row"><div class="grow"><div class="t">'+esc(t.note?dt(t.note):catL(t.cat))+'</div><div class="meta">'+esc(catL(t.cat))+(t.fx?' · <span class="chip fx">'+tt('chip.fixed')+'</span>':'')+'</div></div>'+
       '<span class="amt '+(inc?'pos':'')+'">'+(inc?'+':'−')+money(t.amount)+'</span>'+
-      '<button class="icon-btn" type="button" data-act="del" data-key="tx" data-id="'+t.id+'" aria-label="Eliminar movimiento">'+TRASH+'</button></li>';
+      '<button class="icon-btn" type="button" data-act="del" data-key="tx" data-id="'+t.id+'" aria-label="'+tt('aria.delTx')+'">'+TRASH+'</button></li>';
   });
   $('#tx-list').innerHTML=html+'</ul>';
 }
@@ -822,96 +1103,96 @@ function renderGastos(){
 function taskRow(t){
   var di=dueInfo(t.due);
   return '<li class="row'+(t.done?' done':'')+'">'+
-    '<button class="check" type="button" role="checkbox" aria-checked="'+t.done+'" aria-label="'+(t.done?'Marcar como pendiente':'Marcar como hecha')+'" data-act="toggle-task" data-id="'+t.id+'">'+CHECK+'</button>'+
-    '<div class="grow"><div class="t">'+esc(t.text)+'</div><div class="meta'+(di.bad&&!t.done?' bad':'')+'">'+esc(di.text)+(t.rec?' · <span class="chip fx">Mensual</span>':'')+'</div></div>'+
-    '<span class="chip '+t.prio+'">'+PRIO[t.prio]+'</span>'+
-    '<button class="icon-btn" type="button" data-act="del" data-key="tasks" data-id="'+t.id+'" aria-label="Eliminar tarea">'+TRASH+'</button></li>';
+    '<button class="check" type="button" role="checkbox" aria-checked="'+t.done+'" aria-label="'+(t.done?tt('aria.markPending'):tt('aria.markDone'))+'" data-act="toggle-task" data-id="'+t.id+'">'+CHECK+'</button>'+
+    '<div class="grow"><div class="t">'+esc(dt(t.text))+'</div><div class="meta'+(di.bad&&!t.done?' bad':'')+'">'+esc(di.text)+(t.rec?' · <span class="chip fx">'+tt('chip.monthly')+'</span>':'')+'</div></div>'+
+    '<span class="chip '+t.prio+'">'+prioL(t.prio)+'</span>'+
+    '<button class="icon-btn" type="button" data-act="del" data-key="tasks" data-id="'+t.id+'" aria-label="'+tt('aria.delTask')+'">'+TRASH+'</button></li>';
 }
 function renderTareas(){
   var pend=sortedTasks(state.tasks.filter(function(t){return !t.done;}));
   var done=state.tasks.filter(function(t){return t.done;});
   var open=$('#task-done')&&$('#task-done').open;
-  var html='<div class="card-head"><h2>Pendientes</h2><span class="eyebrow">'+pend.length+'</span></div>';
-  html+=pend.length?'<ul class="list">'+pend.map(taskRow).join('')+'</ul>':'<div class="empty"><strong>Todo al día</strong>No tienes tareas pendientes.</div>';
-  if(done.length) html+='<details class="done-box" id="task-done"'+(open?' open':'')+'><summary>Hechas ('+done.length+')</summary><ul class="list">'+done.map(taskRow).join('')+'</ul></details>';
+  var html='<div class="card-head"><h2>'+tt('tasks.pending')+'</h2><span class="eyebrow">'+pend.length+'</span></div>';
+  html+=pend.length?'<ul class="list">'+pend.map(taskRow).join('')+'</ul>':emptyBox('empty.alldone.t','empty.alldone.d');
+  if(done.length) html+='<details class="done-box" id="task-done"'+(open?' open':'')+'><summary>'+tt('tasks.done',{n:done.length})+'</summary><ul class="list">'+done.map(taskRow).join('')+'</ul></details>';
   $('#task-card').innerHTML=html;
 }
 
 function renderMetas(){
   if(!state.goals.length){
-    $('#goal-list').innerHTML='<div class="card"><div class="empty"><strong>Aún no tienes metas</strong>Crea la primera con el formulario de arriba.</div></div>';
+    $('#goal-list').innerHTML='<div class="card">'+emptyBox('empty.goalsList.t','empty.goalsList.d')+'</div>';
     return;
   }
   $('#goal-list').innerHTML=state.goals.map(function(g){
-    var p=g.target?Math.min(1,g.saved/g.target):0, done=g.saved>=g.target, extra='';
+    var p=g.target?Math.min(1,g.saved/g.target):0, done=g.saved>=g.target, extra='', gname=dt(g.name);
     if(!done&&g.due){
       var d=daysFromToday(g.due);
-      if(d<=0) extra='<span class="neg">Fecha vencida</span>';
-      else{var m=Math.max(1,Math.ceil(d/30));extra='<span>Faltan '+d+(d===1?' día':' días')+' · <b class="num">'+money((g.target-g.saved)/m)+'</b> al mes</span>';}
+      if(d<=0) extra='<span class="neg">'+tt('goal.overdue')+'</span>';
+      else{var m=Math.max(1,Math.ceil(d/30));extra='<span>'+tt(d===1?'goal.left1':'goal.leftN',{d:d,m:'<b class="num">'+money((g.target-g.saved)/m)+'</b>'})+'</span>';}
     }
-    return '<div class="card goal"><div class="goal-top"><h3>'+esc(g.name)+'</h3>'+
-      (done?'<span class="chip ok">Meta cumplida</span>':'')+
-      '<button class="icon-btn" type="button" data-act="del" data-key="goals" data-id="'+g.id+'" aria-label="Eliminar meta">'+TRASH+'</button></div>'+
+    return '<div class="card goal"><div class="goal-top"><h3>'+esc(gname)+'</h3>'+
+      (done?'<span class="chip ok">'+tt('goal.done')+'</span>':'')+
+      '<button class="icon-btn" type="button" data-act="del" data-key="goals" data-id="'+g.id+'" aria-label="'+tt('aria.delGoal')+'">'+TRASH+'</button></div>'+
       '<div><div class="bar"><i class="'+(done?'good':'')+'" style="width:'+p*100+'%"></i></div></div>'+
-      '<div class="goal-nums"><span><b class="num">'+money(g.saved)+'</b> de <span class="num">'+money(g.target)+'</span> · '+Math.round(p*100)+'%</span>'+extra+'</div>'+
-      (g.due?'<div class="meta">Fecha límite: '+esc(shortDate(g.due))+'</div>':'')+
-      '<form class="contrib" data-goal="'+g.id+'" novalidate><input id="c-'+g.id+'" type="number" inputmode="decimal" step="0.01" placeholder="Aportar $" aria-label="Monto a aportar a '+esc(g.name)+'"><button class="btn small" type="submit">Aportar</button></form></div>';
+      '<div class="goal-nums"><span>'+tt('of',{a:'<b class="num">'+money(g.saved)+'</b>',b:'<span class="num">'+money(g.target)+'</span>'})+' · '+Math.round(p*100)+'%</span>'+extra+'</div>'+
+      (g.due?'<div class="meta">'+tt('goal.due',{d:esc(shortDate(g.due))})+'</div>':'')+
+      '<form class="contrib" data-goal="'+g.id+'" novalidate><input id="c-'+g.id+'" type="number" inputmode="decimal" step="0.01" placeholder="'+tt('ph.contrib')+'" aria-label="'+esc(tt('aria.contrib',{n:gname}))+'"><button class="btn small" type="submit">'+tt('btn.contrib')+'</button></form></div>';
   }).join('');
 }
 
 function renderAhorro(){
   $('#sav-total').textContent=money(savTotal());
   var net=savNet(viewMonth), t=state.saveTarget;
-  $('#sav-month-label').textContent='Ahorrado en '+monthName(viewMonth);
-  $('#sav-month-val').textContent=money(net)+(t?' de '+money(t):'');
+  $('#sav-month-label').textContent=tt('sav.savedIn',{m:monthName(viewMonth)});
+  $('#sav-month-val').textContent=t?tt('of',{a:money(net),b:money(t)}):money(net);
   setBar('#sav-bar',t?net/t:0,net>=t&&t>0?'good':'');
   var months=[],k;
   for(k=5;k>=0;k--) months.push(addMonths(viewMonth,-k));
   var vals=months.map(savNet), max=Math.max.apply(null,[1].concat(vals.map(function(v){return Math.max(0,v);})));
   $('#sav-chart').innerHTML=months.map(function(m,i){
     var h=vals[i]>0?Math.max(4,vals[i]/max*96):3;
-    return '<div class="col'+(i===5?' cur':'')+'"><span class="v">'+(vals[i]<0?'−':'')+'$'+Math.round(Math.abs(vals[i]))+'</span><div class="b" style="height:'+h+'px"></div><span class="m">'+esc(parse(m+'-01').toLocaleDateString('es',{month:'short'}).replace('.',''))+'</span></div>';
+    return '<div class="col'+(i===5?' cur':'')+'"><span class="v">'+(vals[i]<0?'−':'')+'$'+Math.round(Math.abs(vals[i]))+'</span><div class="b" style="height:'+h+'px"></div><span class="m">'+esc(parse(m+'-01').toLocaleDateString(loc(),{month:'short'}).replace('.',''))+'</span></div>';
   }).join('');
   var list=state.sav.slice().reverse().sort(function(a,b){return a.date<b.date?1:a.date>b.date?-1:0;}).slice(0,20);
   $('#sav-list').innerHTML=list.length?'<ul class="list">'+list.map(function(m){
     var dep=m.type==='d';
-    return '<li class="row"><div class="grow"><div class="t">'+esc(m.note||(dep?'Depósito':'Retiro'))+'</div><div class="meta">'+(dep?'Depósito':'Retiro')+' · '+esc(shortDate(m.date))+'</div></div>'+
+    return '<li class="row"><div class="grow"><div class="t">'+esc(m.note?dt(m.note):(dep?tt('type.deposit'):tt('type.withdraw')))+'</div><div class="meta">'+(dep?tt('type.deposit'):tt('type.withdraw'))+' · '+esc(shortDate(m.date))+'</div></div>'+
       '<span class="amt '+(dep?'pos':'')+'">'+(dep?'+':'−')+money(m.amount)+'</span>'+
-      '<button class="icon-btn" type="button" data-act="del" data-key="sav" data-id="'+m.id+'" aria-label="Eliminar movimiento">'+TRASH+'</button></li>';
-  }).join('')+'</ul>':'<div class="empty"><strong>Sin movimientos de ahorro</strong>Guarda tu primer depósito arriba.</div>';
+      '<button class="icon-btn" type="button" data-act="del" data-key="sav" data-id="'+m.id+'" aria-label="'+tt('aria.delTx')+'">'+TRASH+'</button></li>';
+  }).join('')+'</ul>':emptyBox('empty.nosav.t','empty.nosav.d');
 }
 
 function renderFijos(){
   var cur=today().slice(0,7), act=state.fixed.filter(function(f){return f.active;}), tot=0;
   act.forEach(function(f){tot+=f.amount;});
-  $('#fix-total').innerHTML='<span>Fijos al mes <b class="num">'+money(tot)+'</b></span><span>Por anotar este mes <b class="num">'+money(pendingFixed(cur))+'</b></span>';
+  $('#fix-total').innerHTML='<span>'+tt('fix.monthly')+' <b class="num">'+money(tot)+'</b></span><span>'+tt('fix.pending')+' <b class="num">'+money(pendingFixed(cur))+'</b></span>';
   if(!state.fixed.length){
-    $('#fix-list').innerHTML='<div class="empty"><strong>Sin gastos fijos</strong>Agrega el alquiler, el internet o cualquier pago que se repita cada mes.</div>';
+    $('#fix-list').innerHTML=emptyBox('empty.nofixed.t','empty.nofixed.d');
     return;
   }
   var list=state.fixed.slice().sort(function(a,b){return a.day-b.day;});
   $('#fix-list').innerHTML='<ul class="list">'+list.map(function(f){
-    var done=(f.done||[]).indexOf(cur)>=0, chip=!f.active?'<span class="chip pause">Pausado</span>':done?'<span class="chip ok">Anotado este mes</span>':'<span class="chip m">Por anotar</span>';
-    return '<li class="row'+(f.active?'':' paused')+'"><div class="grow"><div class="t">'+esc(f.name)+'</div><div class="meta">Día '+f.day+' · '+esc(f.cat)+' · '+chip+'</div></div>'+
-      '<div style="display:grid;justify-items:end"><span class="amt">'+money(f.amount)+'</span><button class="text-btn" type="button" data-act="toggle-fixed" data-id="'+f.id+'">'+(f.active?'Pausar':'Reanudar')+'</button></div>'+
-      '<button class="icon-btn" type="button" data-act="del" data-key="fixed" data-id="'+f.id+'" aria-label="Eliminar gasto fijo">'+TRASH+'</button></li>';
+    var done=(f.done||[]).indexOf(cur)>=0, chip=!f.active?'<span class="chip pause">'+tt('chip.paused')+'</span>':done?'<span class="chip ok">'+tt('chip.logged')+'</span>':'<span class="chip m">'+tt('chip.toLog')+'</span>';
+    return '<li class="row'+(f.active?'':' paused')+'"><div class="grow"><div class="t">'+esc(dt(f.name))+'</div><div class="meta">'+tt('fix.meta',{d:f.day,c:esc(catL(f.cat)),chip:chip})+'</div></div>'+
+      '<div style="display:grid;justify-items:end"><span class="amt">'+money(f.amount)+'</span><button class="text-btn" type="button" data-act="toggle-fixed" data-id="'+f.id+'">'+(f.active?tt('act.pause'):tt('act.resume'))+'</button></div>'+
+      '<button class="icon-btn" type="button" data-act="del" data-key="fixed" data-id="'+f.id+'" aria-label="'+tt('aria.delFixed')+'">'+TRASH+'</button></li>';
   }).join('')+'</ul>';
 }
 
 function renderRec(){
   var cur=today().slice(0,7), list=state.rec.slice().sort(function(a,b){return a.day-b.day;});
   var act=list.filter(function(r){return r.active;}).length;
-  $('#rec-count').textContent=list.length?act+' activas':'';
+  $('#rec-count').textContent=list.length?tt('rec.count',{n:act}):'';
   if(!list.length){
-    $('#rec-list').innerHTML='<div class="empty"><strong>Sin tareas frecuentes</strong>Agrega lo que debas recordar cada mes: pagos, trámites, revisiones.</div>';
+    $('#rec-list').innerHTML=emptyBox('empty.norec.t','empty.norec.d');
     return;
   }
   $('#rec-list').innerHTML='<ul class="list">'+list.map(function(r){
     var created=(r.done||[]).indexOf(cur)>=0, later=(r.from||cur)>cur;
-    var chip=!r.active?'<span class="chip pause">Pausada</span>':later?'<span class="chip m">Empieza el mes que viene</span>':created?'<span class="chip ok">En tus tareas este mes</span>':'<span class="chip m">Se crea hoy</span>';
-    return '<li class="row'+(r.active?'':' paused')+'"><div class="grow"><div class="t">'+esc(r.text)+'</div><div class="meta">Día '+r.day+' de cada mes · '+PRIO[r.prio]+' · '+chip+'</div></div>'+
-      '<button class="text-btn" type="button" data-act="toggle-rec" data-id="'+r.id+'">'+(r.active?'Pausar':'Reanudar')+'</button>'+
-      '<button class="icon-btn" type="button" data-act="del" data-key="rec" data-id="'+r.id+'" aria-label="Eliminar tarea frecuente">'+TRASH+'</button></li>';
+    var chip=!r.active?'<span class="chip pause">'+tt('chip.recPaused')+'</span>':later?'<span class="chip m">'+tt('chip.recNext')+'</span>':created?'<span class="chip ok">'+tt('chip.recCreated')+'</span>':'<span class="chip m">'+tt('chip.recToday')+'</span>';
+    return '<li class="row'+(r.active?'':' paused')+'"><div class="grow"><div class="t">'+esc(dt(r.text))+'</div><div class="meta">'+tt('rec.meta',{d:r.day,p:prioL(r.prio),chip:chip})+'</div></div>'+
+      '<button class="text-btn" type="button" data-act="toggle-rec" data-id="'+r.id+'">'+(r.active?tt('act.pause'):tt('act.resume'))+'</button>'+
+      '<button class="icon-btn" type="button" data-act="del" data-key="rec" data-id="'+r.id+'" aria-label="'+tt('aria.delRec')+'">'+TRASH+'</button></li>';
   }).join('')+'</ul>';
 }
 
@@ -921,26 +1202,26 @@ function projectSpent(id){
 }
 function renderProyectos(){
   var sel=$('#pe-project'), previous=sel.value;
-  sel.innerHTML=state.projects.length?state.projects.map(function(p){return '<option value="'+esc(p.id)+'">'+esc(p.name)+'</option>';}).join(''):'<option value="">Primero crea un proyecto</option>';
+  sel.innerHTML=state.projects.length?state.projects.map(function(p){return '<option value="'+esc(p.id)+'">'+esc(p.name)+'</option>';}).join(''):'<option value="">'+tt('proj.first')+'</option>';
   if(state.projects.some(function(p){return p.id===previous;})) sel.value=previous;
   $('#pe-project').disabled=!state.projects.length;
   $('#project-expense-form button[type="submit"]').disabled=!state.projects.length;
   if(!state.projects.length){
-    $('#project-list').innerHTML='<div class="card"><div class="empty"><strong>Aún no hay proyectos</strong>Crea un proyecto arriba para empezar a controlar su presupuesto.</div></div>';
+    $('#project-list').innerHTML='<div class="card">'+emptyBox('empty.noproj.t','empty.noproj.d')+'</div>';
     return;
   }
   $('#project-list').innerHTML=state.projects.slice().reverse().map(function(p){
     var expenses=state.projectExpenses.filter(function(e){return e.projectId===p.id;}).slice().sort(function(a,b){return a.date<b.date?1:a.date>b.date?-1:0;});
     var spent=projectSpent(p.id), left=(+p.budget||0)-spent, ratio=p.budget>0?spent/p.budget:0;
-    var status=left<0?'<span class="chip a">Presupuesto excedido</span>':ratio>=.8?'<span class="chip m">Cerca del límite</span>':'<span class="chip ok">Dentro del presupuesto</span>';
+    var status=left<0?'<span class="chip a">'+tt('proj.over')+'</span>':ratio>=.8?'<span class="chip m">'+tt('proj.near')+'</span>':'<span class="chip ok">'+tt('proj.ok')+'</span>';
     var items=expenses.length?'<ul class="list">'+expenses.map(function(e){
-      return '<li class="row"><div class="grow"><div class="t">'+esc(e.description)+'</div><div class="meta">'+esc(e.category)+' · '+esc(shortDate(e.date))+'</div></div><span class="amt">'+money(e.amount)+'</span><button class="icon-btn" type="button" data-act="del" data-key="projectExpenses" data-id="'+esc(e.id)+'" aria-label="Eliminar gasto del proyecto">'+TRASH+'</button></li>';
-    }).join('')+'</ul>':'<div class="empty">Todavía no hay gastos registrados.</div>';
-    return '<div class="card project-card"><div class="goal-top"><div class="grow"><div class="project-title">'+esc(p.name)+'</div><div class="meta">'+(p.date?'Inicio: '+esc(shortDate(p.date)):'Sin fecha de inicio')+'</div></div><button class="icon-btn" type="button" data-act="del-project" data-id="'+esc(p.id)+'" aria-label="Eliminar proyecto">'+TRASH+'</button></div>'+
+      return '<li class="row"><div class="grow"><div class="t">'+esc(e.description)+'</div><div class="meta">'+esc(catL(e.category))+' · '+esc(shortDate(e.date))+'</div></div><span class="amt">'+money(e.amount)+'</span><button class="icon-btn" type="button" data-act="del" data-key="projectExpenses" data-id="'+esc(e.id)+'" aria-label="'+tt('aria.delProjExp')+'">'+TRASH+'</button></li>';
+    }).join('')+'</ul>':'<div class="empty">'+tt('proj.noExp')+'</div>';
+    return '<div class="card project-card"><div class="goal-top"><div class="grow"><div class="project-title">'+esc(p.name)+'</div><div class="meta">'+(p.date?tt('proj.start',{d:esc(shortDate(p.date))}):tt('proj.noStart'))+'</div></div><button class="icon-btn" type="button" data-act="del-project" data-id="'+esc(p.id)+'" aria-label="'+tt('aria.delProj')+'">'+TRASH+'</button></div>'+
       (p.note?'<div class="project-note">'+esc(p.note)+'</div>':'')+
-      '<div class="project-metrics"><div class="project-metric"><span>Presupuesto</span><b>'+money(+p.budget||0)+'</b></div><div class="project-metric"><span>Gastado</span><b>'+money(spent)+'</b></div><div class="project-metric"><span>Disponible</span><b class="'+(left<0?'neg':'pos')+'">'+money(left)+'</b></div></div>'+
-      '<div class="bar"><i class="'+(ratio>=1?'bad':ratio>=.8?'warn':'')+'" style="width:'+Math.min(100,Math.max(0,ratio*100))+'%"></i></div><div class="goal-nums"><span>'+Math.round(ratio*100)+'% utilizado</span>'+status+'</div>'+
-      '<div class="project-expenses"><div class="card-head"><h2>Gastos registrados</h2><span class="eyebrow">'+expenses.length+'</span></div>'+items+'</div></div>';
+      '<div class="project-metrics"><div class="project-metric"><span>'+tt('m.budget')+'</span><b>'+money(+p.budget||0)+'</b></div><div class="project-metric"><span>'+tt('m.spent')+'</span><b>'+money(spent)+'</b></div><div class="project-metric"><span>'+tt('m.avail')+'</span><b class="'+(left<0?'neg':'pos')+'">'+money(left)+'</b></div></div>'+
+      '<div class="bar"><i class="'+(ratio>=1?'bad':ratio>=.8?'warn':'')+'" style="width:'+Math.min(100,Math.max(0,ratio*100))+'%"></i></div><div class="goal-nums"><span>'+tt('proj.used',{p:Math.round(ratio*100)})+'</span>'+status+'</div>'+
+      '<div class="project-expenses"><div class="card-head"><h2>'+tt('proj.logged')+'</h2><span class="eyebrow">'+expenses.length+'</span></div>'+items+'</div></div>';
   }).join('');
 }
 
@@ -956,11 +1237,18 @@ function setTab(t){
   renderHeader();
   window.scrollTo(0,0);
 }
+function catOptions(list){return list.map(function(c){return '<option value="'+esc(c)+'">'+esc(catL(c))+'</option>';}).join('');}
+function syncBtnLabels(){
+  $('#tx-btn').textContent=txType==='g'?tt('btn.addExpense'):tt('btn.addIncome');
+  $('#sav-btn').textContent=savType==='d'?tt('btn.saveDeposit'):tt('btn.saveWithdraw');
+}
 function fillCats(){
-  var sel=$('#tx-cat');
-  sel.innerHTML=CATS[txType].map(function(c){return '<option>'+esc(c)+'</option>';}).join('');
-  $('#tx-btn').textContent=txType==='g'?'Agregar gasto':'Agregar ingreso';
-  $('#fix-cat').innerHTML=CATS.g.map(function(c){return '<option>'+esc(c)+'</option>';}).join('');
+  [['#tx-cat',CATS[txType]],['#fix-cat',CATS.g],['#pe-category',PCATS]].forEach(function(p){
+    var el=$(p[0]), prev=el.value;
+    el.innerHTML=catOptions(p[1]);
+    if(prev&&p[1].indexOf(prev)>=0) el.value=prev;
+  });
+  syncBtnLabels();
 }
 function showErr(id,msg){var e=$(id);e.textContent=msg;e.hidden=false;}
 function clearErr(id){$(id).hidden=true;}
@@ -979,7 +1267,7 @@ function removeFrom(key,id){
   if(i<0) return;
   var it=state[key].splice(i,1)[0];
   commit();
-  toast('Eliminado',function(){state[key].splice(Math.min(i,state[key].length),0,it);commit();});
+  toast(tt('toast.deleted'),function(){state[key].splice(Math.min(i,state[key].length),0,it);commit();});
 }
 function removeProject(id){
   var i=state.projects.findIndex(function(p){return p.id===id;});
@@ -989,7 +1277,7 @@ function removeProject(id){
   state.projectExpenses.forEach(function(e){if(e.projectId===id) removed.push(e);else kept.push(e);});
   state.projectExpenses=kept;
   commit();
-  toast('Proyecto eliminado',function(){
+  toast(tt('toast.projDeleted'),function(){
     state.projects.splice(Math.min(i,state.projects.length),0,project);
     state.projectExpenses=state.projectExpenses.concat(removed);
     commit();
@@ -1000,7 +1288,8 @@ document.addEventListener('click',function(e){
   var el=e.target.closest('[data-act]');
   if(!el) return;
   var act=el.getAttribute('data-act');
-  if(act==='tab') setTab(el.getAttribute('data-tab'));
+  if(act==='lang') setLang(el.getAttribute('data-lang'));
+  else if(act==='tab') setTab(el.getAttribute('data-tab'));
   else if(act==='go'){setTab(el.getAttribute('data-tab'));}
   else if(act==='month'){viewMonth=addMonths(viewMonth,+el.getAttribute('data-d'));renderAll();}
   else if(act==='del') removeFrom(el.getAttribute('data-key'),el.getAttribute('data-id'));
@@ -1015,7 +1304,7 @@ document.addEventListener('click',function(e){
     if(kind==='tview'){$('#tk-main').hidden=(val!=='main');$('#tk-rec').hidden=(val!=='rec');}
     else if(kind==='gview'){$('#gx-mov').hidden=(val!=='mov');$('#gx-fix').hidden=(val!=='fix');}
     else if(kind==='tx'){txType=val;fillCats();}
-    else{savType=val;$('#sav-btn').textContent=val==='d'?'Guardar depósito':'Guardar retiro';}
+    else{savType=val;syncBtnLabels();}
   }
   else if(act==='toggle-rec'){
     var rc=state.rec.find(function(x){return x.id===el.getAttribute('data-id');});
@@ -1036,7 +1325,7 @@ document.addEventListener('click',function(e){
   else if(act==='clear-demo'){
     state=norm({demo:false});
     commit();
-    toast('Listo. Ahora todo es tuyo.');
+    toast(tt('toast.cleared'));
   }
 });
 $('#toast-undo').addEventListener('click',function(){
@@ -1048,7 +1337,7 @@ function num(id){var v=parseFloat($(id).value);return isFinite(v)?v:NaN;}
 $('#tx-form').addEventListener('submit',function(e){
   e.preventDefault();clearErr('#tx-err');
   var amount=num('#tx-amount'), date=$('#tx-date').value||today();
-  if(!(amount>0)){showErr('#tx-err','Escribe un monto mayor a 0.');return;}
+  if(!(amount>0)){showErr('#tx-err',tt('err.amount'));return;}
   state.tx.push({id:uid(),type:txType,amount:Math.round(amount*100)/100,cat:$('#tx-cat').value,note:$('#tx-note').value.trim(),date:date});
   viewMonth=date.slice(0,7);
   $('#tx-amount').value='';$('#tx-note').value='';
@@ -1058,7 +1347,7 @@ $('#tx-form').addEventListener('submit',function(e){
 $('#task-form').addEventListener('submit',function(e){
   e.preventDefault();clearErr('#task-err');
   var text=$('#task-text').value.trim();
-  if(!text){showErr('#task-err','Escribe qué hay que hacer.');return;}
+  if(!text){showErr('#task-err',tt('err.task'));return;}
   state.tasks.push({id:uid(),text:text,due:$('#task-due').value,prio:$('#task-prio').value,done:false});
   $('#task-text').value='';$('#task-due').value='';
   commit();
@@ -1066,8 +1355,8 @@ $('#task-form').addEventListener('submit',function(e){
 $('#goal-form').addEventListener('submit',function(e){
   e.preventDefault();clearErr('#goal-err');
   var name=$('#goal-name').value.trim(), target=num('#goal-target'), saved=num('#goal-saved');
-  if(!name){showErr('#goal-err','Ponle un nombre a la meta.');return;}
-  if(!(target>0)){showErr('#goal-err','Escribe el monto que quieres lograr.');return;}
+  if(!name){showErr('#goal-err',tt('err.goalName'));return;}
+  if(!(target>0)){showErr('#goal-err',tt('err.goalTarget'));return;}
   state.goals.push({id:uid(),name:name,target:Math.round(target*100)/100,saved:saved>0?Math.round(saved*100)/100:0,due:$('#goal-due').value});
   ['#goal-name','#goal-target','#goal-saved','#goal-due'].forEach(function(s){$(s).value='';});
   commit();
@@ -1085,28 +1374,28 @@ $('#goal-list').addEventListener('submit',function(e){
 $('#project-form').addEventListener('submit',function(e){
   e.preventDefault();clearErr('#project-err');
   var name=$('#project-name').value.trim(), budget=num('#project-budget'), date=$('#project-date').value||today();
-  if(!name){showErr('#project-err','Escribe el nombre del proyecto.');return;}
-  if(!(budget>0)){showErr('#project-err','El presupuesto debe ser mayor a 0.');return;}
+  if(!name){showErr('#project-err',tt('err.projName'));return;}
+  if(!(budget>0)){showErr('#project-err',tt('err.projBudget'));return;}
   state.projects.push({id:uid(),name:name,budget:Math.round(budget*100)/100,date:date,note:$('#project-note').value.trim()});
   $('#project-name').value='';$('#project-budget').value='';$('#project-note').value='';
-  commit();toast('Proyecto creado');
+  commit();toast(tt('toast.projCreated'));
 });
 $('#project-expense-form').addEventListener('submit',function(e){
   e.preventDefault();clearErr('#pe-err');
   var projectId=$('#pe-project').value, description=$('#pe-description').value.trim(), amount=num('#pe-amount'), date=$('#pe-date').value||today();
-  if(!state.projects.some(function(p){return p.id===projectId;})){showErr('#pe-err','Primero crea un proyecto.');return;}
-  if(!description){showErr('#pe-err','Escribe una descripción para el gasto.');return;}
-  if(!(amount>0)){showErr('#pe-err','El monto debe ser mayor a 0.');return;}
+  if(!state.projects.some(function(p){return p.id===projectId;})){showErr('#pe-err',tt('proj.first'));return;}
+  if(!description){showErr('#pe-err',tt('err.projDesc'));return;}
+  if(!(amount>0)){showErr('#pe-err',tt('err.projAmount'));return;}
   state.projectExpenses.push({id:uid(),projectId:projectId,description:description,amount:Math.round(amount*100)/100,category:$('#pe-category').value,date:date});
   $('#pe-description').value='';$('#pe-amount').value='';
-  commit();toast('Gasto agregado al proyecto');
+  commit();toast(tt('toast.projExp'));
 });
 
 $('#sav-form').addEventListener('submit',function(e){
   e.preventDefault();clearErr('#sav-err');
   var amount=num('#sav-amount');
-  if(!(amount>0)){showErr('#sav-err','Escribe un monto mayor a 0.');return;}
-  if(savType==='r'&&amount>savTotal()+0.001){showErr('#sav-err','No puedes retirar más de lo ahorrado ('+money(savTotal())+').');return;}
+  if(!(amount>0)){showErr('#sav-err',tt('err.amount'));return;}
+  if(savType==='r'&&amount>savTotal()+0.001){showErr('#sav-err',tt('err.savMax',{v:money(savTotal())}));return;}
   var date=$('#sav-date').value||today();
   state.sav.push({id:uid(),type:savType,amount:Math.round(amount*100)/100,note:$('#sav-note').value.trim(),date:date});
   $('#sav-amount').value='';$('#sav-note').value='';
@@ -1115,30 +1404,30 @@ $('#sav-form').addEventListener('submit',function(e){
 $('#fix-form').addEventListener('submit',function(e){
   e.preventDefault();clearErr('#fix-err');
   var name=$('#fix-name').value.trim(), amount=num('#fix-amount'), day=parseInt($('#fix-day').value,10);
-  if(!name){showErr('#fix-err','Escribe el nombre del gasto.');return;}
-  if(!(amount>0)){showErr('#fix-err','Escribe un monto mayor a 0.');return;}
-  if(!(day>=1&&day<=31)){showErr('#fix-err','El día debe estar entre 1 y 31.');return;}
+  if(!name){showErr('#fix-err',tt('err.fixName'));return;}
+  if(!(amount>0)){showErr('#fix-err',tt('err.amount'));return;}
+  if(!(day>=1&&day<=31)){showErr('#fix-err',tt('err.day'));return;}
   var cur=today().slice(0,7), passed=new Date().getDate()>=Math.min(day,dayCount(cur));
   var from=(!$('#fix-now').checked&&passed)?addMonths(cur,1):cur;
   state.fixed.push({id:uid(),name:name,amount:Math.round(amount*100)/100,cat:$('#fix-cat').value,day:day,active:true,from:from,done:[]});
   applyAuto();
   $('#fix-name').value='';$('#fix-amount').value='';
   commit();
-  toast('Gasto fijo agregado');
+  toast(tt('toast.fixedAdded'));
 });
 
 $('#rec-form').addEventListener('submit',function(e){
   e.preventDefault();clearErr('#rec-err');
   var text=$('#rec-text').value.trim(), day=parseInt($('#rec-day').value,10);
-  if(!text){showErr('#rec-err','Escribe qué quieres recordar cada mes.');return;}
-  if(!(day>=1&&day<=31)){showErr('#rec-err','El día debe estar entre 1 y 31.');return;}
+  if(!text){showErr('#rec-err',tt('err.rec'));return;}
+  if(!(day>=1&&day<=31)){showErr('#rec-err',tt('err.day'));return;}
   var cur=today().slice(0,7), passed=new Date().getDate()>Math.min(day,dayCount(cur));
   var from=(passed&&!$('#rec-now').checked)?addMonths(cur,1):cur;
   state.rec.push({id:uid(),text:text,day:day,prio:$('#rec-prio').value,active:true,from:from,done:[]});
   applyAuto();
   $('#rec-text').value='';
   commit();
-  toast('Tarea frecuente agregada');
+  toast(tt('toast.recAdded'));
 });
 
 /* respaldo e instalación */
@@ -1148,15 +1437,15 @@ function exportData(){
   var use=(window.claude&&window.claude.use)?window.claude.use('downloads'):Promise.resolve(null);
   use.then(function(dl){
     if(dl){
-      return dl.save({filename:name,data:data}).then(function(){toast('Copia guardada');},function(err){
-        if(!err||err.code!=='declined') showErr('#bk-err','No se pudo guardar la copia.');
+      return dl.save({filename:name,data:data}).then(function(){toast(tt('toast.exported'));},function(err){
+        if(!err||err.code!=='declined') showErr('#bk-err',tt('err.exportFail'));
       });
     }
     var a=document.createElement('a'), url=URL.createObjectURL(new Blob([data],{type:'application/json'}));
     a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();
     setTimeout(function(){URL.revokeObjectURL(url);},2000);
-    toast('Copia descargada');
-  }).catch(function(){showErr('#bk-err','No se pudo guardar la copia.');});
+    toast(tt('toast.downloaded'));
+  }).catch(function(){showErr('#bk-err',tt('err.exportFail'));});
 }
 $('#bk-export').addEventListener('click',exportData);
 $('#bk-file').addEventListener('change',function(e){
@@ -1171,11 +1460,11 @@ $('#bk-file').addEventListener('change',function(e){
       var old=state;
       state=norm(obj);state.demo=false;
       applyAuto();commit();
-      toast('Copia importada',function(){state=old;commit();});
-    }catch(err){showErr('#bk-err','Ese archivo no es una copia de Rinde.');}
+      toast(tt('toast.imported'),function(){state=old;commit();});
+    }catch(err){showErr('#bk-err',tt('err.badBackup'));}
     input.value='';
   };
-  r.onerror=function(){showErr('#bk-err','No se pudo leer el archivo.');input.value='';};
+  r.onerror=function(){showErr('#bk-err',tt('err.readFail'));input.value='';};
   r.readAsText(f);
 });
 var installEvt=null;
@@ -1210,6 +1499,8 @@ if(!state){state=seed();}
 applyAuto();
 saveLocal();
 $('#tx-date').value=today();$('#sav-date').value=today();$('#project-date').value=today();$('#pe-date').value=today();
+LANG=pickLang();
+applyLang();
 fillCats();
 renderAll();
 var h=(location.hash||'').slice(1);
