@@ -180,6 +180,17 @@ details summary{cursor:pointer;color:var(--muted);font-size:13px;font-weight:600
 .tab[aria-selected="true"]{color:var(--accent)}
 .tab[aria-selected="true"] svg{background:var(--accent);color:var(--accent-ink)}
 
+.rcpt{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;margin:2px 0 4px;min-width:0}
+.rcpt .thumb{width:56px;height:56px;border-radius:10px;object-fit:cover;border:1px solid var(--line);flex:none;background:var(--surface2)}
+.rcpt .grow{flex:1 1 140px;min-width:0}
+.rcpt-hint{font-size:12px;color:var(--muted)}
+.chip.rc{background:var(--accent-soft);color:var(--accent);border:0;display:inline-flex;align-items:center;gap:4px;font-family:inherit;cursor:pointer}
+.chip.rc svg{flex:none}
+.viewer{position:fixed;inset:0;z-index:40;background:rgba(8,20,40,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+  padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.viewer img{max-width:100%;max-height:calc(100% - 70px);object-fit:contain;border-radius:10px;background:#fff}
+.viewer .vmsg{color:#fff;font-size:14px}
+.viewer .btn{background:#fff;color:var(--ink)}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:30;
   background:var(--ink);color:var(--bg);border-radius:12px;padding:10px 12px 10px 16px;display:flex;align-items:center;gap:12px;
   font-size:14px;max-width:calc(100vw - 32px)}
@@ -312,6 +323,13 @@ details summary{cursor:pointer;color:var(--muted);font-size:13px;font-weight:600
             <label class="field"><span data-i18n="f.date">Fecha</span><input id="tx-date" type="date"></label>
           </div>
           <label class="field"><span data-i18n="f.noteOpt">Nota (opcional)</span><input id="tx-note" type="text" maxlength="80" placeholder="Supermercado, bus, almuerzo…" data-i18n-ph="ph.txNote"></label>
+          <div class="rcpt" id="rcpt-box" hidden>
+            <img class="thumb" id="rcpt-thumb" alt="" hidden>
+            <div class="grow"><div class="rcpt-hint" id="rcpt-hint"></div></div>
+            <button class="btn ghost small" type="button" id="rcpt-pick" data-act="rcpt-pick" data-i18n="rc.attach">Adjuntar foto del recibo</button>
+            <button class="btn ghost small" type="button" id="rcpt-clear" data-act="rcpt-clear" data-i18n="rc.remove" hidden>Quitar</button>
+          </div>
+          <input id="tx-photo" type="file" accept="image/*" hidden>
           <p class="err" id="tx-err" hidden></p>
           <button class="btn" type="submit" id="tx-btn" data-i18n="btn.addExpense">Agregar gasto</button>
         </form>
@@ -480,6 +498,12 @@ details summary{cursor:pointer;color:var(--muted);font-size:13px;font-weight:600
   </main>
 </div>
 
+<div class="viewer" id="rcpt-viewer" role="dialog" aria-modal="true" aria-label="Recibo" data-i18n-aria="rc.title" hidden>
+  <img id="rcpt-img" alt="" hidden>
+  <div class="vmsg" id="rcpt-vmsg" hidden></div>
+  <button class="btn small" type="button" data-act="rcpt-close" id="rcpt-close" data-i18n="rc.close">Cerrar</button>
+</div>
+
 <div class="toast" id="toast" role="status" hidden><span id="toast-msg"></span><button type="button" id="toast-undo" hidden data-i18n="toast.undo">Deshacer</button></div>
 
 <nav class="tabs" aria-label="Secciones" data-i18n-aria="nav.aria">
@@ -507,6 +531,64 @@ details summary{cursor:pointer;color:var(--muted);font-size:13px;font-weight:600
 var KEY='mibolsillo.v1';
 var CATS={g:['Comida','Transporte','Hogar','Servicios','Salud','Ocio','Educación','Otros'],i:['Salario','Extra','Otros ingresos']};
 var TABS=['resumen','gastos','tareas','metas','ahorro','proyectos'];
+var CAM='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>';
+/* Fotos de recibos: se guardan en IndexedDB de este dispositivo (no en el JSON de respaldo). */
+var RC={db:null,ok:typeof indexedDB!=='undefined',pending:null,viewUrl:null};
+function rcOpen(){
+  if(RC.db) return Promise.resolve(RC.db);
+  if(!RC.ok) return Promise.reject(new Error('noidb'));
+  return new Promise(function(res,rej){
+    var rq;
+    try{rq=indexedDB.open('rinde.receipts',1);}catch(e){RC.ok=false;return rej(e);}
+    rq.onupgradeneeded=function(){rq.result.createObjectStore('img');};
+    rq.onsuccess=function(){RC.db=rq.result;res(RC.db);};
+    rq.onerror=function(){RC.ok=false;rej(rq.error);};
+  });
+}
+function rcPut(id,blob){return rcOpen().then(function(db){return new Promise(function(res,rej){var tx=db.transaction('img','readwrite');tx.objectStore('img').put(blob,id);tx.oncomplete=function(){res();};tx.onerror=tx.onabort=function(){rej(tx.error);};});});}
+function rcGet(id){return rcOpen().then(function(db){return new Promise(function(res,rej){var r=db.transaction('img').objectStore('img').get(id);r.onsuccess=function(){res(r.result||null);};r.onerror=function(){rej(r.error);};});});}
+function rcDel(id){return rcOpen().then(function(db){return new Promise(function(res){var tx=db.transaction('img','readwrite');tx.objectStore('img').delete(id);tx.oncomplete=tx.onerror=tx.onabort=function(){res();};});}).catch(function(){});}
+function rcShrink(file){
+  return new Promise(function(res,rej){
+    var url=URL.createObjectURL(file), im=new Image();
+    im.onload=function(){
+      var max=1280, w=im.naturalWidth, h=im.naturalHeight;
+      if(!w||!h){URL.revokeObjectURL(url);return rej(new Error('size'));}
+      var k=Math.min(1,max/Math.max(w,h)), cw=Math.round(w*k), ch=Math.round(h*k);
+      var c=document.createElement('canvas');c.width=cw;c.height=ch;
+      var g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,cw,ch);g.drawImage(im,0,0,cw,ch);
+      URL.revokeObjectURL(url);
+      c.toBlob(function(b){b?res(b):rej(new Error('blob'));},'image/jpeg',0.78);
+    };
+    im.onerror=function(){URL.revokeObjectURL(url);rej(new Error('img'));};
+    im.src=url;
+  });
+}
+function rcRefresh(){
+  var box=$('#rcpt-box'); if(!box) return;
+  box.hidden=!RC.ok;
+  var has=!!RC.pending, th=$('#rcpt-thumb');
+  if(has){th.src=RC.pending.url;th.hidden=false;} else {th.removeAttribute('src');th.hidden=true;}
+  $('#rcpt-hint').textContent=has?tt('rc.ready'):tt('rc.hint');
+  $('#rcpt-pick').textContent=has?tt('rc.change'):tt('rc.attach');
+  $('#rcpt-clear').hidden=!has;
+}
+function rcClear(){
+  if(RC.pending&&RC.pending.url) URL.revokeObjectURL(RC.pending.url);
+  RC.pending=null;var f=$('#tx-photo');if(f) f.value='';rcRefresh();
+}
+function rcView(id){
+  var v=$('#rcpt-viewer'), img=$('#rcpt-img'), msg=$('#rcpt-vmsg');
+  img.hidden=true;msg.hidden=true;v.hidden=false;$('#rcpt-close').focus();
+  rcGet(id).then(function(b){
+    if(!b){msg.textContent=tt('rc.missing');msg.hidden=false;return;}
+    RC.viewUrl=URL.createObjectURL(b);img.src=RC.viewUrl;img.hidden=false;
+  }).catch(function(){msg.textContent=tt('rc.missing');msg.hidden=false;});
+}
+function rcCloseView(){
+  $('#rcpt-viewer').hidden=true;$('#rcpt-img').removeAttribute('src');
+  if(RC.viewUrl){URL.revokeObjectURL(RC.viewUrl);RC.viewUrl=null;}
+}
 var TRASH='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg>';
 var CHECK='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg>';
 
@@ -514,6 +596,18 @@ var CHECK='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="c
 /* Para agregar un texto: una fila [clave, español, English]. En el HTML se usa data-i18n="clave"; en JS, tt('clave',{vars}). */
 var LKEY='rinde.lang', LANG='es';
 var DICT=[
+ ["rc.attach","Adjuntar foto del recibo","Attach receipt photo"],
+ ["rc.change","Cambiar foto","Change photo"],
+ ["rc.remove","Quitar","Remove"],
+ ["rc.hint","Foto del recibo o factura (opcional)","Photo of the receipt or invoice (optional)"],
+ ["rc.ready","Foto lista","Photo ready"],
+ ["rc.chip","Recibo","Receipt"],
+ ["rc.title","Recibo","Receipt"],
+ ["rc.close","Cerrar","Close"],
+ ["rc.missing","La foto no está en este dispositivo.","The photo is not on this device."],
+ ["rc.err","No se pudo leer la imagen. Prueba con otra foto.","Could not read the image. Try another photo."],
+ ["rc.nostore","Este navegador no puede guardar fotos.","This browser cannot store photos."],
+ ["rc.saveErr","No se pudo guardar la foto. El gasto se guardó sin ella.","Could not save the photo. The expense was saved without it."],
  ["meta.desc","Rinde: gastos, presupuestos por proyecto, tareas, metas y ahorro en un solo lugar.","Rinde: expenses, project budgets, tasks, goals and savings in one place."],
  ["hdr.sub","Gastos, tareas, metas y ahorro","Expenses, tasks, goals and savings"],
  ["month.prev","Mes anterior","Previous month"],
@@ -769,6 +863,7 @@ function applyLang(){
   document.querySelectorAll('[data-i18n-aria]').forEach(function(el){el.setAttribute('aria-label',tt(el.getAttribute('data-i18n-aria')));});
   document.querySelectorAll('[data-lang]').forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-lang')===LANG));});
   var md=document.querySelector('meta[name="description"]');if(md) md.setAttribute('content',tt('meta.desc'));
+  rcRefresh();
 }
 function setLang(l){
   if((l!=='es'&&l!=='en')||l===LANG) return;
@@ -1093,7 +1188,7 @@ function renderGastos(){
   list.forEach(function(t){
     if(t.date!==last){last=t.date;html+='<li class="day eyebrow">'+esc(dayLabel(t.date))+'</li>';}
     var inc=t.type==='i';
-    html+='<li class="row"><div class="grow"><div class="t">'+esc(t.note?dt(t.note):catL(t.cat))+'</div><div class="meta">'+esc(catL(t.cat))+(t.fx?' · <span class="chip fx">'+tt('chip.fixed')+'</span>':'')+'</div></div>'+
+    html+='<li class="row"><div class="grow"><div class="t">'+esc(t.note?dt(t.note):catL(t.cat))+'</div><div class="meta">'+esc(catL(t.cat))+(t.fx?' · <span class="chip fx">'+tt('chip.fixed')+'</span>':'')+(t.rcpt?' · <button type="button" class="chip rc" data-act="rcpt-view" data-rid="'+esc(t.rcpt)+'">'+CAM+tt('rc.chip')+'</button>':'')+'</div></div>'+
       '<span class="amt '+(inc?'pos':'')+'">'+(inc?'+':'−')+money(t.amount)+'</span>'+
       '<button class="icon-btn" type="button" data-act="del" data-key="tx" data-id="'+t.id+'" aria-label="'+tt('aria.delTx')+'">'+TRASH+'</button></li>';
   });
@@ -1267,6 +1362,7 @@ function removeFrom(key,id){
   if(i<0) return;
   var it=state[key].splice(i,1)[0];
   commit();
+  if(key==='tx'&&it.rcpt) setTimeout(function(){if(!state.tx.some(function(t){return t.rcpt===it.rcpt;})) rcDel(it.rcpt);},9000);
   toast(tt('toast.deleted'),function(){state[key].splice(Math.min(i,state[key].length),0,it);commit();});
 }
 function removeProject(id){
@@ -1294,6 +1390,10 @@ document.addEventListener('click',function(e){
   else if(act==='month'){viewMonth=addMonths(viewMonth,+el.getAttribute('data-d'));renderAll();}
   else if(act==='del') removeFrom(el.getAttribute('data-key'),el.getAttribute('data-id'));
   else if(act==='del-project') removeProject(el.getAttribute('data-id'));
+  else if(act==='rcpt-pick') $('#tx-photo').click();
+  else if(act==='rcpt-clear') rcClear();
+  else if(act==='rcpt-view') rcView(el.getAttribute('data-rid'));
+  else if(act==='rcpt-close') rcCloseView();
   else if(act==='toggle-task'){
     var t=state.tasks.find(function(x){return x.id===el.getAttribute('data-id');});
     if(t){t.done=!t.done;commit();}
@@ -1334,13 +1434,34 @@ $('#toast-undo').addEventListener('click',function(){
 
 function num(id){var v=parseFloat($(id).value);return isFinite(v)?v:NaN;}
 
+$('#tx-photo').addEventListener('change',function(){
+  var f=this.files&&this.files[0]; if(!f) return;
+  clearErr('#tx-err');
+  rcShrink(f).then(function(b){
+    if(RC.pending&&RC.pending.url) URL.revokeObjectURL(RC.pending.url);
+    RC.pending={blob:b,url:URL.createObjectURL(b)};rcRefresh();
+  }).catch(function(){showErr('#tx-err',tt('rc.err'));});
+});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!$('#rcpt-viewer').hidden) rcCloseView();});
+$('#rcpt-viewer').addEventListener('click',function(e){if(e.target===this) rcCloseView();});
 $('#tx-form').addEventListener('submit',function(e){
   e.preventDefault();clearErr('#tx-err');
   var amount=num('#tx-amount'), date=$('#tx-date').value||today();
   if(!(amount>0)){showErr('#tx-err',tt('err.amount'));return;}
-  state.tx.push({id:uid(),type:txType,amount:Math.round(amount*100)/100,cat:$('#tx-cat').value,note:$('#tx-note').value.trim(),date:date});
+  var rec={id:uid(),type:txType,amount:Math.round(amount*100)/100,cat:$('#tx-cat').value,note:$('#tx-note').value.trim(),date:date};
+  var pend=RC.pending;
+  if(pend){
+    rec.rcpt='r'+uid();
+    rcPut(rec.rcpt,pend.blob).catch(function(){
+      var x=state.tx.find(function(t){return t.id===rec.id;});
+      if(x){delete x.rcpt;commit();}
+      toast(tt('rc.saveErr'));
+    });
+  }
+  state.tx.push(rec);
   viewMonth=date.slice(0,7);
   $('#tx-amount').value='';$('#tx-note').value='';
+  rcClear();
   commit();
   $('#tx-amount').focus();
 });

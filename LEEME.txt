@@ -20,3 +20,8 @@ IDIOMA / LANGUAGE
 - Para actualizar teléfonos que ya la instalaron, sube los archivos nuevos al sitio; el cambio de VERSION en sw.js hace que descarguen la versión nueva.
 
 The app ships in Spanish and English. It opens in the phone's language (Spanish unless the phone is set to English) and the ES | EN button in the header switches it. The choice is remembered on each device. Data and backups are the same in both languages.
+
+FOTO DEL RECIBO / RECEIPT PHOTO
+- Gastos > Movimientos: "Adjuntar foto del recibo" abre la camara o la galeria. Toca "Recibo" en la lista para verla.
+- Las fotos se guardan solo en este telefono (se reducen a 1280 px) y NO van en la copia de respaldo JSON.
+- Photos stay on this device only and are not included in the JSON backup.
