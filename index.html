@@ -448,6 +448,7 @@ input:focus-visible,select:focus-visible{outline:none;border-color:var(--accent)
         <div class="sum-line" id="tx-summary"></div>
         <div id="tx-list"></div>
       </div>
+      <div class="card" id="fix-card" hidden><div class="card-head"><h2 data-i18n="t.fixTitle">Gastos fijos del mes</h2></div><p class="hint" data-i18n="t.fixHint">Se agregan solos cada mes.</p><div id="fix-list"></div></div>
     </section>
 
     <section class="panel" id="tab-tareas" role="tabpanel" hidden>
@@ -548,6 +549,7 @@ input:focus-visible,select:focus-visible{outline:none;border-color:var(--accent)
           <button class="btn ghost small" type="button" id="rcpt-pick" data-act="rcpt-pick" data-i18n="rc.attach">Adjuntar foto del recibo</button>
           <button class="btn ghost small" type="button" id="rcpt-clear" data-act="rcpt-clear" data-i18n="rc.remove" hidden>Quitar</button>
         </div>
+        <label class="switch" id="tx-fixed-wrap"><input id="tx-fixed" type="checkbox"><i aria-hidden="true"></i><span data-i18n="f.fixed">Gasto fijo: repetir cada mes</span></label>
         <input id="tx-photo" type="file" accept="image/*" hidden>
         <p class="err" id="tx-err" hidden></p>
         <button class="btn big" type="submit" id="tx-btn" data-i18n="btn.addExpense">Agregar gasto</button>
@@ -885,6 +887,11 @@ var PDFLIB=(function(){
 (function(){
 "use strict";
 var DICT=[
+ ["f.fixed","Gasto fijo: repetir cada mes","Fixed expense: repeat every month"],
+ ["chip.fixed","Fijo","Fixed"],
+ ["t.fixTitle","Gastos fijos del mes","Monthly fixed expenses"],
+ ["t.fixHint","Se agregan solos cada mes. Borra uno para dejar de repetirlo.","Added automatically every month. Delete one to stop repeating it."],
+ ["aria.delFix","Eliminar gasto fijo","Delete fixed expense"],
  ["q.today","Hoy","Today"],
  ["q.yesterday","Ayer","Yesterday"],
  ["q.tomorrow","Mañana","Tomorrow"],
@@ -1209,11 +1216,11 @@ function num(sel){var v=parseFloat($(sel).value);return isFinite(v)?v:NaN;}
 function round2(n){return Math.round(n*100)/100;}
 
 /* ---- Estado ---- */
-function blank(){return {v:1,demo:false,members:[],tx:[],tasks:[],recs:[],goals:[],sav:[],lastPaid:{}};}
+function blank(){return {v:1,demo:false,members:[],tx:[],tasks:[],recs:[],fixed:[],goals:[],sav:[],lastPaid:{}};}
 function fixState(s){
   var b=blank();
   Object.keys(b).forEach(function(k){if(s[k]===undefined) s[k]=b[k];});
-  ['members','tx','tasks','recs','goals','sav'].forEach(function(k){if(!Array.isArray(s[k])) s[k]=[];});
+  ['members','tx','tasks','recs','fixed','goals','sav'].forEach(function(k){if(!Array.isArray(s[k])) s[k]=[];});
   if(!s.lastPaid||typeof s.lastPaid!=='object') s.lastPaid={};
   s.members.forEach(function(m){if(!m.limits||typeof m.limits!=='object') m.limits={};m.budget=+m.budget||0;});
   return s;
@@ -1380,8 +1387,23 @@ function rcCloseView(){
 }
 
 /* ---- Tareas frecuentes ---- */
-function applyRecurring(){
+function applyFixed(){
   var cm=today().slice(0,7),ch=false;
+  state.fixed.forEach(function(f){
+    if(!member(f.m)) return;
+    var mo=f.start||cm,guard=0;
+    while(mo<=cm&&guard++<600){
+      if((f.skipped||[]).indexOf(mo)<0&&!state.tx.some(function(t){return t.fid===f.id&&t.date.slice(0,7)===mo;})){
+        state.tx.push({id:uid(),m:f.m,type:'g',amount:f.amount,cat:f.cat,note:f.name,date:mo+'-'+pad(Math.min(f.day||1,dayCount(mo))),paid:member(f.paid)?f.paid:f.m,fid:f.id});
+        ch=true;
+      }
+      mo=addMonths(mo,1);
+    }
+  });
+  return ch;
+}
+function applyRecurring(){
+  var cm=today().slice(0,7),ch=applyFixed();
   state.recs.forEach(function(r){
     if(!member(r.m)) return;
     if((r.skipped||[]).indexOf(cm)>=0) return;
@@ -1585,6 +1607,7 @@ function renderTx(){
       if(pid!==t.m) meta+=' · <span class="chip pay">'+tt('l.paid',{n:esc(mname(pid))})+'</span>';
       else if(m.role==='hijo') meta+=' · <span class="chip self">'+tt('l.paidHimself')+'</span>';
     }
+    if(t.fid) meta+=' · <span class="chip fx">'+tt('chip.fixed')+'</span>';
     if(t.rcpt) meta+=' · <button type="button" class="chip rc" data-act="rcpt-view" data-rid="'+esc(t.rcpt)+'">'+CAM+tt('rc.chip')+'</button>';
     html+='<li class="row">'+av(m,'sm')+'<div class="grow"><div class="t">'+esc(t.note?dt(t.note):catL(t.cat))+'</div><div class="meta">'+meta+'</div></div>'+
       '<span class="amt '+(inc?'pos':'')+'">'+(inc?'+':'−')+money(t.amount)+'</span>'+
@@ -1615,6 +1638,12 @@ function renderTasks(){
   h+=pend.length?'<ul class="list">'+pend.map(row).join('')+'</ul>':emptyBox('empty.task.t','empty.task.d');
   if(done.length) h+='<details class="done-box"><summary>'+tt('task.doneN',{n:done.length})+'</summary><ul class="list">'+done.map(row).join('')+'</ul></details>';
   $('#task-list').innerHTML=h;
+  var fx=state.fixed.filter(function(r){return member(r.m)&&(ui.mem==='all'||!member(ui.mem)||r.m===ui.mem);});
+  $('#fix-card').hidden=!fx.length;
+  $('#fix-list').innerHTML='<ul class="list">'+fx.map(function(r){
+    var m=member(r.m),pid=r.paid||r.m;
+    return '<li class="row">'+av(m,'sm')+'<div class="grow"><div class="t">'+esc(dt(r.name))+'</div><div class="meta">'+esc(catL(r.cat))+' · '+esc(m.name)+' · '+tt('rec.day',{d:r.day})+(pid!==r.m?' · '+tt('l.paid',{n:esc(mname(pid))}):'')+'</div></div><span class="amt">−'+money(r.amount)+'</span><button class="icon-btn" type="button" data-act="del" data-key="fixed" data-id="'+esc(r.id)+'" aria-label="'+tt('aria.delFix')+'">'+TRASH+'</button></li>';
+  }).join('')+'</ul>';
   var recs=state.recs.filter(function(r){return member(r.m)&&(ui.mem==='all'||!member(ui.mem)||r.m===ui.mem);});
   $('#rec-card').hidden=!recs.length;
   $('#rec-list').innerHTML='<ul class="list">'+recs.map(function(r){
@@ -1700,6 +1729,7 @@ function fillPaid(){
   sel.value=(ui.paidFor===mid&&opts.some(function(o){return o.v===prev;}))?prev:defaultPayer(mid);
   ui.paidFor=mid;
   $('#tx-paid-wrap').hidden=ui.tx!=='g';
+  $('#tx-fixed-wrap').hidden=ui.tx!=='g';
   updateFlow();
   syncChips();
 }
@@ -1843,6 +1873,11 @@ function removeFrom(key,id){
   var arr=state[key],i=arr.findIndex(function(x){return x.id===id;});
   if(i<0) return;
   var it=arr.splice(i,1)[0],rc=null;
+  if(key==='tx'&&it.fid){
+    rc=state.fixed.find(function(r){return r.id===it.fid;});
+    if(rc){rc.skipped=rc.skipped||[];rc.skipped.push(it.date.slice(0,7));}
+    it._fm=it.date.slice(0,7);
+  }
   if(key==='tasks'&&it.rid){
     rc=state.recs.find(function(r){return r.id===it.rid;});
     if(rc){rc.skipped=rc.skipped||[];rc.skipped.push(it.month);}
@@ -1851,7 +1886,8 @@ function removeFrom(key,id){
   if(key==='tx'&&it.rcpt) setTimeout(function(){if(!state.tx.some(function(t){return t.rcpt===it.rcpt;})) rcDel(it.rcpt);},9000);
   toast(tt('toast.deleted'),function(){
     arr.splice(Math.min(i,arr.length),0,it);
-    if(rc&&rc.skipped){var k=rc.skipped.lastIndexOf(it.month);if(k>=0) rc.skipped.splice(k,1);}
+    if(rc&&rc.skipped){var k=rc.skipped.lastIndexOf(it.month||it._fm);if(k>=0) rc.skipped.splice(k,1);}
+    delete it._fm;
     commit();
   });
 }
@@ -1861,6 +1897,8 @@ function deleteMember(id){
   state.tx.forEach(function(t){if(t.paid===id) t.paid=t.m;});
   state.tasks=state.tasks.filter(function(t){return t.m!==id;});
   state.recs=state.recs.filter(function(t){return t.m!==id;});
+  state.fixed=state.fixed.filter(function(t){return t.m!==id;});
+  state.fixed.forEach(function(t){if(t.paid===id) t.paid=t.m;});
   state.goals=state.goals.filter(function(t){return t.m!==id;});
   state.sav=state.sav.filter(function(t){return t.m!==id;});
   state.members=state.members.filter(function(m){return m.id!==id;});
@@ -1893,6 +1931,7 @@ function demoState(){
   T(m,'g',12,'Comida','Almuerzo en el colegio',1,m);T(m,'g',60,'Educación','Cuota del colegio',10,c);T(m,'i',20,'Otros','Mesada',8,m);
   T(so,'g',22,'Educación','Útiles escolares',7,a);T(so,'g',35,'Ropa','Zapatos nuevos',11,c);T(so,'g',10,'Comida','Almuerzo en el colegio',2,a);T(so,'g',30,'Salud','Consulta médica',5,a);
   function fwd(n){var d=new Date();d.setDate(d.getDate()+n);return ds(d);}
+  s.fixed.push({id:uid(),m:c.id,name:'Internet y cable',amount:35,cat:'Otros',day:1,paid:c.id,start:today().slice(0,7),skipped:[]});
   s.recs.push({id:uid(),m:c.id,text:'Pagar la luz',day:5,prio:'a',skipped:[]});
   s.tasks.push({id:uid(),m:a.id,text:'Reunión de padres',due:fwd(2),prio:'m',done:false});
   s.tasks.push({id:uid(),m:a.id,text:'Comprar regalo de cumpleaños',due:fwd(6),prio:'b',done:false});
@@ -2009,6 +2048,11 @@ $('#tx-form').addEventListener('submit',function(e){
     });
   }
   if(ui.tx==='g') state.lastPaid[mid]=paid;
+  if(ui.tx==='g'&&$('#tx-fixed').checked){
+    var fx={id:uid(),m:mid,name:rec.note||catL(rec.cat),amount:rec.amount,cat:rec.cat,day:+date.split('-')[2],paid:paid,start:date.slice(0,7),skipped:[]};
+    state.fixed.push(fx);rec.fid=fx.id;
+  }
+  $('#tx-fixed').checked=false;
   state.tx.push(rec);
   ui.month=date.slice(0,7);
   $('#tx-amount').value='';$('#tx-note').value='';

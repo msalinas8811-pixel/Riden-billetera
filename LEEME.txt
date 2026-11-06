@@ -24,3 +24,7 @@ NOVEDADES v3
 - Formularios como hojas inferiores con el botón +, opciones tocables y fechas rápidas.
 - Gráficos nuevos: anillo de presupuesto, barra de quién pagó, tendencia de 6 meses y categorías con límite.
 - Animaciones suaves (se desactivan si el teléfono tiene 'reducir movimiento').
+
+
+NOVEDAD v4
+- Gastos fijos: al agregar un gasto, activa 'Gasto fijo: repetir cada mes'. Se crea solo cada mes (desde el mes elegido hasta hoy). Lista en la pestaña Gastos; borra uno para dejar de repetirlo.
