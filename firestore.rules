@@ -1,0 +1,108 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------- Ayudas ----------
+    function signedIn() { return request.auth != null; }
+    function famPath(fid) { return /databases/$(database)/documents/families/$(fid); }
+    function isUser(fid) { return signedIn() && exists(famPath(fid) + '/users/' + request.auth.uid); }
+    function me(fid) { return get(famPath(fid) + '/users/' + request.auth.uid).data; }
+    function isParent(fid) { return isUser(fid) && me(fid).role in ['papa', 'mama']; }
+    function memberDoc(fid, m) { return get(famPath(fid) + '/members/' + m).data; }
+    function memberExists(fid, m) { return exists(famPath(fid) + '/members/' + m); }
+    function isDependent(fid, m) { return memberExists(fid, m) && memberDoc(fid, m).role in ['hijo', 'otro']; }
+    // Cada quien administra lo suyo; papá y mamá también administran a los hijos.
+    function canManage(fid, m) {
+      return isUser(fid) && (me(fid).memberId == m || (isParent(fid) && isDependent(fid, m)));
+    }
+    function codeDoc(code) { return get(/databases/$(database)/documents/codes/$(code)).data; }
+    function codeOk(fid, code, role) {
+      return codeDoc(code).fid == fid && (
+        (codeDoc(code).kind == 'parent' && role in ['papa', 'mama']) ||
+        (codeDoc(code).kind == 'member' && role in ['hijo', 'otro']));
+    }
+
+    // ---------- Puntero usuario -> familia ----------
+    match /userFamily/{uid} {
+      allow read, write: if signedIn() && request.auth.uid == uid;
+    }
+
+    // ---------- Códigos de invitación ----------
+    // Se leen de uno en uno (no se pueden listar). Solo papá y mamá actualizan la lista de perfiles libres.
+    match /codes/{code} {
+      allow get: if signedIn();
+      allow list: if false;
+      allow create: if signedIn()
+        && get(famPath(request.resource.data.fid)).data.ownerUid == request.auth.uid;
+      allow update: if signedIn() && isParent(resource.data.fid)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['open']);
+      allow delete: if false;
+    }
+
+    match /families/{fid} {
+      allow read: if isUser(fid);
+      allow create: if signedIn() && request.resource.data.ownerUid == request.auth.uid;
+      allow update: if signedIn() && resource.data.ownerUid == request.auth.uid
+        && request.resource.data.ownerUid == resource.data.ownerUid;
+      allow delete: if false;
+
+      // Códigos visibles solo para papá y mamá
+      match /meta/{doc} {
+        allow read: if isParent(fid);
+        allow create: if signedIn() && get(famPath(fid)).data.ownerUid == request.auth.uid;
+        allow update, delete: if false;
+      }
+
+      // Quién entra a la familia y con qué rol
+      match /users/{uid} {
+        allow read: if isUser(fid);
+        allow create: if signedIn() && request.auth.uid == uid
+          && request.resource.data.uid == uid
+          && request.resource.data.role in ['papa', 'mama', 'hijo', 'otro']
+          && (
+            // quien crea la familia
+            (get(famPath(fid)).data.ownerUid == uid && request.resource.data.role in ['papa', 'mama'])
+            // quien entra con un código válido del tipo que corresponde a su rol
+            || (request.resource.data.code is string && codeOk(fid, request.resource.data.code, request.resource.data.role)
+                && (!memberExists(fid, request.resource.data.memberId)
+                    || (memberDoc(fid, request.resource.data.memberId).role == request.resource.data.role
+                        && memberDoc(fid, request.resource.data.memberId).get('uid', null) == null)))
+          );
+        allow update: if false;
+        // papá y mamá pueden sacar a un hijo o familiar
+        allow delete: if isParent(fid) && resource.data.role in ['hijo', 'otro'];
+      }
+
+      // Perfiles de los integrantes
+      match /members/{m} {
+        allow read: if isUser(fid);
+        // propio perfil recién creado al unirse, o perfil de un hijo/familiar creado por papá o mamá
+        allow create: if isUser(fid) && (
+          (request.resource.data.uid == request.auth.uid && me(fid).memberId == m && request.resource.data.role == me(fid).role)
+          || (isParent(fid) && request.resource.data.role in ['hijo', 'otro'] && !('uid' in request.resource.data && request.resource.data.uid != null))
+        );
+        allow update: if isUser(fid) && (
+          // reclamar un perfil libre
+          (resource.data.get('uid', null) == null && me(fid).memberId == m && me(fid).role == resource.data.role
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['uid'])
+            && request.resource.data.uid == request.auth.uid)
+          // administrar el perfil (sin cambiar rol ni usuario vinculado)
+          || (canManage(fid, m) && request.resource.data.role == resource.data.role
+              && request.resource.data.get('uid', null) == resource.data.get('uid', null))
+        );
+        allow delete: if isParent(fid) && resource.data.role in ['hijo', 'otro'];
+      }
+
+      // Registros de cada integrante: se ven todos; cada quien administra lo suyo y papá/mamá lo de los hijos.
+      match /{col}/{id} {
+        allow read: if isUser(fid) && col in ['tx', 'tasks', 'recs', 'fixed', 'goals', 'sav', 'receipts'];
+        allow create: if col in ['tx', 'tasks', 'recs', 'fixed', 'goals', 'sav', 'receipts']
+          && canManage(fid, request.resource.data.m);
+        allow update: if col in ['tx', 'tasks', 'recs', 'fixed', 'goals', 'sav', 'receipts']
+          && canManage(fid, resource.data.m) && canManage(fid, request.resource.data.m);
+        allow delete: if col in ['tx', 'tasks', 'recs', 'fixed', 'goals', 'sav', 'receipts']
+          && canManage(fid, resource.data.m);
+      }
+    }
+  }
+}

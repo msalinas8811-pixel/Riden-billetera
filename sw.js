@@ -1,6 +1,6 @@
 /* Rinde Familia: funciona sin conexión. Sube el número de VERSION cuando cambies index.html. */
-const VERSION = 'rinde-familia-v5';
-const CORE = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png'];
+const VERSION = 'rinde-familia-v7';
+const CORE = ['./', './index.html', './manifest.webmanifest', './firebase-config.js', './icons/icon-192.png', './icons/icon-512.png'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(VERSION).then((c) => c.addAll(CORE)).then(() => self.skipWaiting()));
@@ -19,7 +19,8 @@ self.addEventListener('fetch', (e) => {
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
   const isFont = url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com';
-  if (url.origin !== self.location.origin && !isFont) return;
+  const isFirebaseSdk = url.hostname === 'www.gstatic.com' && url.pathname.startsWith('/firebasejs/');
+  if (url.origin !== self.location.origin && !isFont && !isFirebaseSdk) return;
   e.respondWith(
     caches.match(req).then((hit) => {
       const net = fetch(req)
@@ -30,7 +31,7 @@ self.addEventListener('fetch', (e) => {
           }
           return res;
         })
-        .catch(() => hit || caches.match('./index.html'));
+        .catch(() => hit || (req.mode === 'navigate' ? caches.match('./index.html') : Response.error()));
       return hit || net;
     })
   );

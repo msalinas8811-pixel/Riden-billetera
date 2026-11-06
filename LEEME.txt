@@ -31,3 +31,6 @@ NOVEDAD v4
 
 NOVEDAD v5
 - Presupuestos: en Inicio (Familia) hay una tarjeta con el presupuesto de cada integrante, botón Editar y el total mensual de la familia. En la vista de un integrante, 'Editar presupuesto' bajo el monto.
+
+NOVEDAD v6 (nube)
+- Cuentas con Gmail o correo y clave, familia con códigos de invitación, datos compartidos en la nube y permisos por rol. Lee PASOS-NUBE.txt. Sin configurar, la app sigue funcionando solo en el teléfono.

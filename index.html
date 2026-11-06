@@ -8,6 +8,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="manifest" href="manifest.webmanifest">
+<script src="firebase-config.js"></script>
 <link rel="icon" type="image/png" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <title>Rinde Familia</title>
@@ -404,6 +405,63 @@ input:focus-visible,select:focus-visible{outline:none;border-color:var(--accent)
   .btn:active,.tab:active,.fab:active{transform:none}
 }
 @media (hover:hover) and (pointer:fine){.chips button:hover{border-color:var(--accent)}}
+
+/* ===== Nube: acceso, cuenta y permisos ===== */
+.cloud .local-only{display:none!important}
+.cloud.noparent .parent-only{display:none!important}
+.check[disabled]{opacity:.45;cursor:default}
+.auth{position:fixed;inset:0;z-index:60;background:linear-gradient(180deg,#EAF6FB 0%,#F7FBFD 46%,#fff 100%);overflow-y:auto;-webkit-overflow-scrolling:touch}
+.auth-in{max-width:420px;margin:0 auto;padding:max(28px,env(safe-area-inset-top)) 20px 36px;min-height:100%;display:flex;flex-direction:column;gap:14px}
+.auth-logo{display:flex;align-items:center;gap:12px;margin-top:8px}
+.auth-logo svg{width:44px;height:44px;flex:none}
+.auth-logo b{font:800 24px/1 'Bricolage Grotesque',system-ui,sans-serif;letter-spacing:-.02em}
+.auth h2{font:800 26px/1.15 'Bricolage Grotesque',system-ui,sans-serif;letter-spacing:-.02em;margin:10px 0 0}
+.auth p.sub{color:var(--muted);font-size:15px;margin:0}
+.auth .card{padding:18px;display:flex;flex-direction:column;gap:12px}
+.auth .gbtn{display:flex;align-items:center;justify-content:center;gap:10px;min-height:50px;border:1.5px solid var(--line);border-radius:14px;background:#fff;font-weight:600;font-size:15px;color:var(--ink)}
+.auth .gbtn:active{transform:scale(.98)}
+.auth .or{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12px}
+.auth .or::before,.auth .or::after{content:"";height:1px;background:var(--line);flex:1}
+.auth .switch-row{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.auth .opt{display:flex;flex-direction:column;gap:2px;text-align:left;padding:16px;border:1.5px solid var(--line);border-radius:16px;background:#fff;min-height:64px}
+.auth .opt b{font-size:16px}.auth .opt span{color:var(--muted);font-size:13px}
+.auth .opt:active{transform:scale(.985)}
+.auth .okmsg{color:var(--good,#1f8a4c);font-size:13px}
+.auth .who-claim{display:flex;flex-direction:column;gap:8px}
+.auth .lang{align-self:flex-end}
+.acct{display:flex;flex-direction:column;gap:10px}
+.acct .code{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1.5px dashed var(--line);border-radius:12px}
+.acct .code b{font:600 18px/1 'JetBrains Mono',monospace;letter-spacing:.12em}
+.acct .code .grow span{display:block;color:var(--muted);font-size:12px;margin-bottom:3px}
+.perm-note{font-size:12.5px;color:var(--muted)}
+
+/* ===== Nube: acceso, cuenta y permisos ===== */
+.cloud .local-only{display:none!important}
+.cloud.noparent .parent-only{display:none!important}
+.check[disabled]{opacity:.45;cursor:default}
+.auth{position:fixed;inset:0;z-index:60;background:linear-gradient(180deg,#EAF6FB 0%,#F7FBFD 46%,#fff 100%);overflow-y:auto;-webkit-overflow-scrolling:touch}
+.auth-in{max-width:420px;margin:0 auto;padding:max(28px,env(safe-area-inset-top)) 20px 36px;min-height:100%;display:flex;flex-direction:column;gap:14px}
+.auth-logo{display:flex;align-items:center;gap:12px;margin-top:8px}
+.auth-logo svg{width:44px;height:44px;flex:none}
+.auth-logo b{font:800 24px/1 'Bricolage Grotesque',system-ui,sans-serif;letter-spacing:-.02em}
+.auth h2{font:800 26px/1.15 'Bricolage Grotesque',system-ui,sans-serif;letter-spacing:-.02em;margin:10px 0 0}
+.auth p.sub{color:var(--muted);font-size:15px;margin:0}
+.auth .card{padding:18px;display:flex;flex-direction:column;gap:12px}
+.auth .gbtn{display:flex;align-items:center;justify-content:center;gap:10px;min-height:50px;border:1.5px solid var(--line);border-radius:14px;background:#fff;font-weight:600;font-size:15px;color:var(--ink)}
+.auth .gbtn:active{transform:scale(.98)}
+.auth .or{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12px}
+.auth .or::before,.auth .or::after{content:"";height:1px;background:var(--line);flex:1}
+.auth .switch-row{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.auth .opt{display:flex;flex-direction:column;gap:2px;text-align:left;padding:16px;border:1.5px solid var(--line);border-radius:16px;background:#fff;min-height:64px}
+.auth .opt b{font-size:16px}.auth .opt span{color:var(--muted);font-size:13px}
+.auth .opt:active{transform:scale(.985)}
+.auth .okmsg{color:#1f8a4c;font-size:13px}
+.auth .lang{align-self:flex-end}
+.acct{display:flex;flex-direction:column;gap:10px}
+.acct .code{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1.5px dashed var(--line);border-radius:12px}
+.acct .code b{font:600 18px/1 'JetBrains Mono',monospace;letter-spacing:.12em}
+.acct .code .grow span{display:block;color:var(--muted);font-size:12px;margin-bottom:3px}
+.perm-note{font-size:12.5px;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -498,19 +556,20 @@ input:focus-visible,select:focus-visible{outline:none;border-color:var(--accent)
     </section>
 
     <section class="panel" id="tab-familia" role="tabpanel" hidden>
-      <div class="card"><div class="card-head"><h2 data-i18n="m.title">Integrantes</h2><button class="link" type="button" data-act="sheet" data-pane="mem" data-i18n="m.add">Agregar integrante</button></div><div id="mem-list"></div></div>
+      <div class="card" id="acct-card"></div>
+      <div class="card"><div class="card-head"><h2 data-i18n="m.title">Integrantes</h2><button type="button" data-act="sheet" data-pane="mem" data-i18n="m.add" id="mem-add-link" class="link parent-only">Agregar integrante</button></div><div id="mem-list"></div></div>
       <div class="card">
         <div class="card-head"><h2 data-i18n="bk.title">Respaldo y restauración</h2></div>
         <p class="hint" style="margin-bottom:12px" data-i18n="bk.desc">Todo se guarda en este dispositivo.</p>
         <div class="backup">
           <button class="btn" type="button" id="bk-export" data-act="bk-export" data-i18n="bk.export">Descargar respaldo</button>
           <button class="btn ghost" type="button" id="bk-share" data-act="bk-share" data-i18n="bk.share">Compartir respaldo</button>
-          <button class="btn ghost" type="button" data-act="bk-import" data-i18n="bk.import">Restaurar respaldo</button>
+          <button class="btn ghost local-only" type="button" data-act="bk-import" data-i18n="bk.import">Restaurar respaldo</button>
         </div>
         <input class="file-in" id="bk-file" type="file" accept="application/json,.json" tabindex="-1">
         <div id="bk-confirm" style="margin-top:12px" hidden></div>
         <p class="err" id="bk-err" hidden></p>
-        <div class="backup" style="margin-top:12px">
+        <div class="backup local-only" style="margin-top:12px">
           <button class="btn ghost" type="button" data-act="demo-load" data-i18n="bk.demo">Cargar familia de ejemplo</button>
           <button class="btn ghost" type="button" data-act="reset-ask" data-i18n="bk.reset">Borrar todos los datos</button>
         </div>
@@ -631,6 +690,8 @@ input:focus-visible,select:focus-visible{outline:none;border-color:var(--accent)
   <div class="vmsg" id="rcpt-vmsg" hidden></div>
   <button class="btn small" type="button" data-act="rcpt-close" id="rcpt-close" data-i18n="rc.close">Cerrar</button>
 </div>
+
+<div class="auth" id="auth" role="dialog" aria-modal="true" aria-label="Rinde Familia" hidden><div class="auth-in" id="auth-box"></div></div>
 
 <div class="toast" id="toast" role="status" hidden><span id="toast-msg"></span><button type="button" id="toast-undo" hidden data-i18n="toast.undo">Deshacer</button></div>
 
@@ -896,6 +957,68 @@ var PDFLIB=(function(){
 (function(){
 "use strict";
 var DICT=[
+ ["btn.back","Atrás","Back"],
+ ["cl.offline","Sin conexión","Offline"],
+ ["cl.synced","Sincronizado","Synced"],
+ ["cl.denied","No tienes permiso para hacer eso.","You don't have permission to do that."],
+ ["cl.noNet","No hay conexión con el servidor. Revisa tu internet e intenta de nuevo.","Can't reach the server. Check your internet and try again."],
+ ["cl.acct","Cuenta y familia","Account and family"],
+ ["cl.connectDesc","Inicia sesión para compartir la información con tu familia en la nube.","Sign in to share your information with your family in the cloud."],
+ ["cl.connect","Iniciar sesión o crear familia","Sign in or create a family"],
+ ["cl.family","Familia: {n}","Family: {n}"],
+ ["cl.signedAs","Sesión: {e}","Signed in as {e}"],
+ ["cl.permKid","Puedes ver todo y administrar solo lo tuyo.","You can see everything and manage only your own."],
+ ["cl.permParent","Puedes ver todo y administrar lo tuyo y lo de los hijos.","You can see everything and manage your own and the children's."],
+ ["cl.codeKids","Código para hijos y otros familiares","Code for children and other relatives"],
+ ["cl.codeParents","Código para papá o mamá","Code for dad or mom"],
+ ["cl.copy","Copiar","Copy"],
+ ["cl.copied","Código copiado","Code copied"],
+ ["cl.invite","Únete a la familia {n} en Rinde Familia. Abre {u}, inicia sesión y usa el código {c}.","Join the {n} family on Rinde Familia. Open {u}, sign in and use the code {c}."],
+ ["cl.signout","Cerrar sesión","Sign out"],
+ ["cl.loading","Cargando…","Loading…"],
+ ["cl.createAcc","Crea tu cuenta","Create your account"],
+ ["cl.title","Inicia sesión","Sign in"],
+ ["cl.sub","Entra para compartir la información con tu familia.","Sign in to share your information with your family."],
+ ["cl.google","Continuar con Google","Continue with Google"],
+ ["cl.or","o con tu correo","or with your email"],
+ ["cl.name","Tu nombre","Your name"],
+ ["cl.email","Correo","Email"],
+ ["cl.pass","Clave (mínimo 6 caracteres)","Password (at least 6 characters)"],
+ ["cl.signup","Crear cuenta","Create account"],
+ ["cl.signin","Entrar","Sign in"],
+ ["cl.haveAcc","Ya tengo cuenta","I already have an account"],
+ ["cl.noAcc","Crear cuenta nueva","Create a new account"],
+ ["cl.forgot","Olvidé mi clave","Forgot my password"],
+ ["cl.resetSent","Te enviamos un correo para cambiar la clave.","We sent you an email to reset your password."],
+ ["cl.local","Usar solo en este teléfono (sin cuenta)","Use on this phone only (no account)"],
+ ["cl.famTitle","Tu familia","Your family"],
+ ["cl.famSub","Crea una familia nueva o únete con un código.","Create a new family or join with a code."],
+ ["cl.create","Crear una familia","Create a family"],
+ ["cl.createD","Tú serás el primero y recibirás los códigos para invitar.","You'll be the first member and get the invite codes."],
+ ["cl.join","Unirme con un código","Join with a code"],
+ ["cl.joinD","Papá, mamá o un hijo que ya tiene el código de la familia.","Dad, mom or a child who already has the family code."],
+ ["cl.famName","Nombre de la familia","Family name"],
+ ["cl.famPh","Familia Salinas","The Smith family"],
+ ["cl.myName","Tu nombre en la familia","Your name in the family"],
+ ["cl.myRole","Eres","You are"],
+ ["cl.createBtn","Crear familia","Create family"],
+ ["cl.codeD","Pídele el código a papá o mamá.","Ask dad or mom for the code."],
+ ["cl.code","Código de familia","Family code"],
+ ["cl.check","Continuar","Continue"],
+ ["cl.badCode","Ese código no existe. Revísalo con quien te lo dio.","That code doesn't exist. Check it with whoever gave it to you."],
+ ["cl.joinParent","Entrar como papá o mamá","Join as dad or mom"],
+ ["cl.joinKid","Entrar como hijo o familiar","Join as a child or relative"],
+ ["cl.claimQ","¿Ya te registraron? Elige tu perfil:","Already registered? Pick your profile:"],
+ ["cl.claimMe","Soy {n}","I'm {n}"],
+ ["cl.claimNew","O crea tu perfil nuevo:","Or create a new profile:"],
+ ["cl.joinBtn","Unirme a la familia","Join the family"],
+ ["cl.e.cred","Correo o clave incorrectos.","Wrong email or password."],
+ ["cl.e.exists","Ese correo ya tiene cuenta. Entra con tu clave.","That email already has an account. Sign in with your password."],
+ ["cl.e.weak","La clave debe tener al menos 6 caracteres.","The password must be at least 6 characters."],
+ ["cl.e.email","Escribe un correo válido.","Enter a valid email."],
+ ["cl.e.many","Demasiados intentos. Espera un momento.","Too many attempts. Wait a moment."],
+ ["cl.e.fields","Completa todos los campos.","Fill in all the fields."],
+ ["cl.e.generic","No se pudo completar. Intenta de nuevo.","Couldn't complete that. Try again."],
  ["h.budgets","Presupuestos","Budgets"],
  ["h.famTotal","Total mensual de la familia","Family monthly total"],
  ["h.editBudget","Editar presupuesto","Edit budget"],
@@ -1245,13 +1368,25 @@ function fixState(s){
 function loadLocal(){
   try{var r=localStorage.getItem(KEY);if(!r) return null;var s=JSON.parse(r);if(!s||typeof s!=='object') return null;return fixState(s);}catch(e){return null;}
 }
+/* Permisos (solo con cuenta en la nube) */
+var CL={on:false,me:null};
+function isParent(){return !CL.on||!!(CL.me&&(CL.me.role==='papa'||CL.me.role==='mama'));}
+function canManage(mid){
+  if(!CL.on) return true;
+  if(!CL.me||!mid) return false;
+  if(CL.me.memberId===mid) return true;
+  var m=member(mid);
+  return !!m&&isParent()&&(m.role==='hijo'||m.role==='otro');
+}
+function manageable(){return state.members.filter(function(m){return canManage(m.id);});}
 var syncState='saved';
 function setSync(s){
   syncState=s;var el=$('#sync');if(!el) return;
   el.setAttribute('data-s',s==='error'?'':s);
-  el.textContent=s==='error'?tt('sync.err'):tt('sync.saved');
+  el.textContent=s==='error'?tt('sync.err'):(CL.on&&typeof navigator!=='undefined'&&navigator.onLine===false?tt('cl.offline'):(CL.on?tt('cl.synced'):tt('sync.saved')));
 }
 function save(){
+  if(CL.on){try{syncOut();setSync('saved');return true;}catch(e){setSync('error');return false;}}
   try{localStorage.setItem(KEY,JSON.stringify(state));setSync('saved');return true;}
   catch(e){setSync('error');return false;}
 }
@@ -1358,8 +1493,9 @@ function rcOpen(){
   });
 }
 function rcPut(id,blob){return rcOpen().then(function(db){return new Promise(function(res,rej){var tx=db.transaction('img','readwrite');tx.objectStore('img').put(blob,id);tx.oncomplete=function(){res();};tx.onerror=tx.onabort=function(){rej(tx.error);};});});}
-function rcGet(id){return rcOpen().then(function(db){return new Promise(function(res,rej){var r=db.transaction('img').objectStore('img').get(id);r.onsuccess=function(){res(r.result||null);};r.onerror=function(){rej(r.error);};});});}
-function rcDel(id){return rcOpen().then(function(db){return new Promise(function(res){var tx=db.transaction('img','readwrite');tx.objectStore('img').delete(id);tx.oncomplete=tx.onerror=tx.onabort=function(){res();};});}).catch(function(){});}
+function rcGetLocal(id){return rcOpen().then(function(db){return new Promise(function(res,rej){var r=db.transaction('img').objectStore('img').get(id);r.onsuccess=function(){res(r.result||null);};r.onerror=function(){rej(r.error);};});});}
+function rcGet(id){return rcGetLocal(id).catch(function(){return null;}).then(function(b){return b||cloudGetReceipt(id);});}
+function rcDel(id){cloudDelReceipt(id);return rcOpen().then(function(db){return new Promise(function(res){var tx=db.transaction('img','readwrite');tx.objectStore('img').delete(id);tx.oncomplete=tx.onerror=tx.onabort=function(){res();};});}).catch(function(){});}
 function rcClearAll(){return rcOpen().then(function(db){return new Promise(function(res){var tx=db.transaction('img','readwrite');tx.objectStore('img').clear();tx.oncomplete=tx.onerror=tx.onabort=function(){res();};});}).catch(function(){});}
 function rcShrink(file){
   return new Promise(function(res,rej){
@@ -1406,12 +1542,13 @@ function rcCloseView(){
 /* ---- Tareas frecuentes ---- */
 function applyFixed(){
   var cm=today().slice(0,7),ch=false;
+  if(CL.on&&!cloudReady()) return false;
   state.fixed.forEach(function(f){
-    if(!member(f.m)) return;
+    if(!member(f.m)||!canManage(f.m)) return;
     var mo=f.start||cm,guard=0;
     while(mo<=cm&&guard++<600){
       if((f.skipped||[]).indexOf(mo)<0&&!state.tx.some(function(t){return t.fid===f.id&&t.date.slice(0,7)===mo;})){
-        state.tx.push({id:uid(),m:f.m,type:'g',amount:f.amount,cat:f.cat,note:f.name,date:mo+'-'+pad(Math.min(f.day||1,dayCount(mo))),paid:member(f.paid)?f.paid:f.m,fid:f.id});
+        state.tx.push({id:'fx'+f.id+mo,m:f.m,type:'g',amount:f.amount,cat:f.cat,note:f.name,date:mo+'-'+pad(Math.min(f.day||1,dayCount(mo))),paid:member(f.paid)?f.paid:f.m,fid:f.id});
         ch=true;
       }
       mo=addMonths(mo,1);
@@ -1421,12 +1558,13 @@ function applyFixed(){
 }
 function applyRecurring(){
   var cm=today().slice(0,7),ch=applyFixed();
+  if(CL.on&&!cloudReady()) return ch;
   state.recs.forEach(function(r){
-    if(!member(r.m)) return;
+    if(!member(r.m)||!canManage(r.m)) return;
     if((r.skipped||[]).indexOf(cm)>=0) return;
     var has=state.tasks.some(function(t){return t.rid===r.id&&t.month===cm;});
     if(!has){
-      state.tasks.push({id:uid(),m:r.m,text:r.text,due:cm+'-'+pad(Math.min(r.day||1,dayCount(cm))),prio:r.prio||'m',done:false,rid:r.id,month:cm});
+      state.tasks.push({id:'rc'+r.id+cm,m:r.m,text:r.text,due:cm+'-'+pad(Math.min(r.day||1,dayCount(cm))),prio:r.prio||'m',done:false,rid:r.id,month:cm});
       ch=true;
     }
   });
@@ -1527,7 +1665,7 @@ function budgetCard(){
   var tot=0,h='<div class="card"><div class="card-head"><h2>'+tt('h.budgets')+'</h2></div>';
   state.members.forEach(function(m){
     tot+=m.budget;
-    h+='<div class="mcard"><div class="mcard-top">'+av(m,'sm')+'<div class="grow"><div class="t">'+esc(m.name)+'</div><div class="meta">'+esc(roleL(m.role))+'</div></div><span class="amt">'+(m.budget>0?money(m.budget):'—')+'</span><button class="link" type="button" data-act="bud-edit" data-id="'+esc(m.id)+'">'+tt('btn.edit')+'</button></div></div>';
+    h+='<div class="mcard"><div class="mcard-top">'+av(m,'sm')+'<div class="grow"><div class="t">'+esc(m.name)+'</div><div class="meta">'+esc(roleL(m.role))+'</div></div><span class="amt">'+(m.budget>0?money(m.budget):'—')+'</span>'+(canManage(m.id)?'<button class="link" type="button" data-act="bud-edit" data-id="'+esc(m.id)+'">'+tt('btn.edit')+'</button>':'')+'</div></div>';
   });
   h+='<div class="kv bud-total"><span>'+tt('h.famTotal')+'</span><span class="num"><b>'+(tot>0?money(tot):'—')+'</b></span></div></div>';
   return h;
@@ -1574,7 +1712,7 @@ function homeFamily(A,r){
 function homeMember(A,r,mid){
   var a=A.mem[mid],m=a.m,b=a.budget,left=b-a.spent;
   var sub=b>0?'<p class="hero-sub">'+tt('h.budgetLine',{b:money(b),s:money(a.spent)})+'</p>':'<p class="hero-sub">'+tt('h.noBudget')+'</p>';
-  sub+='<button class="link" type="button" data-act="bud-edit" data-id="'+esc(mid)+'">'+(b>0?tt('h.editBudget'):tt('h.setBudget'))+'</button>';
+  if(canManage(mid)) sub+='<button class="link" type="button" data-act="bud-edit" data-id="'+esc(mid)+'">'+(b>0?tt('h.editBudget'):tt('h.setBudget'))+'</button>';
   var h=heroBlock((b>0?tt('h.avail',{n:esc(m.name)}):tt('h.spentOf',{n:esc(m.name)}))+' · '+esc(r.label),a.spent,b,sub,'');
   h+='<div class="stats">'+statBox(tt('stat.inc'),money(a.income),'pos')+statBox(tt('stat.savings'),money(savBalance(mid)))+statBox(tt('stat.pending'),String(pendingTasks(mid).length))+'</div>';
   h+=trendCard(mid);
@@ -1639,7 +1777,7 @@ function renderTx(){
     if(t.rcpt) meta+=' · <button type="button" class="chip rc" data-act="rcpt-view" data-rid="'+esc(t.rcpt)+'">'+CAM+tt('rc.chip')+'</button>';
     html+='<li class="row">'+av(m,'sm')+'<div class="grow"><div class="t">'+esc(t.note?dt(t.note):catL(t.cat))+'</div><div class="meta">'+meta+'</div></div>'+
       '<span class="amt '+(inc?'pos':'')+'">'+(inc?'+':'−')+money(t.amount)+'</span>'+
-      '<button class="icon-btn" type="button" data-act="del" data-key="tx" data-id="'+esc(t.id)+'" aria-label="'+tt('aria.delTx')+'">'+TRASH+'</button></li>';
+      (canManage(t.m)?'<button class="icon-btn" type="button" data-act="del" data-key="tx" data-id="'+esc(t.id)+'" aria-label="'+tt('aria.delTx')+'">'+TRASH+'</button>':'')+'</li>';
   });
   $('#tx-list').innerHTML=html+'</ul>';
 }
@@ -1657,10 +1795,11 @@ function renderTasks(){
   var now=today();
   function row(t){
     var m=member(t.m),late=!t.done&&t.due&&t.due<now;
-    return '<li class="row'+(t.done?' done':'')+'"><button class="check" type="button" role="checkbox" aria-checked="'+(!!t.done)+'" data-act="toggle-task" data-id="'+esc(t.id)+'" aria-label="'+tt('aria.doneTask')+'"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.500l4.500 4.500L19 7"/></svg></button>'+
+    var cm=canManage(t.m);
+    return '<li class="row'+(t.done?' done':'')+'"><button class="check" type="button" role="checkbox" aria-checked="'+(!!t.done)+'"'+(cm?' data-act="toggle-task"':' disabled')+' data-id="'+esc(t.id)+'" aria-label="'+tt('aria.doneTask')+'"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.500l4.500 4.500L19 7"/></svg></button>'+
       '<div class="grow"><div class="t">'+esc(dt(t.text))+'</div><div class="meta'+(late?' bad':'')+'"><span class="tag-m">'+av(m,'sm')+esc(m.name)+'</span>'+(t.due?' · '+(late?tt('task.late')+' ':'')+esc(shortDate(t.due)):'')+(t.rid?' · '+tt('chip.monthly'):'')+'</div></div>'+
       '<span class="chip '+t.prio+'">'+tt('prio.'+t.prio)+'</span>'+
-      '<button class="icon-btn" type="button" data-act="del" data-key="tasks" data-id="'+esc(t.id)+'" aria-label="'+tt('aria.delTask')+'">'+TRASH+'</button></li>';
+      (cm?'<button class="icon-btn" type="button" data-act="del" data-key="tasks" data-id="'+esc(t.id)+'" aria-label="'+tt('aria.delTask')+'">'+TRASH+'</button>':'')+'</li>';
   }
   var h='';
   h+=pend.length?'<ul class="list">'+pend.map(row).join('')+'</ul>':emptyBox('empty.task.t','empty.task.d');
@@ -1670,13 +1809,13 @@ function renderTasks(){
   $('#fix-card').hidden=!fx.length;
   $('#fix-list').innerHTML='<ul class="list">'+fx.map(function(r){
     var m=member(r.m),pid=r.paid||r.m;
-    return '<li class="row">'+av(m,'sm')+'<div class="grow"><div class="t">'+esc(dt(r.name))+'</div><div class="meta">'+esc(catL(r.cat))+' · '+esc(m.name)+' · '+tt('rec.day',{d:r.day})+(pid!==r.m?' · '+tt('l.paid',{n:esc(mname(pid))}):'')+'</div></div><span class="amt">−'+money(r.amount)+'</span><button class="icon-btn" type="button" data-act="del" data-key="fixed" data-id="'+esc(r.id)+'" aria-label="'+tt('aria.delFix')+'">'+TRASH+'</button></li>';
+    return '<li class="row">'+av(m,'sm')+'<div class="grow"><div class="t">'+esc(dt(r.name))+'</div><div class="meta">'+esc(catL(r.cat))+' · '+esc(m.name)+' · '+tt('rec.day',{d:r.day})+(pid!==r.m?' · '+tt('l.paid',{n:esc(mname(pid))}):'')+'</div></div><span class="amt">−'+money(r.amount)+'</span>'+(canManage(r.m)?'<button class="icon-btn" type="button" data-act="del" data-key="fixed" data-id="'+esc(r.id)+'" aria-label="'+tt('aria.delFix')+'">'+TRASH+'</button>':'')+'</li>';
   }).join('')+'</ul>';
   var recs=state.recs.filter(function(r){return member(r.m)&&(ui.mem==='all'||!member(ui.mem)||r.m===ui.mem);});
   $('#rec-card').hidden=!recs.length;
   $('#rec-list').innerHTML='<ul class="list">'+recs.map(function(r){
     var m=member(r.m);
-    return '<li class="row">'+av(m,'sm')+'<div class="grow"><div class="t">'+esc(dt(r.text))+'</div><div class="meta">'+esc(m.name)+' · '+tt('rec.day',{d:r.day})+'</div></div><button class="icon-btn" type="button" data-act="del" data-key="recs" data-id="'+esc(r.id)+'" aria-label="'+tt('aria.delRec')+'">'+TRASH+'</button></li>';
+    return '<li class="row">'+av(m,'sm')+'<div class="grow"><div class="t">'+esc(dt(r.text))+'</div><div class="meta">'+esc(m.name)+' · '+tt('rec.day',{d:r.day})+'</div></div>'+(canManage(r.m)?'<button class="icon-btn" type="button" data-act="del" data-key="recs" data-id="'+esc(r.id)+'" aria-label="'+tt('aria.delRec')+'">'+TRASH+'</button>':'')+'</li>';
   }).join('')+'</ul>';
 }
 
@@ -1687,10 +1826,10 @@ function renderGoals(){
     var m=member(g.m),pct=g.target>0?Math.min(100,Math.round(g.saved/g.target*100)):0,done=g.saved>=g.target;
     return '<div class="card goal"><div class="goal-top"><div class="grow"><h3>'+esc(dt(g.name))+'</h3><div class="meta"><span class="tag-m">'+av(m,'sm')+esc(m.name)+'</span>'+(g.due?' · '+tt('goal.due',{d:esc(fmtD(g.due))}):'')+'</div></div>'+
       (done?'<span class="chip ok">'+tt('goal.done')+'</span>':'<span class="chip b">'+pct+'%</span>')+
-      '<button class="icon-btn" type="button" data-act="del" data-key="goals" data-id="'+esc(g.id)+'" aria-label="'+tt('aria.delGoal')+'">'+TRASH+'</button></div>'+
+      (canManage(g.m)?'<button class="icon-btn" type="button" data-act="del" data-key="goals" data-id="'+esc(g.id)+'" aria-label="'+tt('aria.delGoal')+'">'+TRASH+'</button>':'')+'</div>'+
       bar(g.saved,g.target,done?'good':'')+
       '<div class="goal-nums"><span><b class="num">'+money(g.saved)+'</b> '+tt('goal.saved')+'</span><span>'+tt('goal.of')+' <b class="num">'+money(g.target)+'</b></span></div>'+
-      '<form class="contrib" data-goal="'+esc(g.id)+'"><input type="number" inputmode="decimal" min="0.01" step="0.01" placeholder="0.00" aria-label="'+tt('goal.contribAria')+'"><button class="btn small" type="submit">'+tt('goal.contrib')+'</button></form></div>';
+      (canManage(g.m)?'<form class="contrib" data-goal="'+esc(g.id)+'"><input type="number" inputmode="decimal" min="0.01" step="0.01" placeholder="0.00" aria-label="'+tt('goal.contribAria')+'"><button class="btn small" type="submit">'+tt('goal.contrib')+'</button></form>':'')+'</div>';
   }).join('');
 }
 
@@ -1705,7 +1844,7 @@ function renderSav(){
   $('#sav-list').innerHTML='<ul class="list">'+list.map(function(s){
     var m=member(s.m),dep=s.type==='d';
     return '<li class="row">'+av(m,'sm')+'<div class="grow"><div class="t">'+esc(s.note?dt(s.note):(dep?tt('type.deposit'):tt('type.withdraw')))+'</div><div class="meta">'+esc(m.name)+' · '+esc(shortDate(s.date))+'</div></div><span class="amt '+(dep?'pos':'')+'">'+(dep?'+':'−')+money(s.amount)+'</span>'+
-      '<button class="icon-btn" type="button" data-act="del" data-key="sav" data-id="'+esc(s.id)+'" aria-label="'+tt('aria.delTx')+'">'+TRASH+'</button></li>';
+      (canManage(s.m)?'<button class="icon-btn" type="button" data-act="del" data-key="sav" data-id="'+esc(s.id)+'" aria-label="'+tt('aria.delTx')+'">'+TRASH+'</button>':'')+'</li>';
   }).join('')+'</ul>';
 }
 
@@ -1715,8 +1854,8 @@ function renderMembers(){
   el.innerHTML=state.members.map(function(m){
     var n=state.tx.filter(function(t){return t.m===m.id;}).length;
     var h='<div class="mrow">'+av(m,'lg')+'<div class="grow"><div class="t">'+esc(m.name)+'</div><div class="meta">'+esc(roleL(m.role))+' · '+(m.budget>0?tt('m.budgetN',{b:money(m.budget)}):tt('m.noBudget'))+'</div></div>'+
-      '<button class="text-btn" type="button" data-act="mem-edit" data-id="'+esc(m.id)+'">'+tt('m.edit')+'</button>'+
-      '<button class="icon-btn" type="button" data-act="mem-del" data-id="'+esc(m.id)+'" aria-label="'+tt('aria.delMember')+'">'+TRASH+'</button></div>';
+      (canManage(m.id)?'<button class="text-btn" type="button" data-act="mem-edit" data-id="'+esc(m.id)+'">'+tt('m.edit')+'</button>':'')+
+      (canManage(m.id)&&!(CL.on&&CL.me&&CL.me.memberId===m.id)?'<button class="icon-btn" type="button" data-act="mem-del" data-id="'+esc(m.id)+'" aria-label="'+tt('aria.delMember')+'">'+TRASH+'</button>':'')+'</div>';
     if(ui.confirmMem===m.id){
       var paidFor=state.tx.filter(function(t){return t.type==='g'&&(t.paid||t.m)===m.id&&t.m!==m.id;}).length;
       h+='<div class="confirm" style="margin-bottom:10px"><span>'+tt('m.confirm',{n:esc(m.name),c:n,p:paidFor})+'</span><div class="btns"><button type="button" data-act="mem-del-no">'+tt('btn.cancel')+'</button><button type="button" class="solid" data-act="mem-del-yes" data-id="'+esc(m.id)+'">'+tt('btn.delete')+'</button></div></div>';
@@ -1726,7 +1865,7 @@ function renderMembers(){
 }
 
 /* Selectores de integrantes */
-function memberOpts(){return state.members.map(function(m){return {v:m.id,l:m.name+' ('+roleL(m.role)+')'};});}
+function memberOpts(onlyMine){return (onlyMine?manageable():state.members).map(function(m){return {v:m.id,l:m.name+' ('+roleL(m.role)+')'};});}
 function fillSel(sel,opts,def){
   var cur=sel.value;
   sel.innerHTML=opts.map(function(o){return '<option value="'+esc(o.v)+'">'+esc(o.l)+'</option>';}).join('');
@@ -1735,9 +1874,10 @@ function fillSel(sel,opts,def){
   else if(def!==undefined&&opts.some(function(o){return o.v===def;})) sel.value=def;
 }
 function fillSelects(){
-  var def=(ui.mem!=='all'&&member(ui.mem))?ui.mem:(state.members[0]&&state.members[0].id);
-  var opts=memberOpts();
+  var mine=manageable(),opts=memberOpts(true);
+  var def=(ui.mem!=='all'&&canManage(ui.mem))?ui.mem:(mine[0]&&mine[0].id);
   ['#tx-m','#task-m','#goal-m','#sav-m'].forEach(function(s){fillSel($(s),opts,def);});
+  opts=memberOpts();
   fillSel($('#rep-m'),[{v:'fam',l:tt('r.family')}].concat(opts),(ui.mem!=='all'&&member(ui.mem))?ui.mem:'fam');
   var cs=CATS.map(function(c){return {v:c,l:catL(c)};});
   fillSel($('#tx-cat'),cs);
@@ -1787,7 +1927,7 @@ function sheetTitle(n){
 function fabPane(){return {inicio:'tx',gastos:'tx',tareas:'task',metas:ui.gsv==='sav'?'sav':'goal',familia:'mem'}[ui.tab]||null;}
 function renderFab(){
   var f=$('#fab'),pane=fabPane();
-  f.hidden=!pane||(!state.members.length&&ui.tab!=='familia');
+  f.hidden=!pane||(!state.members.length&&ui.tab!=='familia')||(pane==='mem'?!isParent():!manageable().length);
   if(pane) f.setAttribute('aria-label',tt('fab.'+pane));
 }
 function memAvatar(){
@@ -1855,7 +1995,381 @@ function renderAll(){
   refreshLabels();
   setSync(syncState);
   countUps();
+  cloudRenderHook();
 }
+/* ===== Nube: cuenta, familia y sincronización (Firebase) ===== */
+var CLK='rinde.familia.mode';
+var COLS=['members','tx','tasks','recs','fixed','goals','sav'];
+var CLOUD={ad:null,fid:null,famName:'',codes:null,shadow:{},loaded:{},published:'',rq:0,user:null,booted:false,
+  u:{step:'loading',mode:'in',role:'papa',err:'',ok:'',busy:false,info:null,code:''},f:{}};
+function cloudAvailable(){return !!(window.RINDE_ADAPTER||(window.RINDE_FIREBASE&&window.RINDE_FIREBASE.apiKey));}
+function cloudReady(){return COLS.every(function(c){return CLOUD.loaded[c];});}
+function stable(v){
+  if(Array.isArray(v)) return '['+v.map(stable).join(',')+']';
+  if(v&&typeof v==='object') return '{'+Object.keys(v).sort().filter(function(k){return v[k]!==undefined;}).map(function(k){return JSON.stringify(k)+':'+stable(v[k]);}).join(',')+'}';
+  return JSON.stringify(v);
+}
+function cleanDoc(x){return JSON.parse(JSON.stringify(x));}
+function newCode(){
+  var A='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',o='',a=new Uint8Array(8);
+  try{crypto.getRandomValues(a);}catch(e){for(var i=0;i<8;i++) a[i]=Math.floor(Math.random()*256);}
+  for(var j=0;j<8;j++) o+=A.charAt(a[j]%A.length);
+  return o;
+}
+function setMode(m){try{if(m) localStorage.setItem(CLK,m);else localStorage.removeItem(CLK);}catch(e){}}
+
+/* ---- Adaptador de Firebase (se carga solo si hay configuración) ---- */
+function firebaseAdapter(){
+  var B='https://www.gstatic.com/firebasejs/10.14.1/',app,auth,db,au,fs;
+  function D(){var a=[db];for(var i=0;i<arguments.length;i++) a.push(arguments[i]);return fs.doc.apply(null,a);}
+  function ud(x){var o=x.data();o.id=x.id;return o;}
+  return {
+    init:function(){
+      return Promise.all([import(B+'firebase-app.js'),import(B+'firebase-auth.js'),import(B+'firebase-firestore.js')]).then(function(m){
+        au=m[1];fs=m[2];
+        app=m[0].initializeApp(window.RINDE_FIREBASE);
+        auth=au.getAuth(app);
+        try{db=fs.initializeFirestore(app,{localCache:fs.persistentLocalCache({tabManager:fs.persistentMultipleTabManager()})});}
+        catch(e){db=fs.getFirestore(app);}
+        return au.getRedirectResult(auth).catch(function(){});
+      });
+    },
+    onAuth:function(cb){au.onAuthStateChanged(auth,function(u){cb(u?{uid:u.uid,email:u.email||'',name:u.displayName||''}:null);});},
+    signInGoogle:function(){
+      var p=new au.GoogleAuthProvider();
+      return au.signInWithPopup(auth,p).catch(function(e){
+        if(e&&(e.code==='auth/popup-blocked'||e.code==='auth/operation-not-supported-in-this-environment')) return au.signInWithRedirect(auth,p);
+        throw e;
+      });
+    },
+    signInEmail:function(e,p){return au.signInWithEmailAndPassword(auth,e,p);},
+    signUpEmail:function(e,p,n){return au.createUserWithEmailAndPassword(auth,e,p).then(function(c){return n?au.updateProfile(c.user,{displayName:n}):null;});},
+    resetPassword:function(e){return au.sendPasswordResetEmail(auth,e);},
+    signOut:function(){return au.signOut(auth);},
+    getPointer:function(uid){return fs.getDoc(D('userFamily',uid)).then(function(s){return s.exists()?s.data():null;});},
+    getUserDoc:function(fid,uid){return fs.getDoc(D('families',fid,'users',uid)).then(function(s){return s.exists()?s.data():null;});},
+    getFamily:function(fid){return fs.getDoc(D('families',fid)).then(function(s){return s.exists()?s.data():null;});},
+    getCodes:function(fid){return fs.getDoc(D('families',fid,'meta','codes')).then(function(s){return s.exists()?s.data():null;}).catch(function(){return null;});},
+    lookupCode:function(code){return fs.getDoc(D('codes',code)).then(function(s){return s.exists()?s.data():null;});},
+    createFamily:function(uid,o){
+      var fid=fs.doc(fs.collection(db,'families')).id;
+      return fs.setDoc(D('families',fid),{name:o.famName,ownerUid:uid,createdAt:Date.now()})
+        .then(function(){return fs.setDoc(D('families',fid,'users',uid),{uid:uid,role:o.me.role,memberId:o.me.id,email:o.email||'',owner:true});})
+        .then(function(){return fs.setDoc(D('families',fid,'meta','codes'),{parent:o.codes.parent,member:o.codes.member});})
+        .then(function(){return fs.setDoc(D('codes',o.codes.parent),{fid:fid,kind:'parent',open:[]});})
+        .then(function(){return fs.setDoc(D('codes',o.codes.member),{fid:fid,kind:'member',open:[]});})
+        .then(function(){var me=cleanDoc(o.me);me.uid=uid;return fs.setDoc(D('families',fid,'members',me.id),me);})
+        .then(function(){return fs.setDoc(D('userFamily',uid),{fid:fid});})
+        .then(function(){return {fid:fid};});
+    },
+    joinFamily:function(uid,o){
+      var memberId=o.claimId||o.me.id;
+      return fs.setDoc(D('families',o.fid,'users',uid),{uid:uid,role:o.role,memberId:memberId,email:o.email||'',code:o.code})
+        .then(function(){
+          if(o.claimId) return fs.updateDoc(D('families',o.fid,'members',o.claimId),{uid:uid});
+          var me=cleanDoc(o.me);me.uid=uid;return fs.setDoc(D('families',o.fid,'members',me.id),me);
+        })
+        .then(function(){return fs.setDoc(D('userFamily',uid),{fid:o.fid});});
+    },
+    publishOpen:function(code,open){return fs.updateDoc(D('codes',code),{open:open});},
+    subscribe:function(fid,col,cb,errcb){
+      return fs.onSnapshot(fs.collection(db,'families',fid,col),function(s){cb(s.docs.map(ud));},errcb);
+    },
+    setDoc:function(fid,col,id,data){return fs.setDoc(D('families',fid,col,id),data);},
+    delDoc:function(fid,col,id){return fs.deleteDoc(D('families',fid,col,id));},
+    putReceipt:function(fid,id,o){return fs.setDoc(D('families',fid,'receipts',id),o);},
+    getReceipt:function(fid,id){return fs.getDoc(D('families',fid,'receipts',id)).then(function(s){return s.exists()?s.data():null;});},
+    delReceipt:function(fid,id){return fs.deleteDoc(D('families',fid,'receipts',id));}
+  };
+}
+
+/* ---- Arranque ---- */
+function cloudBoot(){
+  renderAccount();
+  if(!cloudAvailable()) return false;
+  var mode=null;try{mode=localStorage.getItem(CLK);}catch(e){}
+  if(mode==='local') return false;
+  CLOUD.booted=true;
+  CLOUD.ad=window.RINDE_ADAPTER||firebaseAdapter();
+  authGo('loading');
+  CLOUD.ad.init().then(function(){CLOUD.ad.onAuth(onAuthUser);}).catch(function(e){
+    CLOUD.u.err=tt('cl.noNet');authGo('login');try{console.error(e);}catch(x){}
+  });
+  return true;
+}
+function onAuthUser(user){
+  CLOUD.user=user;
+  if(!user){
+    if(CL.on){location.reload();return;}
+    CLOUD.u.err='';authGo('login');return;
+  }
+  if(CL.on) return;
+  authGo('loading');
+  var ad=CLOUD.ad;
+  ad.getPointer(user.uid).then(function(p){
+    if(!p||!p.fid) return null;
+    return ad.getUserDoc(p.fid,user.uid).then(function(u){return u?{fid:p.fid,u:u}:null;});
+  }).then(function(r){
+    if(r) enterFamily(r.fid,r.u);
+    else{CLOUD.u.err='';authGo('family');}
+  }).catch(function(e){CLOUD.u.err=authMsg(e);authGo('family');});
+}
+function enterFamily(fid,u){
+  var ad=CLOUD.ad;
+  CLOUD.fid=fid;CLOUD.shadow={};CLOUD.loaded={};CLOUD.published='';
+  CL.me={uid:u.uid,role:u.role,memberId:u.memberId};CL.on=true;
+  document.body.classList.add('cloud');
+  document.body.classList.toggle('noparent',!isParent());
+  state=blank();ui.mem=u.memberId;ui.editMem=null;ui.confirmMem=null;
+  COLS.forEach(function(c){CLOUD.shadow[c]={};});
+  $('#auth').hidden=true;
+  setSync('saved');
+  ad.getFamily(fid).then(function(f){CLOUD.famName=(f&&f.name)||'';renderAccount();}).catch(function(){});
+  if(isParent()) ad.getCodes(fid).then(function(c){CLOUD.codes=c;renderAccount();publishOpen();}).catch(function(){});
+  CLOUD.unsubs=COLS.map(function(col){
+    return ad.subscribe(fid,col,function(docs){applyRemote(col,docs);},function(e){onWriteErr(e);});
+  });
+  renderAll();setTab(ui.tab);
+}
+function applyRemote(col,docs){
+  var sh={};
+  docs.forEach(function(d){sh[d.id]=stable(cleanDoc(d));});
+  state[col]=docs;CLOUD.shadow[col]=sh;CLOUD.loaded[col]=true;
+  if(col==='members') fixState(state);
+  if(cloudReady()){
+    var ch=applyRecurring();
+    if(ch) save();
+    publishOpen();
+  }
+  scheduleRender();
+}
+function scheduleRender(){
+  if(CLOUD.rq) return;
+  var f=function(){CLOUD.rq=0;renderAll();};
+  CLOUD.rq=(window.requestAnimationFrame||setTimeout)(f);
+}
+function syncOut(){
+  if(!CL.on||!CLOUD.fid) return;
+  var ad=CLOUD.ad,fid=CLOUD.fid,dels=[];
+  COLS.forEach(function(col){
+    var cur={},sh=CLOUD.shadow[col];
+    state[col].forEach(function(x){cur[x.id]=cleanDoc(x);});
+    Object.keys(cur).forEach(function(id){
+      var j=stable(cur[id]);
+      if(sh[id]!==j){sh[id]=j;ad.setDoc(fid,col,id,cur[id]).catch(onWriteErr);}
+    });
+    Object.keys(sh).forEach(function(id){if(!cur[id]){delete sh[id];dels.push([col,id]);}});
+  });
+  dels.sort(function(a,b){return (a[0]==='members')-(b[0]==='members');});
+  dels.forEach(function(d){ad.delDoc(fid,d[0],d[1]).catch(onWriteErr);});
+  publishOpen();
+}
+function onWriteErr(e){
+  var c=e&&e.code;
+  if(c==='permission-denied'||c==='PERMISSION_DENIED') toast(tt('cl.denied'));
+  else setSync('error');
+  try{console.error(e);}catch(x){}
+}
+function publishOpen(){
+  if(!CL.on||!isParent()||!CLOUD.codes||!cloudReady()) return;
+  function open(roles){return state.members.filter(function(m){return !m.uid&&roles.indexOf(m.role)>=0;}).map(function(m){return {id:m.id,name:m.name,role:m.role};});}
+  var po=open(['papa','mama']),mo=open(['hijo','otro']),key=stable([po,mo]);
+  if(key===CLOUD.published) return;
+  CLOUD.published=key;
+  CLOUD.ad.publishOpen(CLOUD.codes.parent,po).catch(function(){CLOUD.published='';});
+  CLOUD.ad.publishOpen(CLOUD.codes.member,mo).catch(function(){CLOUD.published='';});
+}
+/* Recibos en la nube */
+function cloudPutReceipt(id,blob,m){
+  if(!CL.on) return;
+  blobToDataUrl(blob).then(function(d){return CLOUD.ad.putReceipt(CLOUD.fid,id,{m:m,data:d});}).catch(function(e){try{console.error(e);}catch(x){}});
+}
+function cloudGetReceipt(id){
+  if(!CL.on) return Promise.resolve(null);
+  return CLOUD.ad.getReceipt(CLOUD.fid,id).then(function(d){
+    if(!d||!d.data) return null;
+    var b=dataUrlToBlob(d.data);rcPut(id,b).catch(function(){});return b;
+  }).catch(function(){return null;});
+}
+function cloudDelReceipt(id){if(CL.on&&CLOUD.ad) CLOUD.ad.delReceipt(CLOUD.fid,id).catch(function(){});}
+
+/* ---- Roles disponibles en el formulario de integrante ---- */
+function roleOpts(m){
+  var sel=$('#mem-role'),list=['papa','mama','hijo','otro'];
+  if(CL.on) list=m?[m.role]:['hijo','otro'];
+  sel.innerHTML=list.map(function(r){return '<option value="'+r+'" data-i18n="role.'+r+'">'+esc(roleL(r))+'</option>';}).join('');
+  sel.value=m?m.role:(list.indexOf('hijo')>=0?'hijo':list[0]);
+  syncChips();
+}
+
+/* ---- Cuenta y familia (pestaña Familia) ---- */
+function renderAccount(){
+  var el=$('#acct-card');if(!el) return;
+  document.body.classList.toggle('noparent',CL.on&&!isParent());
+  if(!CL.on){
+    if(!cloudAvailable()){el.hidden=true;return;}
+    el.hidden=false;
+    el.innerHTML='<div class="card-head"><h2>'+tt('cl.acct')+'</h2></div><div class="acct"><p class="hint">'+tt('cl.connectDesc')+'</p><button class="btn" type="button" data-act="cl-connect">'+tt('cl.connect')+'</button></div>';
+    return;
+  }
+  el.hidden=false;
+  var h='<div class="card-head"><h2>'+tt('cl.acct')+'</h2></div><div class="acct">';
+  h+='<div class="meta"><b>'+tt('cl.family',{n:esc(CLOUD.famName||'—')})+'</b></div>';
+  if(CLOUD.user&&CLOUD.user.email) h+='<div class="meta">'+tt('cl.signedAs',{e:esc(CLOUD.user.email)})+'</div>';
+  if(!isParent()) h+='<p class="perm-note">'+tt('cl.permKid')+'</p>';
+  else{
+    h+='<p class="perm-note">'+tt('cl.permParent')+'</p>';
+    if(CLOUD.codes){
+      h+='<div class="code"><div class="grow"><span>'+tt('cl.codeKids')+'</span><b>'+esc(CLOUD.codes.member)+'</b></div><button class="link" type="button" data-act="cl-copy" data-c="'+esc(CLOUD.codes.member)+'">'+tt('cl.copy')+'</button><button class="link" type="button" data-act="cl-share" data-c="'+esc(CLOUD.codes.member)+'">WhatsApp</button></div>';
+      h+='<div class="code"><div class="grow"><span>'+tt('cl.codeParents')+'</span><b>'+esc(CLOUD.codes.parent)+'</b></div><button class="link" type="button" data-act="cl-copy" data-c="'+esc(CLOUD.codes.parent)+'">'+tt('cl.copy')+'</button><button class="link" type="button" data-act="cl-share" data-c="'+esc(CLOUD.codes.parent)+'">WhatsApp</button></div>';
+    }
+  }
+  h+='<button class="btn ghost" type="button" data-act="cl-signout">'+tt('cl.signout')+'</button></div>';
+  el.innerHTML=h;
+}
+function shareCode(c){
+  var text=tt('cl.invite',{n:CLOUD.famName,c:c,u:location.href.split('#')[0].split('?')[0]});
+  if(navigator.share){navigator.share({text:text}).catch(function(){});return;}
+  window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');
+}
+function copyCode(c){
+  var done=function(){toast(tt('cl.copied'));};
+  try{navigator.clipboard.writeText(c).then(done,done);}catch(e){done();}
+}
+
+/* ---- Pantallas de acceso ---- */
+var GICO='<svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.800 2.400 30.300 0 24 0 14.600 0 6.500 5.400 2.600 13.200l7.900 6.100C12.400 13.600 17.700 9.500 24 9.500z"/><path fill="#4285F4" d="M46.500 24.500c0-1.600-.1-3.100-.4-4.500H24v9h12.700c-.6 3-2.300 5.500-4.800 7.200l7.600 5.900c4.500-4.100 7-10.200 7-17.600z"/><path fill="#FBBC05" d="M10.500 28.700A14.500 14.500 0 0 1 9.500 24c0-1.600.3-3.200.8-4.700l-7.900-6.100A24 24 0 0 0 0 24c0 3.900.9 7.500 2.600 10.800l7.900-6.100z"/><path fill="#34A853" d="M24 48c6.500 0 11.900-2.100 15.900-5.800l-7.600-5.900c-2.100 1.400-4.900 2.300-8.300 2.300-6.300 0-11.600-4.100-13.500-9.800l-7.900 6.100C6.500 42.600 14.600 48 24 48z"/></svg>';
+var LOGO='<svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="lg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0A7BC4"/><stop offset="1" stop-color="#19B6C6"/></linearGradient></defs><rect width="64" height="64" rx="16" fill="url(#lg2)"/><rect x="21" y="35" width="6" height="10" rx="2" fill="#fff"/><rect x="29" y="29" width="6" height="16" rx="2" fill="#fff"/><rect x="37" y="22" width="6" height="23" rx="2" fill="#fff"/></svg>';
+function authGo(step){CLOUD.u.step=step;CLOUD.u.busy=false;$('#auth').hidden=false;renderAuth();}
+function authMsg(e){
+  var c=(e&&e.code)||'';
+  if(c==='auth/invalid-credential'||c==='auth/wrong-password'||c==='auth/user-not-found'||c==='auth/invalid-login-credentials') return tt('cl.e.cred');
+  if(c==='auth/email-already-in-use') return tt('cl.e.exists');
+  if(c==='auth/weak-password') return tt('cl.e.weak');
+  if(c==='auth/invalid-email') return tt('cl.e.email');
+  if(c==='auth/too-many-requests') return tt('cl.e.many');
+  if(c==='auth/network-request-failed'||c==='unavailable') return tt('cl.noNet');
+  if(c==='permission-denied') return tt('cl.denied');
+  if(c==='auth/popup-closed-by-user'||c==='auth/cancelled-popup-request') return '';
+  return tt('cl.e.generic');
+}
+function fld(name,label,type,extra){
+  return '<label class="field"><span>'+label+'</span><input name="'+name+'" type="'+(type||'text')+'" '+(extra||'')+'></label>';
+}
+function roleChips(roles,cur){
+  return '<div class="chips">'+roles.map(function(r){return '<button type="button" data-act="au-role" data-v="'+r+'" aria-pressed="'+(cur===r)+'"><span>'+esc(roleL(r))+'</span></button>';}).join('')+'</div>';
+}
+function renderAuth(){
+  var u=CLOUD.u,box=$('#auth-box'),h='';
+  var head='<div class="lang" role="group" aria-label="Idioma / Language"><button type="button" data-act="lang" data-lang="es" aria-pressed="'+(LANG==='es')+'">ES</button><button type="button" data-act="lang" data-lang="en" aria-pressed="'+(LANG==='en')+'">EN</button></div><div class="auth-logo">'+LOGO+'<b>Rinde Familia</b></div>';
+  var err=u.err?'<p class="err" role="alert">'+esc(u.err)+'</p>':'',ok=u.ok?'<p class="okmsg">'+esc(u.ok)+'</p>':'';
+  var dis=u.busy?' disabled':'';
+  if(u.step==='loading'){
+    h=head+'<p class="sub">'+tt('cl.loading')+'</p>';
+  } else if(u.step==='login'){
+    var up=u.mode==='up';
+    h=head+'<h2>'+(up?tt('cl.createAcc'):tt('cl.title'))+'</h2><p class="sub">'+tt('cl.sub')+'</p>'+
+      '<div class="card"><button class="gbtn" type="button" data-act="au-google"'+dis+'>'+GICO+'<span>'+tt('cl.google')+'</span></button><div class="or">'+tt('cl.or')+'</div>'+
+      '<form id="au-email" novalidate>'+(up?fld('name',tt('cl.name'),'text','autocomplete="name" maxlength="40"'):'')+fld('email',tt('cl.email'),'email','autocomplete="email" inputmode="email"')+fld('pass',tt('cl.pass'),'password','autocomplete="'+(up?'new-password':'current-password')+'"')+err+ok+
+      '<button class="btn big" type="submit"'+dis+'>'+(up?tt('cl.signup'):tt('cl.signin'))+'</button></form>'+
+      '<div class="switch-row"><button class="link" type="button" data-act="au-mode">'+(up?tt('cl.haveAcc'):tt('cl.noAcc'))+'</button>'+(up?'':'<button class="link" type="button" data-act="au-forgot">'+tt('cl.forgot')+'</button>')+'</div></div>'+
+      '<button class="link" type="button" data-act="au-local">'+tt('cl.local')+'</button>';
+  } else if(u.step==='family'){
+    h=head+'<h2>'+tt('cl.famTitle')+'</h2><p class="sub">'+tt('cl.famSub')+'</p>'+err+
+      '<button class="opt" type="button" data-act="au-pick" data-v="create"><b>'+tt('cl.create')+'</b><span>'+tt('cl.createD')+'</span></button>'+
+      '<button class="opt" type="button" data-act="au-pick" data-v="code"><b>'+tt('cl.join')+'</b><span>'+tt('cl.joinD')+'</span></button>'+
+      '<button class="link" type="button" data-act="cl-signout">'+tt('cl.signout')+'</button>';
+  } else if(u.step==='create'){
+    h=head+'<h2>'+tt('cl.create')+'</h2><div class="card"><form id="au-create" novalidate>'+fld('fam',tt('cl.famName'),'text','maxlength="40" placeholder="'+esc(tt('cl.famPh'))+'"')+fld('me',tt('cl.myName'),'text','maxlength="40" autocomplete="name"')+
+      '<div class="field"><span>'+tt('cl.myRole')+'</span>'+roleChips(['papa','mama'],u.role)+'</div>'+fld('bud',tt('f.budgetMonth'),'number','inputmode="decimal" min="0" step="0.01" placeholder="0.00"')+err+
+      '<button class="btn big" type="submit"'+dis+'>'+tt('cl.createBtn')+'</button></form></div><button class="link" type="button" data-act="au-back">'+tt('btn.back')+'</button>';
+  } else if(u.step==='code'){
+    h=head+'<h2>'+tt('cl.join')+'</h2><p class="sub">'+tt('cl.codeD')+'</p><div class="card"><form id="au-code" novalidate>'+fld('code',tt('cl.code'),'text','maxlength="8" autocapitalize="characters" autocomplete="off" style="text-transform:uppercase;letter-spacing:.14em;font-family:JetBrains Mono,monospace"')+err+
+      '<button class="btn big" type="submit"'+dis+'>'+tt('cl.check')+'</button></form></div><button class="link" type="button" data-act="au-back">'+tt('btn.back')+'</button>';
+  } else if(u.step==='join'){
+    var info=u.info,roles=info.kind==='parent'?['papa','mama']:['hijo','otro'];
+    h=head+'<h2>'+tt(info.kind==='parent'?'cl.joinParent':'cl.joinKid')+'</h2>';
+    if(info.open&&info.open.length){
+      h+='<p class="sub">'+tt('cl.claimQ')+'</p><div class="card">'+info.open.map(function(o){return '<button class="opt" type="button" data-act="au-claim" data-id="'+esc(o.id)+'"'+dis+'><b>'+tt('cl.claimMe',{n:esc(o.name)})+'</b><span>'+esc(roleL(o.role))+'</span></button>';}).join('')+'</div><p class="sub">'+tt('cl.claimNew')+'</p>';
+    }
+    h+='<div class="card"><form id="au-join" novalidate>'+fld('me',tt('cl.myName'),'text','maxlength="40" autocomplete="name"')+'<div class="field"><span>'+tt('cl.myRole')+'</span>'+roleChips(roles,roles.indexOf(u.role)>=0?u.role:roles[0])+'</div>'+fld('bud',tt('f.budgetMonth'),'number','inputmode="decimal" min="0" step="0.01" placeholder="0.00"')+err+
+      '<button class="btn big" type="submit"'+dis+'>'+tt('cl.joinBtn')+'</button></form></div><button class="link" type="button" data-act="au-back">'+tt('btn.back')+'</button>';
+  }
+  box.innerHTML=h;
+  $$('input[name]',box).forEach(function(i){if(CLOUD.f[i.name]!==undefined) i.value=CLOUD.f[i.name];});
+}
+function cloudRenderHook(){
+  renderAccount();
+  if(!$('#auth').hidden&&CLOUD.u.step!=='loading') renderAuth();
+}
+$('#auth').addEventListener('input',function(e){var n=e.target&&e.target.name;if(n) CLOUD.f[n]=e.target.name==='code'?e.target.value.toUpperCase():e.target.value;});
+
+function busy(on){CLOUD.u.busy=on;renderAuth();}
+function afterJoin(){
+  var user=CLOUD.user;CLOUD.u.err='';CLOUD.u.busy=false;authGo('loading');onAuthUser(user);
+}
+function pickColor(){return COLORS[Math.floor(Math.random()*COLORS.length)];}
+function numOrZero(v){var n=parseFloat(v);return n>0?round2(n):0;}
+document.addEventListener('click',function(e){
+  var el=e.target.closest&&e.target.closest('[data-act^="au-"],[data-act^="cl-"]');if(!el) return;
+  var act=el.getAttribute('data-act'),u=CLOUD.u,ad=CLOUD.ad;
+  switch(act){
+    case 'au-google':
+      u.err='';busy(true);
+      ad.signInGoogle().then(function(){u.busy=false;}).catch(function(x){u.err=authMsg(x);busy(false);});break;
+    case 'au-mode': u.mode=u.mode==='up'?'in':'up';u.err='';u.ok='';renderAuth();break;
+    case 'au-forgot':
+      var em=(CLOUD.f.email||'').trim();u.ok='';
+      if(!em){u.err=tt('cl.e.email');renderAuth();break;}
+      ad.resetPassword(em).then(function(){u.err='';u.ok=tt('cl.resetSent');renderAuth();}).catch(function(x){u.err=authMsg(x);u.ok='';renderAuth();});break;
+    case 'au-local': setMode('local');location.reload();break;
+    case 'au-pick': u.err='';authGo(el.getAttribute('data-v'));break;
+    case 'au-back': u.err='';authGo(u.step==='join'?'code':'family');break;
+    case 'au-role': u.role=el.getAttribute('data-v');renderAuth();break;
+    case 'au-claim':
+      u.err='';busy(true);
+      ad.joinFamily(CLOUD.user.uid,{fid:u.info.fid,code:u.code,role:(u.info.open.find(function(o){return o.id===el.getAttribute('data-id');})||{}).role,email:CLOUD.user.email,claimId:el.getAttribute('data-id')})
+        .then(afterJoin).catch(function(x){u.err=authMsg(x);busy(false);});break;
+    case 'cl-signout': ad.signOut().then(function(){if(!CL.on) return;location.reload();}).catch(function(){location.reload();});break;
+    case 'cl-connect': setMode(null);location.reload();break;
+    case 'cl-copy': copyCode(el.getAttribute('data-c'));break;
+    case 'cl-share': shareCode(el.getAttribute('data-c'));break;
+  }
+});
+document.addEventListener('submit',function(e){
+  var f=e.target,id=f&&f.id;
+  if(id!=='au-email'&&id!=='au-create'&&id!=='au-code'&&id!=='au-join') return;
+  e.preventDefault();
+  var u=CLOUD.u,ad=CLOUD.ad,F=CLOUD.f;u.err='';u.ok='';
+  if(id==='au-email'){
+    var em=(F.email||'').trim(),pw=F.pass||'';
+    if(!/^\S+@\S+\.\S+$/.test(em)){u.err=tt('cl.e.email');renderAuth();return;}
+    if(pw.length<6){u.err=tt('cl.e.weak');renderAuth();return;}
+    busy(true);
+    (u.mode==='up'?ad.signUpEmail(em,pw,(F.name||'').trim()):ad.signInEmail(em,pw)).then(function(){u.busy=false;}).catch(function(x){u.err=authMsg(x);busy(false);});
+  } else if(id==='au-create'){
+    var fam=(F.fam||'').trim(),nm=(F.me||'').trim();
+    if(!fam||!nm){u.err=tt('cl.e.fields');renderAuth();return;}
+    var me={id:uid(),name:nm,role:u.role==='mama'?'mama':'papa',budget:numOrZero(F.bud),color:pickColor(),limits:{}};
+    busy(true);
+    ad.createFamily(CLOUD.user.uid,{famName:fam,me:me,email:CLOUD.user.email,codes:{parent:newCode(),member:newCode()}}).then(afterJoin).catch(function(x){u.err=authMsg(x);busy(false);});
+  } else if(id==='au-code'){
+    var c=(F.code||'').trim().toUpperCase();
+    if(c.length<6){u.err=tt('cl.badCode');renderAuth();return;}
+    busy(true);
+    ad.lookupCode(c).then(function(info){
+      if(!info||!info.fid){u.err=tt('cl.badCode');busy(false);return;}
+      info.open=info.open||[];u.info=info;u.code=c;u.role=info.kind==='parent'?'papa':'hijo';authGo('join');
+    }).catch(function(x){u.err=authMsg(x)||tt('cl.badCode');busy(false);});
+  } else if(id==='au-join'){
+    var jn=(F.me||'').trim();
+    if(!jn){u.err=tt('cl.e.fields');renderAuth();return;}
+    var roles=u.info.kind==='parent'?['papa','mama']:['hijo','otro'],role=roles.indexOf(u.role)>=0?u.role:roles[0];
+    var jm={id:uid(),name:jn,role:role,budget:numOrZero(F.bud),color:pickColor(),limits:{}};
+    busy(true);
+    ad.joinFamily(CLOUD.user.uid,{fid:u.info.fid,code:u.code,role:role,email:CLOUD.user.email,me:jm}).then(afterJoin).catch(function(x){u.err=authMsg(x);busy(false);});
+  }
+});
 /* ===== Acciones, formularios, reportes PDF, respaldo e inicio ===== */
 function showErr(sel,msg){var e=$(sel);e.textContent=msg;e.hidden=false;}
 function clearErr(sel){var e=$(sel);e.textContent='';e.hidden=true;}
@@ -1900,6 +2414,7 @@ function setLang(l){
 function removeFrom(key,id){
   var arr=state[key],i=arr.findIndex(function(x){return x.id===id;});
   if(i<0) return;
+  if(!canManage(arr[i].m)){toast(tt('cl.denied'));return;}
   var it=arr.splice(i,1)[0],rc=null;
   if(key==='tx'&&it.fid){
     rc=state.fixed.find(function(r){return r.id===it.fid;});
@@ -1920,6 +2435,7 @@ function removeFrom(key,id){
   });
 }
 function deleteMember(id){
+  if(!canManage(id)||(CL.on&&CL.me&&CL.me.memberId===id)){toast(tt('cl.denied'));return;}
   var removed=state.tx.filter(function(t){return t.m===id;});
   state.tx=state.tx.filter(function(t){return t.m!==id;});
   state.tx.forEach(function(t){if(t.paid===id) t.paid=t.m;});
@@ -1994,10 +2510,10 @@ document.addEventListener('click',function(e){
     case 'color': ui.color=el.getAttribute('data-c');$$('#mem-colors button').forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-c')===ui.color));});memAvatar();break;
     case 'del': removeFrom(el.getAttribute('data-key'),id);break;
     case 'toggle-task':
-      var t=state.tasks.find(function(x){return x.id===id;});if(t){t.done=!t.done;commit();}break;
+      var t=state.tasks.find(function(x){return x.id===id;});if(t&&canManage(t.m)){t.done=!t.done;commit();}break;
     case 'mem-edit': startEditMember(id);break;
     case 'bud-edit':
-      var bm=member(id);if(!bm) break;
+      var bm=member(id);if(!bm||!canManage(id)) break;
       ui.budMem=id;$('#bud-av').innerHTML=av(bm,'lg');$('#bud-name').textContent=bm.name;$('#bud-sub').textContent=roleL(bm.role);
       $('#bud-amount').value=bm.budget>0?bm.budget:'';clearErr('#bud-err');openSheet('bud');break;
     case 'mem-del': ui.confirmMem=id;renderMembers();break;
@@ -2065,6 +2581,7 @@ $('#tx-form').addEventListener('submit',function(e){
   e.preventDefault();clearErr('#tx-err');
   var mid=$('#tx-m').value;
   if(!member(mid)){showErr('#tx-err',tt('err.noMember'));return;}
+  if(!canManage(mid)){showErr('#tx-err',tt('cl.denied'));return;}
   var amount=num('#tx-amount'),date=$('#tx-date').value||today();
   if(!(amount>0)){showErr('#tx-err',tt('err.amount'));return;}
   var paid=ui.tx==='g'?$('#tx-paid').value:mid;
@@ -2073,7 +2590,7 @@ $('#tx-form').addEventListener('submit',function(e){
   var pend=ui.tx==='g'?RC.pending:null;
   if(pend){
     rec.rcpt='r'+uid();
-    rcPut(rec.rcpt,pend.blob).catch(function(){
+    rcPut(rec.rcpt,pend.blob).then(function(){cloudPutReceipt(rec.rcpt,pend.blob,rec.m);}).catch(function(){
       var x=state.tx.find(function(t){return t.id===rec.id;});
       if(x){delete x.rcpt;commit();}
       toast(tt('rc.saveErr'));
@@ -2094,6 +2611,7 @@ $('#task-form').addEventListener('submit',function(e){
   e.preventDefault();clearErr('#task-err');
   var mid=$('#task-m').value,text=$('#task-text').value.trim(),due=$('#task-due').value,prio=$('#task-prio').value;
   if(!member(mid)){showErr('#task-err',tt('err.noMember'));return;}
+  if(!canManage(mid)){showErr('#task-err',tt('cl.denied'));return;}
   if(!text){showErr('#task-err',tt('err.task'));return;}
   if($('#task-rec').checked){
     state.recs.push({id:uid(),m:mid,text:text,day:due?+due.split('-')[2]:1,prio:prio,skipped:[]});
@@ -2105,6 +2623,7 @@ $('#goal-form').addEventListener('submit',function(e){
   e.preventDefault();clearErr('#goal-err');
   var mid=$('#goal-m').value,name=$('#goal-name').value.trim(),target=num('#goal-target');
   if(!member(mid)){showErr('#goal-err',tt('err.noMember'));return;}
+  if(!canManage(mid)){showErr('#goal-err',tt('cl.denied'));return;}
   if(!name){showErr('#goal-err',tt('err.goalName'));return;}
   if(!(target>0)){showErr('#goal-err',tt('err.target'));return;}
   state.goals.push({id:uid(),m:mid,name:name,target:round2(target),saved:0,due:$('#goal-due').value});
@@ -2116,13 +2635,14 @@ document.addEventListener('submit',function(e){
   e.preventDefault();
   var g=state.goals.find(function(x){return x.id===f.getAttribute('data-goal');});
   var v=parseFloat(f.querySelector('input').value);
-  if(!g||!(v>0)) return;
+  if(!g||!(v>0)||!canManage(g.m)) return;
   g.saved=round2(g.saved+v);commit();
 });
 $('#sav-form').addEventListener('submit',function(e){
   e.preventDefault();clearErr('#sav-err');
   var mid=$('#sav-m').value,amount=num('#sav-amount');
   if(!member(mid)){showErr('#sav-err',tt('err.noMember'));return;}
+  if(!canManage(mid)){showErr('#sav-err',tt('cl.denied'));return;}
   if(!(amount>0)){showErr('#sav-err',tt('err.amount'));return;}
   if(ui.sav==='r'&&amount>savBalance(mid)){showErr('#sav-err',tt('err.savFunds',{b:money(savBalance(mid))}));return;}
   state.sav.push({id:uid(),m:mid,type:ui.sav,amount:round2(amount),note:$('#sav-note').value.trim(),date:$('#sav-date').value||today()});
@@ -2135,11 +2655,13 @@ function resetMemForm(){
   ui.color=COLORS[state.members.length%COLORS.length];ui.memPhoto='';
   $$('#mem-colors button').forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-c')===ui.color));});
   $('details.lim').open=false;
+  roleOpts(null);
   clearErr('#mem-err');syncChips();refreshLabels();
 }
 function startEditMember(id){
-  var m=member(id);if(!m) return;
+  var m=member(id);if(!m||!canManage(id)) return;
   ui.editMem=id;ui.color=m.color;ui.memPhoto=m.photo||'';
+  roleOpts(m);
   $('#mem-name').value=m.name;$('#mem-role').value=m.role;$('#mem-budget').value=m.budget||'';
   $$('#mem-limits input').forEach(function(i){var v=m.limits[i.getAttribute('data-lim')];i.value=v?v:'';});
   $$('#mem-colors button').forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-c')===m.color));});
@@ -2176,9 +2698,12 @@ $('#mem-form').addEventListener('submit',function(e){
   var role=$('#mem-role').value;
   if(ui.editMem){
     var m=member(ui.editMem);
+    if(m&&!canManage(m.id)){showErr('#mem-err',tt('cl.denied'));return;}
+    if(m&&CL.on) role=m.role;
     if(m){m.name=name;m.role=role;m.budget=round2(budget);m.color=ui.color;m.limits=limits;if(ui.memPhoto) m.photo=ui.memPhoto;else delete m.photo;}
     ui.editMem=null;
   } else {
+    if(CL.on&&(!isParent()||(role!=='hijo'&&role!=='otro'))){showErr('#mem-err',tt('cl.denied'));return;}
     var nm={id:uid(),name:name,role:role,budget:round2(budget),color:ui.color,limits:limits};
     if(ui.memPhoto) nm.photo=ui.memPhoto;
     state.members.push(nm);
@@ -2495,6 +3020,8 @@ $('#bk-file').addEventListener('change',function(){
   renderAll();
   setTab(ui.tab);
   document.addEventListener('visibilitychange',function(){if(!document.hidden&&applyRecurring()){save();renderAll();}});
+  window.addEventListener('online',function(){setSync(syncState);});window.addEventListener('offline',function(){setSync(syncState);});
+  cloudBoot();
   if(!window.claude&&'serviceWorker' in navigator&&/^https?:$/.test(location.protocol)){
     window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});
   }

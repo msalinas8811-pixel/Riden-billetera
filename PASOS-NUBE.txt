@@ -1,0 +1,47 @@
+YA CONFIGURADO: este paquete ya trae tu proyecto de Firebase (rinde-familia-sv) con Firestore, las reglas y el inicio de sesión
+con Google y correo/clave. Solo falta publicar la app en un sitio https (por ejemplo Firebase Hosting: rinde-familia-sv.web.app).
+Los pasos de abajo son por si quieres repetirlo con otro proyecto.
+
+RINDE FAMILIA EN LA NUBE (Firebase) - PASOS PARA ACTIVARLA
+===========================================================
+Mientras firebase-config.js esté vacío, la app funciona solo en el teléfono (como antes).
+Al llenarlo, la app pide iniciar sesión y toda la familia comparte los datos en la nube.
+
+1) Crear el proyecto
+   - Entra a https://console.firebase.google.com con tu Gmail > "Agregar proyecto" (el plan gratis Spark alcanza).
+
+2) Activar el inicio de sesión
+   - Compilación > Authentication > "Comenzar" > pestaña "Método de acceso".
+   - Activa "Google" y "Correo electrónico/contraseña".
+   - Pestaña "Configuración" > "Dominios autorizados": agrega el dominio donde publiques la app
+     (por ejemplo tuusuario.github.io o tuapp.netlify.app). Sin esto, el botón de Google falla.
+
+3) Crear la base de datos
+   - Compilación > Firestore Database > "Crear base de datos" > modo producción > elige la región.
+   - Pestaña "Reglas": borra todo, pega el contenido de firestore.rules y pulsa "Publicar".
+     Esas reglas son las que hacen cumplir los permisos (el celular no puede saltárselas).
+
+4) Conectar la app
+   - Configuración del proyecto (engrane) > "Tus apps" > icono web </> > registrar la app.
+   - Copia apiKey, authDomain, projectId y appId dentro de firebase-config.js.
+   - Sube todos los archivos de esta carpeta a tu hosting con https (la app no instala desde un zip suelto).
+   - Abre la app una vez con internet; si ya la tenías instalada, ciérrala y ábrela de nuevo para actualizar.
+
+5) Usarla
+   - Papá o mamá: Crear cuenta (o Google) > "Crear una familia". En la pestaña Familia (botón + de arriba)
+     verás dos códigos: uno para hijos/otros familiares y otro para papá/mamá.
+   - Los demás: Crear cuenta > "Unirme con un código". Si papá o mamá ya registró al hijo, el hijo elige
+     "Soy ..." y queda enlazado a su perfil.
+
+QUIÉN PUEDE QUÉ
+   - Todos ven la información de todos.
+   - Papá administra lo suyo y lo de los hijos. Mamá administra lo suyo y lo de los hijos.
+     Ninguno edita el presupuesto, gastos ni tareas del otro.
+   - Cada hijo registra y administra lo suyo. Solo papá y mamá agregan o eliminan hijos.
+   - "Administrar" = agregar y eliminar gastos, tareas, metas, ahorros, gastos fijos y editar el presupuesto.
+
+NOTAS
+   - Los recibos se guardan como imágenes pequeñas dentro de Firestore (sin Firebase Storage, que ahora exige plan de pago).
+   - Funciona sin conexión: los cambios se guardan y se sincronizan al volver el internet.
+   - Los datos que ya tengas en este teléfono (modo sin cuenta) no se suben solos a la nube.
+   - El SDK de Firebase se descarga desde los servidores de Google (www.gstatic.com) la primera vez.
