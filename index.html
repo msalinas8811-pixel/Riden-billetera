@@ -336,6 +336,9 @@ details summary{cursor:pointer;color:var(--muted);font-size:13px;font-weight:600
       </div>
       <div class="card">
         <div class="sum-line" id="tx-summary"></div>
+        <div class="backup" style="margin:12px 0">
+          <button class="btn ghost small" type="button" id="tx-report-pdf">Generar reporte PDF</button>
+        </div>
         <div id="tx-list"></div>
       </div>
       </div>
@@ -1464,6 +1467,29 @@ $('#tx-form').addEventListener('submit',function(e){
   rcClear();
   commit();
   $('#tx-amount').focus();
+});
+
+$('#tx-report-pdf').addEventListener('click',function(){
+  var items=monthTx(viewMonth).slice().sort(function(a,b){return a.date.localeCompare(b.date);});
+  var expenses=items.filter(function(t){return t.type==='g';});
+  var income=items.filter(function(t){return t.type==='i';});
+  var totalG=expenses.reduce(function(s,t){return s+t.amount;},0);
+  var totalI=income.reduce(function(s,t){return s+t.amount;},0);
+  var rows=items.map(function(t){
+    var isInc=t.type==='i';
+    return '<tr><td>'+esc(dayLabel(t.date))+'</td><td>'+esc(catL(t.cat))+'</td><td>'+esc(t.note||catL(t.cat))+'</td><td>'+ (isInc?'Ingreso':'Gasto')+'</td><td class="money">'+(isInc?'+':'−')+money(t.amount)+'</td></tr>';
+  }).join('');
+  var doc='<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Reporte Rinde '+esc(viewMonth)+'</title><style>'+
+    'body{font:14px Arial,sans-serif;color:#17202b;margin:28px}h1{margin:0 0 5px;font-size:24px}p{color:#596575;margin:5px 0 20px}.summary{display:flex;gap:12px;margin:20px 0}.box{border:1px solid #dce2e9;border-radius:8px;padding:12px;flex:1}.label{font-size:11px;color:#687486}.value{font-size:20px;font-weight:bold;margin-top:6px}table{width:100%;border-collapse:collapse;margin-top:20px}th,td{text-align:left;padding:9px;border-bottom:1px solid #e1e6ec}th{background:#f3f6f9;font-size:12px}.money{text-align:right;white-space:nowrap}.foot{margin-top:24px;font-size:11px;color:#6a7482}@media print{body{margin:12mm}.no-print{display:none}}'+
+    '</style></head><body><h1>Rinde · Reporte de movimientos</h1><p>Período: '+esc(monthName(viewMonth))+' · Generado: '+esc(today())+'</p>'+
+    '<div class="summary"><div class="box"><div class="label">Ingresos</div><div class="value">'+money(totalI)+'</div></div><div class="box"><div class="label">Gastos</div><div class="value">'+money(totalG)+'</div></div><div class="box"><div class="label">Balance</div><div class="value">'+money(totalI-totalG)+'</div></div></div>'+
+    '<h2>Detalle de movimientos</h2><table><thead><tr><th>Fecha</th><th>Categoría</th><th>Descripción</th><th>Tipo</th><th class="money">Monto</th></tr></thead><tbody>'+rows+'</tbody></table>'+
+    '<p class="foot">Reporte generado desde los datos guardados en este teléfono. Para guardar como PDF, seleccione “Guardar como PDF” en la ventana de impresión.</p>'+
+    '<div class="no-print" style="margin-top:20px"><button onclick="window.print()">Imprimir / Guardar PDF</button> <button onclick="window.close()">Cerrar</button></div>'+
+    '<script>window.onload=function(){setTimeout(function(){window.print()},250)};<\/script></body></html>';
+  var w=window.open('','_blank');
+  if(!w){toast('Permite ventanas emergentes para generar el PDF.');return;}
+  w.document.open();w.document.write(doc);w.document.close();
 });
 $('#task-form').addEventListener('submit',function(e){
   e.preventDefault();clearErr('#task-err');
