@@ -303,6 +303,18 @@ details summary{cursor:pointer;color:var(--muted);font-size:13px;font-weight:600
       </div>
     </section>
 
+
+    <section class="panel" id="tab-familia" hidden>
+      <div class="card"><div class="card-head"><h2>Integrantes de la familia</h2></div>
+        <form id="family-form"><div class="fields"><label class="field"><span>Nombre</span><input id="fam-name" maxlength="60" required placeholder="Nombre del integrante"></label><label class="field"><span>Parentesco</span><select id="fam-role"><option>Papá</option><option>Mamá</option><option>Hijo/a</option><option>Otro</option></select></label></div><button class="btn" type="submit">Agregar integrante</button></form>
+        <div id="family-list" style="margin-top:14px"></div>
+      </div>
+      <div class="card"><div class="card-head"><h2>Reporte PDF</h2></div><p class="hint">Genera un reporte individual o familiar del mes seleccionado. El PDF se crea en este teléfono y puede compartirse por WhatsApp.</p>
+        <label class="field"><span>Integrante</span><select id="family-report-member"><option value="all">Toda la familia</option></select></label>
+        <button class="btn" type="button" id="family-pdf">Generar reporte PDF</button>
+      </div>
+    </section>
+
     <!-- GASTOS -->
     <section class="panel" id="tab-gastos" hidden>
       <div class="seg" role="group" aria-label="Vista de gastos" data-i18n-aria="aria.expView">
@@ -323,6 +335,8 @@ details summary{cursor:pointer;color:var(--muted);font-size:13px;font-weight:600
             <label class="field"><span data-i18n="f.date">Fecha</span><input id="tx-date" type="date"></label>
           </div>
           <label class="field"><span data-i18n="f.noteOpt">Nota (opcional)</span><input id="tx-note" type="text" maxlength="80" placeholder="Supermercado, bus, almuerzo…" data-i18n-ph="ph.txNote"></label>
+          <div class="fields" id="family-expense-fields"><label class="field"><span>Beneficiario</span><select id="tx-beneficiary"><option value="">Gasto personal</option></select></label><label class="field"><span>Quién pagó</span><select id="tx-payer"><option value="">Sin asignar</option></select></label></div>
+          
           <div class="rcpt" id="rcpt-box" hidden>
             <img class="thumb" id="rcpt-thumb" alt="" hidden>
             <div class="grow"><div class="rcpt-hint" id="rcpt-hint"></div></div>
@@ -336,9 +350,6 @@ details summary{cursor:pointer;color:var(--muted);font-size:13px;font-weight:600
       </div>
       <div class="card">
         <div class="sum-line" id="tx-summary"></div>
-        <div class="backup" style="margin:12px 0">
-          <button class="btn ghost small" type="button" id="tx-report-pdf">Generar reporte PDF</button>
-        </div>
         <div id="tx-list"></div>
       </div>
       </div>
@@ -515,6 +526,7 @@ details summary{cursor:pointer;color:var(--muted);font-size:13px;font-weight:600
       <svg viewBox="0 0 40 26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18v-5M20 18V8M26 18v-3"/></svg><span data-i18n="nav.summary">Resumen</span></button>
     <button class="tab" role="tab" type="button" data-act="tab" data-tab="gastos" aria-selected="false">
       <svg viewBox="0 0 40 26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="12" y="7" width="16" height="12" rx="2.5"/><path d="M12 11h16M24 15h1.5"/></svg><span data-i18n="nav.expenses">Gastos</span></button>
+    <button class="tab" role="tab" type="button" data-act="tab" data-tab="familia" aria-selected="false"><svg viewBox="0 0 40 26" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="16" cy="10" r="4"/><circle cx="25" cy="11" r="3"/><path d="M8 21c0-5 3-7 8-7s8 2 8 7M23 15c5 0 8 2 8 6"/></svg><span>Familia</span></button>
     <button class="tab" role="tab" type="button" data-act="tab" data-tab="tareas" aria-selected="false">
       <svg viewBox="0 0 40 26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 13.5l3.2 3.2 7.8-8"/></svg><span data-i18n="nav.tasks">Tareas</span></button>
     <button class="tab" role="tab" type="button" data-act="tab" data-tab="metas" aria-selected="false">
@@ -533,7 +545,7 @@ details summary{cursor:pointer;color:var(--muted);font-size:13px;font-weight:600
 /* ---------- utilidades ---------- */
 var KEY='mibolsillo.v1';
 var CATS={g:['Comida','Transporte','Hogar','Servicios','Salud','Ocio','Educación','Otros'],i:['Salario','Extra','Otros ingresos']};
-var TABS=['resumen','gastos','tareas','metas','ahorro','proyectos'];
+var TABS=['resumen','gastos','familia','tareas','metas','ahorro','proyectos'];
 var CAM='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>';
 /* Fotos de recibos: se guardan en IndexedDB de este dispositivo (no en el JSON de respaldo). */
 var RC={db:null,ok:typeof indexedDB!=='undefined',pending:null,viewUrl:null};
@@ -907,7 +919,7 @@ var state, viewMonth=today().slice(0,7), txType='g', savType='d', tab='resumen';
 function norm(s){
   s=(s&&typeof s==='object')?s:{};
   function arr(x){return Array.isArray(x)?x:[];}
-  return {v:1,demo:!!s.demo,budget:+s.budget||0,saveTarget:+s.saveTarget||0,
+  return {v:2,demo:!!s.demo,budget:+s.budget||0,saveTarget:+s.saveTarget||0,family:arr(s.family),
     tx:arr(s.tx),tasks:arr(s.tasks),goals:arr(s.goals),sav:arr(s.sav),fixed:arr(s.fixed),rec:arr(s.rec),projects:arr(s.projects),projectExpenses:arr(s.projectExpenses)};
 }
 function seed(){
@@ -1191,7 +1203,7 @@ function renderGastos(){
   list.forEach(function(t){
     if(t.date!==last){last=t.date;html+='<li class="day eyebrow">'+esc(dayLabel(t.date))+'</li>';}
     var inc=t.type==='i';
-    html+='<li class="row"><div class="grow"><div class="t">'+esc(t.note?dt(t.note):catL(t.cat))+'</div><div class="meta">'+esc(catL(t.cat))+(t.fx?' · <span class="chip fx">'+tt('chip.fixed')+'</span>':'')+(t.rcpt?' · <button type="button" class="chip rc" data-act="rcpt-view" data-rid="'+esc(t.rcpt)+'">'+CAM+tt('rc.chip')+'</button>':'')+'</div></div>'+
+    html+='<li class="row"><div class="grow"><div class="t">'+esc(t.note?dt(t.note):catL(t.cat))+'</div><div class="meta">'+esc(catL(t.cat))+(t.beneficiary?' · Beneficiario: '+esc((state.family||[]).find(function(m){return m.id===t.beneficiary;})||{}).name:'')+(t.payer?' · Pagó: '+esc((state.family||[]).find(function(m){return m.id===t.payer;})||{}).name:'')+(t.fx?' · <span class="chip fx">'+tt('chip.fixed')+'</span>':'')+(t.rcpt?' · <button type="button" class="chip rc" data-act="rcpt-view" data-rid="'+esc(t.rcpt)+'">'+CAM+tt('rc.chip')+'</button>':'')+'</div></div>'+
       '<span class="amt '+(inc?'pos':'')+'">'+(inc?'+':'−')+money(t.amount)+'</span>'+
       '<button class="icon-btn" type="button" data-act="del" data-key="tx" data-id="'+t.id+'" aria-label="'+tt('aria.delTx')+'">'+TRASH+'</button></li>';
   });
@@ -1323,7 +1335,20 @@ function renderProyectos(){
   }).join('');
 }
 
-function renderAll(){renderHeader();renderResumen();renderGastos();renderFijos();renderTareas();renderRec();renderMetas();renderAhorro();renderProyectos();}
+function familyInit(){
+  var f=state.family||[]; $('#family-list').innerHTML=f.length?f.map(function(m){var spent=state.tx.filter(function(t){return t.type==='g'&&(t.beneficiary===m.id||t.payer===m.id)&&t.date.slice(0,7)===viewMonth;}).reduce(function(a,t){return a+t.amount;},0);return '<div class="row"><div class="grow"><div class="t">'+esc(m.name)+'</div><div class="meta">'+esc(m.role)+' · movimientos asociados '+money(spent)+'</div></div><button class="icon-btn" data-act="family-del" data-id="'+esc(m.id)+'" type="button">×</button></div>';}).join(''):'<p class="hint">Agrega a papá, mamá e hijos para asignar gastos y preparar reportes.</p>';
+  ['#tx-beneficiary','#tx-payer','#family-report-member'].forEach(function(sel){var el=$(sel),v=el.value;el.innerHTML=(sel==='#tx-beneficiary'?'<option value="">Gasto personal</option>':sel==='#tx-payer'?'<option value="">Sin asignar</option>':'<option value="all">Toda la familia</option>')+f.map(function(m){return '<option value="'+esc(m.id)+'">'+esc(m.name)+'</option>';}).join('');if(v)el.value=v;});
+}
+$('#family-form').addEventListener('submit',function(e){e.preventDefault();var n=$('#fam-name').value.trim();if(!n)return;state.family=state.family||[];state.family.push({id:uid(),name:n,role:$('#fam-role').value,budget:0});$('#fam-name').value='';commit();familyInit();});
+$('#family-list').addEventListener('click',function(e){var b=e.target.closest('[data-act="family-del"]');if(!b)return;state.family=(state.family||[]).filter(function(m){return m.id!==b.dataset.id;});commit();familyInit();});
+$('#family-pdf').addEventListener('click',function(){
+ var mid=$('#family-report-member').value,month=viewMonth, members=(state.family||[]).filter(function(m){return mid==='all'||m.id===mid;}),tx=state.tx.filter(function(t){return t.date.slice(0,7)===month&&t.type==='g'&&(mid==='all'||t.beneficiary===mid||t.payer===mid);}).sort(function(a,b){return a.date.localeCompare(b.date);});
+ var total=tx.reduce(function(a,t){return a+t.amount;},0), title=mid==='all'?'Reporte familiar':(members[0]?members[0].name:'Reporte individual');
+ var rows=tx.map(function(t){var ben=(state.family||[]).find(function(m){return m.id===t.beneficiary;}),pay=(state.family||[]).find(function(m){return m.id===t.payer;});return '<tr><td>'+esc(t.date)+'</td><td>'+esc(t.note||t.cat)+'</td><td>'+esc(ben?ben.name:'Personal')+'</td><td>'+esc(pay?pay.name:'Sin asignar')+'</td><td style="text-align:right">$'+t.amount.toFixed(2)+'</td></tr>';}).join('');
+ var w=window.open('','_blank');if(!w){alert('Permite ventanas emergentes para generar el PDF.');return;}w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>'+esc(title)+'</title><style>body{font:14px Arial;margin:28px;color:#18212b}h1{font-size:24px}table{width:100%;border-collapse:collapse;margin-top:20px}td,th{padding:9px;border-bottom:1px solid #ddd;text-align:left}th{background:#f2f5f8}.total{font-size:20px;font-weight:bold;margin:20px 0}</style></head><body><h1>Rinde Familia · '+esc(title)+'</h1><p>Período: '+esc(monthName(month))+'</p><div class="total">Total de gastos: $'+total.toFixed(2)+'</div><table><thead><tr><th>Fecha</th><th>Descripción</th><th>Beneficiario</th><th>Pagó</th><th>Monto</th></tr></thead><tbody>'+rows+'</tbody></table><p>Reporte generado localmente desde este teléfono.</p><button onclick="window.print()">Imprimir / Guardar PDF</button><script>window.onload=function(){setTimeout(function(){window.print()},250)};<\/script></body></html>');w.document.close();
+});
+
+function renderAll(){familyInit();renderHeader();renderResumen();renderGastos();renderFijos();renderTareas();renderRec();renderMetas();renderAhorro();renderProyectos();}
 
 /* ---------- pestañas, formularios y acciones ---------- */
 function setTab(t){
@@ -1451,7 +1476,7 @@ $('#tx-form').addEventListener('submit',function(e){
   e.preventDefault();clearErr('#tx-err');
   var amount=num('#tx-amount'), date=$('#tx-date').value||today();
   if(!(amount>0)){showErr('#tx-err',tt('err.amount'));return;}
-  var rec={id:uid(),type:txType,amount:Math.round(amount*100)/100,cat:$('#tx-cat').value,note:$('#tx-note').value.trim(),date:date};
+  var rec={id:uid(),type:txType,amount:Math.round(amount*100)/100,cat:$('#tx-cat').value,note:$('#tx-note').value.trim(),date:date,beneficiary:$('#tx-beneficiary').value||'',payer:$('#tx-payer').value||''};
   var pend=RC.pending;
   if(pend){
     rec.rcpt='r'+uid();
@@ -1467,29 +1492,6 @@ $('#tx-form').addEventListener('submit',function(e){
   rcClear();
   commit();
   $('#tx-amount').focus();
-});
-
-$('#tx-report-pdf').addEventListener('click',function(){
-  var items=monthTx(viewMonth).slice().sort(function(a,b){return a.date.localeCompare(b.date);});
-  var expenses=items.filter(function(t){return t.type==='g';});
-  var income=items.filter(function(t){return t.type==='i';});
-  var totalG=expenses.reduce(function(s,t){return s+t.amount;},0);
-  var totalI=income.reduce(function(s,t){return s+t.amount;},0);
-  var rows=items.map(function(t){
-    var isInc=t.type==='i';
-    return '<tr><td>'+esc(dayLabel(t.date))+'</td><td>'+esc(catL(t.cat))+'</td><td>'+esc(t.note||catL(t.cat))+'</td><td>'+ (isInc?'Ingreso':'Gasto')+'</td><td class="money">'+(isInc?'+':'−')+money(t.amount)+'</td></tr>';
-  }).join('');
-  var doc='<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Reporte Rinde '+esc(viewMonth)+'</title><style>'+
-    'body{font:14px Arial,sans-serif;color:#17202b;margin:28px}h1{margin:0 0 5px;font-size:24px}p{color:#596575;margin:5px 0 20px}.summary{display:flex;gap:12px;margin:20px 0}.box{border:1px solid #dce2e9;border-radius:8px;padding:12px;flex:1}.label{font-size:11px;color:#687486}.value{font-size:20px;font-weight:bold;margin-top:6px}table{width:100%;border-collapse:collapse;margin-top:20px}th,td{text-align:left;padding:9px;border-bottom:1px solid #e1e6ec}th{background:#f3f6f9;font-size:12px}.money{text-align:right;white-space:nowrap}.foot{margin-top:24px;font-size:11px;color:#6a7482}@media print{body{margin:12mm}.no-print{display:none}}'+
-    '</style></head><body><h1>Rinde · Reporte de movimientos</h1><p>Período: '+esc(monthName(viewMonth))+' · Generado: '+esc(today())+'</p>'+
-    '<div class="summary"><div class="box"><div class="label">Ingresos</div><div class="value">'+money(totalI)+'</div></div><div class="box"><div class="label">Gastos</div><div class="value">'+money(totalG)+'</div></div><div class="box"><div class="label">Balance</div><div class="value">'+money(totalI-totalG)+'</div></div></div>'+
-    '<h2>Detalle de movimientos</h2><table><thead><tr><th>Fecha</th><th>Categoría</th><th>Descripción</th><th>Tipo</th><th class="money">Monto</th></tr></thead><tbody>'+rows+'</tbody></table>'+
-    '<p class="foot">Reporte generado desde los datos guardados en este teléfono. Para guardar como PDF, seleccione “Guardar como PDF” en la ventana de impresión.</p>'+
-    '<div class="no-print" style="margin-top:20px"><button onclick="window.print()">Imprimir / Guardar PDF</button> <button onclick="window.close()">Cerrar</button></div>'+
-    '<script>window.onload=function(){setTimeout(function(){window.print()},250)};<\/script></body></html>';
-  var w=window.open('','_blank');
-  if(!w){toast('Permite ventanas emergentes para generar el PDF.');return;}
-  w.document.open();w.document.write(doc);w.document.close();
 });
 $('#task-form').addEventListener('submit',function(e){
   e.preventDefault();clearErr('#task-err');
