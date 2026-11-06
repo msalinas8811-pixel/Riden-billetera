@@ -28,3 +28,6 @@ NOVEDADES v3
 
 NOVEDAD v4
 - Gastos fijos: al agregar un gasto, activa 'Gasto fijo: repetir cada mes'. Se crea solo cada mes (desde el mes elegido hasta hoy). Lista en la pestaña Gastos; borra uno para dejar de repetirlo.
+
+NOVEDAD v5
+- Presupuestos: en Inicio (Familia) hay una tarjeta con el presupuesto de cada integrante, botón Editar y el total mensual de la familia. En la vista de un integrante, 'Editar presupuesto' bajo el monto.
