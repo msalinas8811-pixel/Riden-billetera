@@ -1,27 +1,19 @@
-RINDE — PRESUPUESTO POR PROYECTO
+RINDE FAMILIA / RINDE FAMILY  (PWA para Android / Android PWA)
 
-Esta versión parte del archivo proporcionado y agrega la sección Proyectos.
+QUE INCLUYE
+- Integrantes de la familia (papa, mama, hijos, otros) con su color y presupuesto mensual (y limites por categoria).
+- Gastos, ingresos, tareas (con frecuentes cada mes), metas y ahorro de cada integrante.
+- Gastos de los hijos: se indica quien pago (papa, mama o el propio hijo). El gasto aparece solo en el reporte del hijo y en el de quien pago, y el familiar lo cuenta una vez.
+- Foto del recibo o factura en cada gasto.
+- Reportes PDF: individual por integrante y familiar consolidado, por mes, ano o rango de fechas.
+- Compartir el PDF por WhatsApp (menu de compartir del telefono).
+- Todo se guarda en el telefono (sin Firebase ni cuenta). Respaldo y restauracion en JSON con las fotos incluidas.
+- Espanol e ingles (boton ES | EN).
 
-Funciones nuevas:
-- Crear proyectos con nombre, presupuesto, fecha de inicio y nota.
-- Registrar gastos por proyecto con descripción, monto, categoría y fecha.
-- Ver presupuesto, total gastado, saldo disponible y porcentaje utilizado.
-- Aviso visual cuando el presupuesto se acerca al límite o se excede.
-- Eliminar gastos y proyectos; al eliminar un proyecto se eliminan sus gastos asociados, con opción Deshacer.
-- Los proyectos y sus gastos se incluyen en el respaldo JSON y se conservan en el almacenamiento de Rinde.
+COMO INSTALAR
+1. Sube la carpeta completa a un hosting con https (Netlify, GitHub Pages, Cloudflare Pages).
+2. Abre el enlace en Chrome del telefono > menu > "Agregar a pantalla de inicio".
+No se instala abriendo el archivo desde el telefono; necesita https.
 
-Para actualizar la versión web, sustituye los archivos del sitio por los incluidos en esta carpeta. Si el navegador muestra una versión anterior, cierra la app y vuelve a abrirla; si sigue igual, exporta primero una copia y luego limpia los datos del sitio.
-
-IDIOMA / LANGUAGE
-- La app trae español e inglés. Se abre en el idioma del teléfono (si no es inglés, en español) y se cambia con el botón ES | EN del encabezado. La elección se recuerda en cada dispositivo.
-- Los datos y las copias de respaldo son los mismos en los dos idiomas: las categorías se guardan igual y solo cambia lo que se ve. Una copia hecha en español se puede importar en inglés y al revés.
-- Los datos de ejemplo se muestran en el idioma elegido mientras sigan siendo de ejemplo. Lo que escribas tú no se traduce.
-- Todos los textos están en un diccionario dentro de index.html (busca DICT). Para cambiar una frase, edita su fila: [clave, español, English].
-- Para actualizar teléfonos que ya la instalaron, sube los archivos nuevos al sitio; el cambio de VERSION en sw.js hace que descarguen la versión nueva.
-
-The app ships in Spanish and English. It opens in the phone's language (Spanish unless the phone is set to English) and the ES | EN button in the header switches it. The choice is remembered on each device. Data and backups are the same in both languages.
-
-FOTO DEL RECIBO / RECEIPT PHOTO
-- Gastos > Movimientos: "Adjuntar foto del recibo" abre la camara o la galeria. Toca "Recibo" en la lista para verla.
-- Las fotos se guardan solo en este telefono (se reducen a 1280 px) y NO van en la copia de respaldo JSON.
-- Photos stay on this device only and are not included in the JSON backup.
+ACTUALIZAR: al cambiar index.html, sube el numero de VERSION en sw.js.
+RESPALDO: Familia > Descargar respaldo. Los datos viven solo en este telefono: haz respaldo antes de cambiar de telefono o borrar datos del navegador.
