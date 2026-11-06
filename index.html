@@ -294,6 +294,116 @@ table.mx td:first-child{font-family:var(--f-body)}
 .welcome p{color:var(--muted)}
 details.lim summary{padding:6px 0}
 @media (max-width:380px){.tab{font-size:9.5px}}
+
+/* ---- Rediseño: hojas, chips, gráficos, movimiento ---- */
+:root{--ease-out:cubic-bezier(.23,1,.32,1);--ease-drawer:cubic-bezier(.32,.72,0,1)}
+.sr{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;overflow:hidden}
+.btn,.tab,.who button,.chips button,.icon-btn,.fab,.seg button,.seg3 button,.step,.link{transition:transform 150ms var(--ease-out),background-color 150ms ease,border-color 150ms ease,color 150ms ease,box-shadow 150ms ease}
+.btn:active,.tab:active,.who button:active,.chips button:active,.icon-btn:active,.fab:active,.seg button:active,.step:active{transform:scale(.97)}
+.btn.big{min-height:54px;font-size:16px;border-radius:16px;background:linear-gradient(120deg,var(--accent),var(--accent2));color:#fff;box-shadow:0 6px 16px rgba(10,123,196,.28)}
+.panel:not([hidden]){animation:fadein .2s ease-out}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+
+/* Botón flotante */
+.fab{position:fixed;right:max(18px,env(safe-area-inset-right,0px));bottom:calc(88px + env(safe-area-inset-bottom,0px));z-index:25;width:58px;height:58px;border:0;border-radius:20px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:grid;place-items:center;box-shadow:0 10px 24px rgba(10,123,196,.38)}
+.fab[hidden]{display:none}
+body.locked{overflow:hidden}
+body.locked .fab{display:none}
+
+/* Hoja inferior */
+.sheet-wrap{position:fixed;inset:0;z-index:35;display:flex;align-items:flex-end;justify-content:center}
+.sheet-wrap[hidden]{display:none}
+.backdrop{position:absolute;inset:0;background:rgba(8,20,40,.5);opacity:0;transition:opacity 220ms ease-out}
+.sheet{position:relative;width:100%;max-width:560px;max-height:92%;overflow-y:auto;overscroll-behavior:contain;background:var(--surface);color:var(--ink);border-radius:28px 28px 0 0;
+  padding:8px max(20px,env(safe-area-inset-right,0px)) calc(26px + env(safe-area-inset-bottom,0px)) max(20px,env(safe-area-inset-left,0px));
+  transform:translateY(100%);transition:transform 320ms var(--ease-drawer);box-shadow:0 -10px 40px rgba(8,20,40,.25)}
+.sheet-wrap.open .backdrop{opacity:1}
+.sheet-wrap.open .sheet{transform:none}
+.sheet::before{content:"";display:block;width:40px;height:4px;border-radius:4px;background:var(--line);margin:4px auto 6px}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:4px 0 12px;position:sticky;top:0;background:var(--surface);z-index:2}
+.sheet-head h2{font-size:22px;font-weight:800;letter-spacing:-.02em}
+.pane form{gap:16px}
+.pane[hidden]{display:none}
+
+/* Campos amigables */
+.amount{display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--line);border-radius:18px;padding:8px 18px;transition:border-color 150ms ease,box-shadow 150ms ease}
+.amount:focus-within{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+.amount .cur{font:800 30px var(--f-display);color:var(--muted)}
+.amount input{border:0;background:transparent;font:800 40px var(--f-display);padding:6px 0;letter-spacing:-.02em;min-width:0;width:100%}
+.amount input:focus-visible{outline:none}
+.amount input::placeholder{color:var(--line)}
+input:focus-visible,select:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+.field>span:first-child{font-size:13px;font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface2);color:var(--ink);border-radius:99px;padding:7px 14px;min-height:42px;font-weight:600;font-size:14px;text-align:left}
+.chips button:has(.av){padding-left:6px}
+.chips button[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.chips.quick button{min-height:36px;padding:5px 12px;font-size:13px}
+.datebox{display:grid;gap:8px}
+.switch{display:flex;align-items:center;gap:12px;position:relative;font-size:15px;min-height:44px}
+.switch input{position:absolute;left:0;top:0;width:52px;height:30px;margin:0;opacity:0;z-index:1;cursor:pointer}
+.switch i{width:52px;height:30px;border-radius:99px;background:var(--line);flex:none;position:relative;transition:background-color 180ms ease}
+.switch i::after{content:"";position:absolute;left:3px;top:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform 220ms var(--ease-out)}
+.switch input:checked+i{background:var(--accent)}
+.switch input:checked+i::after{transform:translateX(22px)}
+.switch input:focus-visible+i{box-shadow:0 0 0 4px var(--accent-soft)}
+.flow{display:flex;gap:8px;align-items:flex-start}
+
+/* Foto del integrante */
+.photo{display:flex;align-items:center;gap:16px}
+.photo-btn{position:relative;border:0;background:transparent;padding:0;border-radius:50%;flex:none}
+.av.xl{width:84px;height:84px;font-size:34px}
+.photo-btn .cam{position:absolute;right:-2px;bottom:-2px;width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;border:3px solid var(--surface)}
+.photo-t{font-weight:700}
+.av[data-ph]{background-size:cover!important;background-position:center!important;color:transparent}
+
+/* Inicio: anillo, tendencia, barra apilada */
+.hero-row{display:flex;align-items:center;gap:18px}
+.ring{width:120px;height:120px;flex:none}
+.ring .rt{font:800 26px var(--f-display);fill:var(--ink);letter-spacing:-.02em}
+.ring .rs{font:500 11px var(--f-body);fill:var(--muted)}
+.hero-amount.md{font-size:40px}
+.hero-txt{min-width:0;flex:1}
+.stack{display:flex;gap:2px;height:16px;border-radius:99px;overflow:hidden;margin:4px 0 14px;background:var(--surface2)}
+.stack i{display:block;min-width:4px;transition:flex-grow 500ms var(--ease-out)}
+.trend{--ph:104px;position:relative;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;align-items:end;height:calc(var(--ph) + 54px)}
+.tcol{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px;min-width:0;border:0;background:transparent;padding:0;border-radius:8px;position:relative}
+.tcol .tv{font:500 10px var(--f-mono);color:var(--muted);white-space:nowrap}
+.tcol .tb{width:100%;max-width:38px;border-radius:8px 8px 3px 3px;background:var(--accent);opacity:.28;min-height:3px;transform-origin:bottom;transition:opacity 150ms ease}
+.tcol.cur .tb{opacity:1;background:linear-gradient(180deg,var(--accent2),var(--accent))}
+.tcol.cur .tv{color:var(--ink);font-weight:700}
+.tcol .tm{font-size:11px;color:var(--muted);text-transform:capitalize}
+.tcol[aria-pressed="true"] .tb,.tcol:hover .tb{opacity:.7}
+.tcol.cur[aria-pressed="true"] .tb{opacity:1}
+.trend .bl{position:absolute;left:0;right:0;border-top:2px dashed var(--bad);opacity:.55;pointer-events:none}
+.trend .bl span{position:absolute;right:0;top:-18px;font-size:10px;color:var(--bad);background:var(--surface);padding:0 4px}
+.tip{min-height:20px;margin-top:10px;font-size:13px;color:var(--muted);text-align:center}
+.tip b{color:var(--ink)}
+.bar>i.tick{display:none}
+.lim-wrap{position:relative}
+.lim-wrap .lt{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--bad);border-radius:2px}
+
+/* Movimiento: una entrada orquestada en Inicio */
+.fx>*{animation:rise 520ms var(--ease-out) both}
+.fx>*:nth-child(2){animation-delay:60ms}.fx>*:nth-child(3){animation-delay:110ms}.fx>*:nth-child(4){animation-delay:160ms}.fx>*:nth-child(5){animation-delay:210ms}.fx>*:nth-child(n+6){animation-delay:250ms}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.fx .arc{animation:arc 1000ms var(--ease-out) both}
+@keyframes arc{from{stroke-dashoffset:var(--c)}}
+.fx .bar>i{animation:grow 800ms var(--ease-out) both}
+@keyframes grow{from{width:0}}
+.fx .tb{animation:colgrow 700ms var(--ease-out) both}
+@keyframes colgrow{from{transform:scaleY(0)}}
+.fx .stack i{animation:grow2 700ms var(--ease-out) both}
+@keyframes grow2{from{flex-grow:0}}
+.toast{bottom:calc(158px + env(safe-area-inset-bottom,0px));animation:toastin 260ms var(--ease-out)}
+@keyframes toastin{from{opacity:0;transform:translate(-50%,12px)}}
+.mrow,.row{transition:background-color 150ms ease}
+@media (prefers-reduced-motion:reduce){
+  .sheet{transition:none}.backdrop{transition:none}
+  .fx>*,.fx .arc,.fx .bar>i,.fx .tb,.fx .stack i,.toast,.panel:not([hidden]){animation:none}
+  .btn:active,.tab:active,.fab:active{transform:none}
+}
+@media (hover:hover) and (pointer:fine){.chips button:hover{border-color:var(--accent)}}
 </style>
 </head>
 <body>
@@ -335,52 +445,12 @@ details.lim summary{padding:6px 0}
 
     <section class="panel" id="tab-gastos" role="tabpanel" hidden>
       <div class="card">
-        <form id="tx-form" novalidate>
-          <div class="seg" role="group" aria-label="Tipo de movimiento" data-i18n-aria="aria.txType">
-            <button type="button" data-act="seg" data-kind="tx" data-val="g" aria-pressed="true" data-i18n="type.expense">Gasto</button>
-            <button type="button" data-act="seg" data-kind="tx" data-val="i" aria-pressed="false" data-i18n="type.income">Ingreso</button>
-          </div>
-          <label class="field"><span data-i18n="f.for">Para quién es</span><select id="tx-m"></select></label>
-          <div class="fields">
-            <label class="field"><span data-i18n="f.amount">Monto</span><input id="tx-amount" type="number" inputmode="decimal" min="0.01" step="0.01" placeholder="0.00"></label>
-            <label class="field"><span data-i18n="f.category">Categoría</span><select id="tx-cat"></select></label>
-            <label class="field"><span data-i18n="f.date">Fecha</span><input id="tx-date" type="date"></label>
-          </div>
-          <label class="field" id="tx-paid-wrap"><span data-i18n="f.paidBy">Quién pagó</span><select id="tx-paid"></select></label>
-          <label class="field"><span data-i18n="f.noteOpt">Nota (opcional)</span><input id="tx-note" type="text" maxlength="80" placeholder="Útiles, bus, almuerzo…" data-i18n-ph="ph.txNote"></label>
-          <div class="flow" id="tx-flow"></div>
-          <div class="rcpt" id="rcpt-box" hidden>
-            <img class="thumb" id="rcpt-thumb" alt="" hidden>
-            <div class="grow"><div class="rcpt-hint" id="rcpt-hint"></div></div>
-            <button class="btn ghost small" type="button" id="rcpt-pick" data-act="rcpt-pick" data-i18n="rc.attach">Adjuntar foto del recibo</button>
-            <button class="btn ghost small" type="button" id="rcpt-clear" data-act="rcpt-clear" data-i18n="rc.remove" hidden>Quitar</button>
-          </div>
-          <input id="tx-photo" type="file" accept="image/*" hidden>
-          <p class="err" id="tx-err" hidden></p>
-          <button class="btn" type="submit" id="tx-btn" data-i18n="btn.addExpense">Agregar gasto</button>
-        </form>
-      </div>
-      <div class="card">
         <div class="sum-line" id="tx-summary"></div>
         <div id="tx-list"></div>
       </div>
     </section>
 
     <section class="panel" id="tab-tareas" role="tabpanel" hidden>
-      <div class="card">
-        <form id="task-form" novalidate>
-          <label class="field"><span data-i18n="f.forTask">Responsable</span><select id="task-m"></select></label>
-          <label class="field"><span data-i18n="f.task">Tarea</span><input id="task-text" type="text" maxlength="100" placeholder="Pagar la cuota del colegio…" data-i18n-ph="ph.task"></label>
-          <div class="fields">
-            <label class="field"><span data-i18n="f.dueOpt">Fecha límite (opcional)</span><input id="task-due" type="date"></label>
-            <label class="field"><span data-i18n="f.priority">Prioridad</span>
-              <select id="task-prio"><option value="a" data-i18n="prio.a">Alta</option><option value="m" selected data-i18n="prio.m">Media</option><option value="b" data-i18n="prio.b">Baja</option></select></label>
-          </div>
-          <label class="checkline"><input id="task-rec" type="checkbox"><span data-i18n="f.repeat">Repetir cada mes (frecuente)</span></label>
-          <p class="err" id="task-err" hidden></p>
-          <button class="btn" type="submit" data-i18n="btn.addTask">Agregar tarea</button>
-        </form>
-      </div>
       <div class="card"><div id="task-list"></div></div>
       <div class="card" id="rec-card"><div class="card-head"><h2 data-i18n="t.recTitle">Tareas frecuentes</h2></div><div id="rec-list"></div></div>
     </section>
@@ -390,38 +460,8 @@ details.lim summary{padding:6px 0}
         <button type="button" data-act="seg" data-kind="gsv" data-val="goals" aria-pressed="true" data-i18n="nav.goalsOnly">Metas</button>
         <button type="button" data-act="seg" data-kind="gsv" data-val="sav" aria-pressed="false" data-i18n="nav.savings">Ahorro</button>
       </div>
-      <div class="panel" id="gsv-goals">
-        <div class="card">
-          <form id="goal-form" novalidate>
-            <label class="field"><span data-i18n="f.forGoal">De quién es la meta</span><select id="goal-m"></select></label>
-            <label class="field"><span data-i18n="f.goalName">Nombre de la meta</span><input id="goal-name" type="text" maxlength="60" placeholder="Bicicleta, viaje, laptop…" data-i18n-ph="ph.goal"></label>
-            <div class="fields">
-              <label class="field"><span data-i18n="f.target">Monto objetivo</span><input id="goal-target" type="number" inputmode="decimal" min="1" step="0.01" placeholder="0.00"></label>
-              <label class="field"><span data-i18n="f.dueOpt">Fecha límite (opcional)</span><input id="goal-due" type="date"></label>
-            </div>
-            <p class="err" id="goal-err" hidden></p>
-            <button class="btn" type="submit" data-i18n="btn.addGoal">Crear meta</button>
-          </form>
-        </div>
-        <div id="goal-list" class="panel"></div>
-      </div>
+      <div class="panel" id="gsv-goals"><div id="goal-list" class="panel"></div></div>
       <div class="panel" id="gsv-sav" hidden>
-        <div class="card">
-          <form id="sav-form" novalidate>
-            <div class="seg" role="group" aria-label="Tipo de movimiento de ahorro" data-i18n-aria="aria.savType">
-              <button type="button" data-act="seg" data-kind="sav" data-val="d" aria-pressed="true" data-i18n="type.deposit">Depósito</button>
-              <button type="button" data-act="seg" data-kind="sav" data-val="r" aria-pressed="false" data-i18n="type.withdraw">Retiro</button>
-            </div>
-            <label class="field"><span data-i18n="f.forSav">De quién es el ahorro</span><select id="sav-m"></select></label>
-            <div class="fields">
-              <label class="field"><span data-i18n="f.amount">Monto</span><input id="sav-amount" type="number" inputmode="decimal" min="0.01" step="0.01" placeholder="0.00"></label>
-              <label class="field"><span data-i18n="f.date">Fecha</span><input id="sav-date" type="date"></label>
-            </div>
-            <label class="field"><span data-i18n="f.noteOpt">Nota (opcional)</span><input id="sav-note" type="text" maxlength="80" placeholder="Mesada, regalo…" data-i18n-ph="ph.sav"></label>
-            <p class="err" id="sav-err" hidden></p>
-            <button class="btn" type="submit" id="sav-btn" data-i18n="btn.addDeposit">Guardar depósito</button>
-          </form>
-        </div>
         <div class="card"><div id="sav-summary"></div></div>
         <div class="card"><div id="sav-list"></div></div>
       </div>
@@ -457,26 +497,10 @@ details.lim summary{padding:6px 0}
     </section>
 
     <section class="panel" id="tab-familia" role="tabpanel" hidden>
-      <div class="card">
-        <div class="card-head"><h2 id="mem-title" data-i18n="m.add">Agregar integrante</h2><button class="link" type="button" id="mem-cancel" data-act="mem-cancel" hidden data-i18n="m.cancelEdit">Cancelar edición</button></div>
-        <form id="mem-form" novalidate>
-          <div class="fields">
-            <label class="field"><span data-i18n="f.name">Nombre</span><input id="mem-name" type="text" maxlength="40" placeholder="Nombre" data-i18n-ph="ph.name"></label>
-            <label class="field"><span data-i18n="f.role">Rol</span>
-              <select id="mem-role"><option value="papa" data-i18n="role.papa">Papá</option><option value="mama" data-i18n="role.mama">Mamá</option><option value="hijo" data-i18n="role.hijo">Hijo/a</option><option value="otro" data-i18n="role.otro">Otro familiar</option></select></label>
-          </div>
-          <label class="field"><span data-i18n="f.budgetMonth">Presupuesto mensual</span><input id="mem-budget" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00"></label>
-          <div class="field"><span data-i18n="f.color">Color</span><div class="swatches" id="mem-colors"></div></div>
-          <details class="lim"><summary data-i18n="m.limits">Límite por categoría (opcional)</summary><div class="limits" id="mem-limits"></div></details>
-          <p class="err" id="mem-err" hidden></p>
-          <button class="btn" type="submit" id="mem-btn" data-i18n="btn.addMember">Agregar integrante</button>
-        </form>
-      </div>
-      <div class="card"><div class="card-head"><h2 data-i18n="m.title">Integrantes</h2></div><div id="mem-list"></div></div>
-
+      <div class="card"><div class="card-head"><h2 data-i18n="m.title">Integrantes</h2><button class="link" type="button" data-act="sheet" data-pane="mem" data-i18n="m.add">Agregar integrante</button></div><div id="mem-list"></div></div>
       <div class="card">
         <div class="card-head"><h2 data-i18n="bk.title">Respaldo y restauración</h2></div>
-        <p class="hint" style="margin-bottom:12px" data-i18n="bk.desc">Todo se guarda en este dispositivo. El respaldo incluye integrantes, movimientos, tareas, metas, ahorro y las fotos de recibos.</p>
+        <p class="hint" style="margin-bottom:12px" data-i18n="bk.desc">Todo se guarda en este dispositivo.</p>
         <div class="backup">
           <button class="btn" type="button" id="bk-export" data-act="bk-export" data-i18n="bk.export">Descargar respaldo</button>
           <button class="btn ghost" type="button" id="bk-share" data-act="bk-share" data-i18n="bk.share">Compartir respaldo</button>
@@ -492,6 +516,103 @@ details.lim summary{padding:6px 0}
       </div>
     </section>
   </main>
+</div>
+
+<button class="fab" id="fab" type="button" data-act="fab" aria-label="Agregar"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+
+<div class="sheet-wrap" id="sheet" hidden>
+  <div class="backdrop" data-act="sheet-close"></div>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+    <div class="sheet-head">
+      <h2 id="sheet-title"></h2>
+      <button class="icon-btn" type="button" data-act="sheet-close" aria-label="Cerrar" data-i18n-aria="rc.close"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+
+    <div class="pane" id="pane-tx" hidden>
+      <form id="tx-form" novalidate>
+        <div class="seg" role="group" aria-label="Tipo de movimiento" data-i18n-aria="aria.txType">
+          <button type="button" data-act="seg" data-kind="tx" data-val="g" aria-pressed="true" data-i18n="type.expense">Gasto</button>
+          <button type="button" data-act="seg" data-kind="tx" data-val="i" aria-pressed="false" data-i18n="type.income">Ingreso</button>
+        </div>
+        <label class="field"><span data-i18n="f.amount">Monto</span><span class="amount"><span class="cur">$</span><input id="tx-amount" type="number" inputmode="decimal" min="0.01" step="0.01" placeholder="0.00"></span></label>
+        <div class="field"><span data-i18n="f.for">Para quién es</span><div class="chips" data-chips="tx-m"></div><select id="tx-m" class="sr" tabindex="-1" aria-hidden="true"></select></div>
+        <div class="field" id="tx-paid-wrap"><span data-i18n="f.paidBy">Quién pagó</span><div class="chips" data-chips="tx-paid"></div><select id="tx-paid" class="sr" tabindex="-1" aria-hidden="true"></select></div>
+        <div class="flow" id="tx-flow"></div>
+        <div class="field"><span data-i18n="f.category">Categoría</span><div class="chips" data-chips="tx-cat"></div><select id="tx-cat" class="sr" tabindex="-1" aria-hidden="true"></select></div>
+        <div class="field"><span data-i18n="f.date">Fecha</span>
+          <div class="datebox"><div class="chips quick"><button type="button" data-act="qdate" data-target="tx-date" data-off="0" data-i18n="q.today">Hoy</button><button type="button" data-act="qdate" data-target="tx-date" data-off="-1" data-i18n="q.yesterday">Ayer</button></div><input id="tx-date" type="date"></div></div>
+        <label class="field"><span data-i18n="f.noteOpt">Nota (opcional)</span><input id="tx-note" type="text" maxlength="80" placeholder="Útiles, bus, almuerzo…" data-i18n-ph="ph.txNote"></label>
+        <div class="rcpt" id="rcpt-box" hidden>
+          <img class="thumb" id="rcpt-thumb" alt="" hidden>
+          <div class="grow"><div class="rcpt-hint" id="rcpt-hint"></div></div>
+          <button class="btn ghost small" type="button" id="rcpt-pick" data-act="rcpt-pick" data-i18n="rc.attach">Adjuntar foto del recibo</button>
+          <button class="btn ghost small" type="button" id="rcpt-clear" data-act="rcpt-clear" data-i18n="rc.remove" hidden>Quitar</button>
+        </div>
+        <input id="tx-photo" type="file" accept="image/*" hidden>
+        <p class="err" id="tx-err" hidden></p>
+        <button class="btn big" type="submit" id="tx-btn" data-i18n="btn.addExpense">Agregar gasto</button>
+      </form>
+    </div>
+
+    <div class="pane" id="pane-task" hidden>
+      <form id="task-form" novalidate>
+        <label class="field"><span data-i18n="f.task">Tarea</span><input id="task-text" type="text" maxlength="100" placeholder="Pagar la cuota del colegio…" data-i18n-ph="ph.task"></label>
+        <div class="field"><span data-i18n="f.forTask">Responsable</span><div class="chips" data-chips="task-m"></div><select id="task-m" class="sr" tabindex="-1" aria-hidden="true"></select></div>
+        <div class="field"><span data-i18n="f.dueOpt">Fecha límite (opcional)</span>
+          <div class="datebox"><div class="chips quick"><button type="button" data-act="qdate" data-target="task-due" data-off="0" data-i18n="q.today">Hoy</button><button type="button" data-act="qdate" data-target="task-due" data-off="1" data-i18n="q.tomorrow">Mañana</button><button type="button" data-act="qdate" data-target="task-due" data-off="7" data-i18n="q.week">En 1 semana</button></div><input id="task-due" type="date"></div></div>
+        <div class="field"><span data-i18n="f.priority">Prioridad</span><div class="chips" data-chips="task-prio"></div>
+          <select id="task-prio" class="sr" tabindex="-1" aria-hidden="true"><option value="a" data-i18n="prio.a">Alta</option><option value="m" selected data-i18n="prio.m">Media</option><option value="b" data-i18n="prio.b">Baja</option></select></div>
+        <label class="switch"><input id="task-rec" type="checkbox"><i aria-hidden="true"></i><span data-i18n="f.repeat">Repetir cada mes (frecuente)</span></label>
+        <p class="err" id="task-err" hidden></p>
+        <button class="btn big" type="submit" data-i18n="btn.addTask">Agregar tarea</button>
+      </form>
+    </div>
+
+    <div class="pane" id="pane-goal" hidden>
+      <form id="goal-form" novalidate>
+        <label class="field"><span data-i18n="f.goalName">Nombre de la meta</span><input id="goal-name" type="text" maxlength="60" placeholder="Bicicleta, viaje, laptop…" data-i18n-ph="ph.goal"></label>
+        <label class="field"><span data-i18n="f.target">Monto objetivo</span><span class="amount"><span class="cur">$</span><input id="goal-target" type="number" inputmode="decimal" min="1" step="0.01" placeholder="0.00"></span></label>
+        <div class="field"><span data-i18n="f.forGoal">De quién es la meta</span><div class="chips" data-chips="goal-m"></div><select id="goal-m" class="sr" tabindex="-1" aria-hidden="true"></select></div>
+        <div class="field"><span data-i18n="f.dueOpt">Fecha límite (opcional)</span><input id="goal-due" type="date"></div>
+        <p class="err" id="goal-err" hidden></p>
+        <button class="btn big" type="submit" data-i18n="btn.addGoal">Crear meta</button>
+      </form>
+    </div>
+
+    <div class="pane" id="pane-sav" hidden>
+      <form id="sav-form" novalidate>
+        <div class="seg" role="group" aria-label="Tipo de movimiento de ahorro" data-i18n-aria="aria.savType">
+          <button type="button" data-act="seg" data-kind="sav" data-val="d" aria-pressed="true" data-i18n="type.deposit">Depósito</button>
+          <button type="button" data-act="seg" data-kind="sav" data-val="r" aria-pressed="false" data-i18n="type.withdraw">Retiro</button>
+        </div>
+        <label class="field"><span data-i18n="f.amount">Monto</span><span class="amount"><span class="cur">$</span><input id="sav-amount" type="number" inputmode="decimal" min="0.01" step="0.01" placeholder="0.00"></span></label>
+        <div class="field"><span data-i18n="f.forSav">De quién es el ahorro</span><div class="chips" data-chips="sav-m"></div><select id="sav-m" class="sr" tabindex="-1" aria-hidden="true"></select></div>
+        <div class="field"><span data-i18n="f.date">Fecha</span>
+          <div class="datebox"><div class="chips quick"><button type="button" data-act="qdate" data-target="sav-date" data-off="0" data-i18n="q.today">Hoy</button><button type="button" data-act="qdate" data-target="sav-date" data-off="-1" data-i18n="q.yesterday">Ayer</button></div><input id="sav-date" type="date"></div></div>
+        <label class="field"><span data-i18n="f.noteOpt">Nota (opcional)</span><input id="sav-note" type="text" maxlength="80" placeholder="Mesada, regalo…" data-i18n-ph="ph.sav"></label>
+        <p class="err" id="sav-err" hidden></p>
+        <button class="btn big" type="submit" id="sav-btn" data-i18n="btn.addDeposit">Guardar depósito</button>
+      </form>
+    </div>
+
+    <div class="pane" id="pane-mem" hidden>
+      <form id="mem-form" novalidate>
+        <div class="photo">
+          <button type="button" class="photo-btn" id="mem-photo-btn" data-act="mem-photo" aria-label="Foto del integrante" data-i18n-aria="m.photo"><span class="av xl" id="mem-av"></span><span class="cam"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg></span></button>
+          <div class="grow"><div class="photo-t" data-i18n="m.photo">Foto del integrante</div><div class="rcpt-hint" data-i18n="m.photoHint">Opcional. Si no hay foto, se usa la inicial.</div><button class="link" type="button" id="mem-photo-clear" data-act="mem-photo-clear" hidden data-i18n="rc.remove">Quitar</button></div>
+        </div>
+        <input id="mem-photo" type="file" accept="image/*" hidden>
+        <label class="field"><span data-i18n="f.name">Nombre</span><input id="mem-name" type="text" maxlength="40" placeholder="Nombre" data-i18n-ph="ph.name" autocomplete="off"></label>
+        <div class="field"><span data-i18n="f.role">Rol</span><div class="chips" data-chips="mem-role"></div>
+          <select id="mem-role" class="sr" tabindex="-1" aria-hidden="true"><option value="papa" data-i18n="role.papa">Papá</option><option value="mama" data-i18n="role.mama">Mamá</option><option value="hijo" selected data-i18n="role.hijo">Hijo/a</option><option value="otro" data-i18n="role.otro">Otro familiar</option></select></div>
+        <label class="field"><span data-i18n="f.budgetMonth">Presupuesto mensual</span><span class="amount"><span class="cur">$</span><input id="mem-budget" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00"></span></label>
+        <div class="field"><span data-i18n="f.color">Color</span><div class="swatches" id="mem-colors"></div></div>
+        <details class="lim"><summary data-i18n="m.limits">Límite por categoría (opcional)</summary><div class="limits" id="mem-limits"></div></details>
+        <p class="err" id="mem-err" hidden></p>
+        <button class="btn big" type="submit" id="mem-btn" data-i18n="btn.addMember">Agregar integrante</button>
+      </form>
+    </div>
+  </div>
 </div>
 
 <div class="viewer" id="rcpt-viewer" role="dialog" aria-modal="true" aria-label="Recibo" data-i18n-aria="rc.title" hidden>
@@ -764,6 +885,34 @@ var PDFLIB=(function(){
 (function(){
 "use strict";
 var DICT=[
+ ["q.today","Hoy","Today"],
+ ["q.yesterday","Ayer","Yesterday"],
+ ["q.tomorrow","Mañana","Tomorrow"],
+ ["q.week","En 1 semana","In 1 week"],
+ ["sh.tx","Nuevo gasto","New expense"],
+ ["sh.inc","Nuevo ingreso","New income"],
+ ["sh.task","Nueva tarea","New task"],
+ ["sh.goal","Nueva meta","New goal"],
+ ["sh.dep","Nuevo depósito","New deposit"],
+ ["sh.wd","Nuevo retiro","New withdrawal"],
+ ["fab.tx","Agregar gasto o ingreso","Add expense or income"],
+ ["fab.task","Agregar tarea","Add task"],
+ ["fab.goal","Crear meta","Create goal"],
+ ["fab.sav","Agregar depósito o retiro","Add deposit or withdrawal"],
+ ["fab.mem","Agregar integrante","Add member"],
+ ["m.photo","Foto del integrante","Member photo"],
+ ["m.photoHint","Opcional. Si no hay foto, se usa la inicial.","Optional. Without a photo, the initial is used."],
+ ["toast.expAdded","Gasto agregado","Expense added"],
+ ["toast.incAdded","Ingreso agregado","Income added"],
+ ["toast.taskAdded","Tarea agregada","Task added"],
+ ["toast.goalAdded","Meta creada","Goal created"],
+ ["toast.savAdded","Ahorro guardado","Savings saved"],
+ ["toast.memberSaved","Integrante guardado","Member saved"],
+ ["h.trend","Gasto de los últimos 6 meses","Spending over the last 6 months"],
+ ["h.tipHint","Toca una barra para ver el monto.","Tap a bar to see the amount."],
+ ["h.ringAria","Se usó el {p}% del presupuesto","{p}% of the budget used"],
+ ["h.used","usado","used"],
+ ["h.famAvail","Disponible de la familia en {m}","Family available in {m}"],
  ["meta.desc","Rinde Familia: presupuesto, gastos, tareas, metas y ahorro de cada integrante, con reportes en PDF.","Rinde Familia: budget, expenses, tasks, goals and savings for each family member, with PDF reports."],
  ["hdr.sub","Las finanzas de toda la familia","Finances for the whole family"],
  ["who.aria","Integrante","Family member"],
@@ -1029,11 +1178,11 @@ function loc(){return LANG==='en'?'en-US':'es';}
 var CATS=['Comida','Transporte','Hogar','Salud','Educación','Ocio','Ropa','Otros'];
 var CAT_EN={Comida:'Food',Transporte:'Transport',Hogar:'Home',Salud:'Health','Educación':'Education',Ocio:'Leisure',Ropa:'Clothes',Otros:'Other'};
 function catL(c){return (LANG==='en'&&CAT_EN[c])||c;}
-var COLORS=['#0A7BC4','#19B6C6','#E08A2E','#7B5CD6','#D6537A','#2F9E6B','#C0392B','#8A6D3B'];
+var COLORS=['#0A7BC4','#E67E22','#8E5BD9','#2F9E4F','#C9A100','#D6337A'];
 var SEED_EN={'Supermercado':'Groceries','Útiles escolares':'School supplies','Bus escolar':'School bus','Gasolina':'Gas','Cuota del colegio':'School fee','Almuerzo en el colegio':'School lunch','Cine con amigos':'Movies with friends','Zapatos nuevos':'New shoes','Consulta médica':'Doctor visit','Salario':'Salary','Mesada':'Allowance','Pagar la luz':'Pay the electricity bill','Reunión de padres':'Parents meeting','Comprar regalo de cumpleaños':'Buy birthday present','Bicicleta nueva':'New bicycle','Viaje familiar':'Family trip','Laptop para la universidad':'Laptop for college','Regalo de abuela':'Gift from grandma'};
 var state=null;
 function dt(s){return (LANG==='en'&&state&&state.demo&&SEED_EN[s])||s;}
-var ui={mem:'all',month:'',tab:'inicio',gsv:'goals',tx:'g',sav:'d',rp:'month',editMem:null,confirmMem:null,color:COLORS[0]};
+var ui={mem:'all',month:'',tab:'inicio',gsv:'goals',tx:'g',sav:'d',rp:'month',editMem:null,confirmMem:null,color:COLORS[0],fx:true,sheet:null,memPhoto:''};
 
 function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 function pad(n){return String(n).padStart(2,'0');}
@@ -1091,7 +1240,18 @@ function member(id){for(var i=0;i<state.members.length;i++) if(state.members[i].
 function roleL(r){return tt('role.'+r);}
 function mname(id){var m=member(id);return m?m.name:'?';}
 function initial(m){return esc((m.name||'?').trim().charAt(0).toUpperCase()||'?');}
-function av(m,cls){return '<span class="av'+(cls?' '+cls:'')+'" style="background:'+esc(m.color)+'" aria-hidden="true">'+initial(m)+'</span>';}
+var PH={};
+function photoUrl(m){
+  if(!m||!m.photo) return '';
+  var u=PH[m.photo];
+  if(!u){try{u=URL.createObjectURL(dataUrlToBlob(m.photo));}catch(e){u=m.photo;}PH[m.photo]=u;}
+  return u;
+}
+function av(m,cls){
+  var u=photoUrl(m);
+  if(u) return '<span class="av'+(cls?' '+cls:'')+'" data-ph="1" style="background:'+esc(m.color)+' url(\''+u+'\') center/cover" aria-hidden="true"></span>';
+  return '<span class="av'+(cls?' '+cls:'')+'" style="background:'+esc(m.color)+'" aria-hidden="true">'+initial(m)+'</span>';
+}
 function pill(m){return '<span class="pill"><i style="background:'+esc(m.color)+'"></i>'+esc(m.name)+'</span>';}
 function adults(){return state.members.filter(function(m){return m.role!=='hijo';});}
 function payersFor(mid){
@@ -1239,7 +1399,7 @@ function renderWho(){
   var el=$('#who'),gr=$('#greet');
   el.hidden=false;gr.hidden=!state.members.length;
   var mems=state.members.slice(0,3),cl='';
-  mems.forEach(function(m,i){cl+='<span class="av p'+(i+1)+'" style="background:'+esc(m.color)+'" aria-hidden="true">'+initial(m)+'</span>';});
+  mems.forEach(function(m,i){cl+=av(m,'p'+(i+1));});
   var h=state.members.length?'<button type="button" data-act="who" data-id="all" aria-pressed="'+(ui.mem==='all'&&ui.tab!=='familia')+'"><span class="face">'+cl+'</span><span class="nm">'+tt('who.all')+'</span></button>':'';
   state.members.forEach(function(m){
     h+='<button type="button" data-act="who" data-id="'+esc(m.id)+'" aria-pressed="'+(ui.mem===m.id&&ui.tab!=='familia')+'"><span class="face">'+av(m,'big')+'</span><span class="nm">'+esc(m.name)+'</span></button>';
@@ -1257,19 +1417,38 @@ function renderMonthBar(){
 
 function homeWelcome(){
   return '<div class="card welcome"><h2>'+tt('w.title')+'</h2><p>'+tt('w.desc')+'</p>'+
-    '<button class="btn" type="button" data-act="go" data-tab="familia">'+tt('w.add')+'</button>'+
+    '<button class="btn" type="button" data-act="sheet" data-pane="mem">'+tt('w.add')+'</button>'+
     '<button class="btn ghost" type="button" data-act="demo-load">'+tt('w.demo')+'</button></div>';
 }
 function statBox(label,val,cls){return '<div class="stat"><span class="eyebrow">'+label+'</span><span class="num '+(cls||'')+'">'+val+'</span></div>';}
+function fmtK(n){return n>=1000?'$'+(n/1000).toFixed(n>=10000?0:1)+'k':'$'+Math.round(n);}
+function ring(pct,label,sub){
+  var r=52,c=2*Math.PI*r,p=Math.min(1,pct),over=pct>1;
+  return '<svg class="ring" viewBox="0 0 128 128" role="img" aria-label="'+esc(label)+'"><defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0A7BC4"/><stop offset="1" stop-color="#19B6C6"/></linearGradient></defs>'+
+    '<circle cx="64" cy="64" r="'+r+'" fill="none" stroke="var(--surface2)" stroke-width="14"/>'+
+    '<circle class="arc" cx="64" cy="64" r="'+r+'" fill="none" stroke="'+(over?'var(--bad)':(pct>.85?'var(--warn)':'url(#rg)'))+'" stroke-width="14" stroke-linecap="round" stroke-dasharray="'+c.toFixed(1)+'" stroke-dashoffset="'+(c*(1-p)).toFixed(1)+'" style="--c:'+c.toFixed(1)+'" transform="rotate(-90 64 64)"/>'+
+    '<text x="64" y="66" text-anchor="middle" class="rt">'+Math.round(pct*100)+'%</text><text x="64" y="84" text-anchor="middle" class="rs">'+esc(sub)+'</text></svg>';
+}
+function heroBlock(eyebrow,spent,budget,subLine,extraHtml){
+  var left=budget-spent,h='<div class="card hero"><div class="hero-row">';
+  if(budget>0) h+=ring(spent/budget,tt('h.ringAria',{p:Math.round(spent/budget*100)}),tt('h.used'));
+  h+='<div class="hero-txt"><span class="eyebrow">'+eyebrow+'</span><div class="hero-amount md'+(budget>0&&left<0?' neg':'')+'" data-count="'+(budget>0?left:spent)+'">'+money(budget>0?left:spent)+'</div>'+subLine+'</div></div>'+(extraHtml||'')+'</div>';
+  return h;
+}
+function stackBar(ent,tot){
+  var h='<div class="stack" role="img" aria-label="'+esc(tt('h.whoPaid'))+'">';
+  ent.forEach(function(e){var m=member(e[0]);h+='<i style="flex:'+e[1].toFixed(2)+' 1 0;background:'+esc(m.color)+'"></i>';});
+  return h+'</div>';
+}
 function payersCard(byPayer,mid,title){
   var ent=sortedEntries(byPayer).filter(function(e){return e[1]>0&&member(e[0]);});
   if(!ent.length) return '';
-  var max=ent[0][1],tot=0;ent.forEach(function(e){tot+=e[1];});
-  var h='<div class="card"><div class="card-head"><h2>'+title+'</h2></div><div class="cats">';
+  var tot=0;ent.forEach(function(e){tot+=e[1];});
+  var h='<div class="card"><div class="card-head"><h2>'+title+'</h2><span class="num">'+money(tot)+'</span></div>'+stackBar(ent,tot)+'<div class="cats">';
   ent.forEach(function(e){
     var m=member(e[0]);
     var lab=mid&&mid!=='all'?payerLabelShort(e[0],mid):esc(m.name);
-    h+='<div><div class="cat-top"><span class="tag-m">'+av(m,'sm')+lab+'</span><span><b class="num">'+money(e[1])+'</b> · '+Math.round(e[1]/tot*100)+'%</span></div>'+bar(e[1],max)+'</div>';
+    h+='<div class="cat-top"><span class="tag-m">'+av(m,'sm')+lab+'</span><span><b class="num">'+money(e[1])+'</b> · '+Math.round(e[1]/tot*100)+'%</span></div>';
   });
   return h+'</div></div>';
 }
@@ -1277,16 +1456,42 @@ function payerLabelShort(pid,mid){
   var p=member(pid);if(!p) return '?';
   return pid===mid?esc(tt('who.selfShort',{n:p.name})):esc(p.name)+' <span class="meta" style="display:inline">('+esc(roleL(p.role))+')</span>';
 }
+function trendCard(mid){
+  var vals=[],i,vm,mx=0,bud=0;
+  var ms=mid==='all'?state.members:[member(mid)];
+  ms.forEach(function(m){bud+=m.budget;});
+  for(i=5;i>=0;i--){
+    vm=addMonths(ui.month,-i);var r=rangeMonth(vm),t=0;
+    state.tx.forEach(function(x){if(x.type==='g'&&inP(x.date,r)&&(mid==='all'?!!member(x.m):x.m===mid)) t+=x.amount;});
+    vals.push({vm:vm,v:t});mx=Math.max(mx,t);
+  }
+  var top=Math.max(mx,bud)||1;
+  var h='<div class="card"><div class="card-head"><h2>'+tt('h.trend')+'</h2></div><div class="trend" role="group" aria-label="'+esc(tt('h.trend'))+'">';
+  if(bud>0) h+='<div class="bl" style="bottom:calc(19px + var(--ph) * '+(bud/top).toFixed(3)+')"><span>'+tt('r.budget')+'</span></div>';
+  vals.forEach(function(x,k){
+    var cur=k===5,mo=parse(x.vm+'-01').toLocaleDateString(loc(),{month:'short'}).replace('.','');
+    var tip=cap(monthName(x.vm))+': <b>'+money(x.v)+'</b>';
+    h+='<button type="button" class="tcol'+(cur?' cur':'')+'" data-act="tip" data-tip="'+esc(tip)+'" aria-pressed="false" aria-label="'+esc(cap(monthName(x.vm))+' '+money(x.v))+'"><span class="tv">'+(x.v>0?fmtK(x.v):'')+'</span><span class="tb" style="height:calc(var(--ph) * '+(x.v/top).toFixed(3)+')"></span><span class="tm">'+esc(mo)+'</span></button>';
+  });
+  return h+'</div><div class="tip" id="tip" aria-live="polite">'+tt('h.tipHint')+'</div></div>';
+}
+function catRows(cats,m,r){
+  var top=cats.length?cats[0][1]:0,h='<div class="cats">';
+  cats.forEach(function(e){
+    var lim=m?(m.limits[e[0]]||0)*r.months:0;
+    h+='<div><div class="cat-top"><span>'+esc(catL(e[0]))+'</span><span><b class="num">'+money(e[1])+'</b>'+(lim>0?' / '+money(lim):'')+'</span></div>'+
+      '<div class="lim-wrap">'+bar(e[1],lim>0?Math.max(lim,e[1]):top,lim>0?budCls(e[1],lim):'')+(lim>0?'<i class="lt" style="left:'+(lim/Math.max(lim,e[1])*100).toFixed(1)+'%"></i>':'')+'</div></div>';
+  });
+  return h+'</div>';
+}
 function homeFamily(A,r){
   var left=A.budget-A.spent,pend=pendingTasks('all').length,sav=0;
   state.members.forEach(function(m){sav+=savBalance(m.id);});
-  var h='<div class="card hero"><span class="eyebrow">'+tt('h.famSpent',{m:esc(r.label)})+'</span><div class="hero-amount">'+money(A.spent)+'</div>';
-  if(A.budget>0){
-    h+='<p class="hero-sub">'+tt('h.ofBudget',{b:money(A.budget)})+'</p>'+bar(A.spent,A.budget,budCls(A.spent,A.budget))+
-       '<p class="pace">'+(left>=0?tt('h.left',{a:'<b>'+money(left)+'</b>'}):tt('h.over',{a:'<b>'+money(-left)+'</b>'}))+'</p>';
-  } else h+='<p class="hero-sub">'+tt('h.noBudgetFam')+'</p>';
-  h+='</div><div class="stats">'+statBox(tt('stat.inc'),money(A.income),'pos')+statBox(tt('stat.savings'),money(sav))+statBox(tt('stat.pending'),String(pend))+'</div>';
-  // por integrante
+  var sub=A.budget>0?'<p class="hero-sub">'+tt('h.ofBudget',{b:money(A.budget)})+'</p><p class="pace">'+(left>=0?tt('h.left',{a:'<b>'+money(left)+'</b>'}):tt('h.over',{a:'<b>'+money(-left)+'</b>'}))+'</p>':'<p class="hero-sub">'+tt('h.noBudgetFam')+'</p>';
+  var h=heroBlock(A.budget>0?tt('h.famAvail',{m:esc(r.label)}):tt('h.famSpent',{m:esc(r.label)}),A.spent,A.budget,sub,'');
+  h+='<div class="stats">'+statBox(tt('r.spent'),money(A.spent))+statBox(tt('stat.inc'),money(A.income),'pos')+statBox(tt('stat.savings'),money(sav))+'</div>';
+  h+=trendCard('all');
+  h+=payersCard(A.byPayer,'all',tt('h.whoPaid'));
   h+='<div class="card"><div class="card-head"><h2>'+tt('h.byMember')+'</h2></div>';
   state.members.forEach(function(m){
     var a=A.mem[m.id],b=a.budget,selfPaid=a.byPayer[m.id]||0,others=a.spent-selfPaid;
@@ -1300,8 +1505,6 @@ function homeFamily(A,r){
     h+='</div>';
   });
   h+='</div>';
-  h+=payersCard(A.byPayer,'all',tt('h.whoPaid'));
-  // hijos
   var kids=state.members.filter(function(m){return m.role==='hijo'&&A.mem[m.id].spent>0;});
   if(kids.length){
     h+='<div class="card"><div class="card-head"><h2>'+tt('h.kids')+'</h2></div>';
@@ -1316,22 +1519,15 @@ function homeFamily(A,r){
     h+='</div>';
   }
   var cats=sortedEntries(A.cats);
-  if(cats.length){
-    h+='<div class="card"><div class="card-head"><h2>'+tt('h.byCat')+'</h2></div><div class="cats">';
-    cats.forEach(function(e){h+='<div><div class="cat-top"><span>'+esc(catL(e[0]))+'</span><span class="num">'+money(e[1])+'</span></div>'+bar(e[1],cats[0][1])+'</div>';});
-    h+='</div></div>';
-  }
+  if(cats.length) h+='<div class="card"><div class="card-head"><h2>'+tt('h.byCat')+'</h2></div>'+catRows(cats,null,r)+'</div>';
   return h;
 }
 function homeMember(A,r,mid){
   var a=A.mem[mid],m=a.m,b=a.budget,left=b-a.spent;
-  var h='<div class="card hero"><span class="eyebrow">'+(b>0?tt('h.avail',{n:esc(m.name)}):tt('h.spentOf',{n:esc(m.name)}))+' · '+esc(r.label)+'</span>';
-  if(b>0){
-    h+='<div class="hero-amount'+(left<0?' neg':'')+'">'+money(left)+'</div><p class="hero-sub">'+tt('h.budgetLine',{b:money(b),s:money(a.spent)})+'</p>'+bar(a.spent,b,budCls(a.spent,b));
-  } else {
-    h+='<div class="hero-amount">'+money(a.spent)+'</div><p class="hero-sub">'+tt('h.noBudget')+'</p><button class="link" type="button" data-act="mem-edit" data-id="'+esc(mid)+'">'+tt('h.setBudget')+'</button>';
-  }
-  h+='</div><div class="stats">'+statBox(tt('stat.inc'),money(a.income),'pos')+statBox(tt('stat.savings'),money(savBalance(mid)))+statBox(tt('stat.pending'),String(pendingTasks(mid).length))+'</div>';
+  var sub=b>0?'<p class="hero-sub">'+tt('h.budgetLine',{b:money(b),s:money(a.spent)})+'</p>':'<p class="hero-sub">'+tt('h.noBudget')+'</p><button class="link" type="button" data-act="mem-edit" data-id="'+esc(mid)+'">'+tt('h.setBudget')+'</button>';
+  var h=heroBlock((b>0?tt('h.avail',{n:esc(m.name)}):tt('h.spentOf',{n:esc(m.name)}))+' · '+esc(r.label),a.spent,b,sub,'');
+  h+='<div class="stats">'+statBox(tt('stat.inc'),money(a.income),'pos')+statBox(tt('stat.savings'),money(savBalance(mid)))+statBox(tt('stat.pending'),String(pendingTasks(mid).length))+'</div>';
+  h+=trendCard(mid);
   h+=payersCard(a.byPayer,mid,tt('h.whoPaidHis',{n:esc(m.name)}));
   if(a.paidForOthers>0){
     var by={};a.forOthers.forEach(function(t){by[t.m]=(by[t.m]||0)+t.amount;});
@@ -1340,14 +1536,7 @@ function homeMember(A,r,mid){
     h+='</div>';
   }
   var cats=sortedEntries(a.cats);
-  if(cats.length){
-    h+='<div class="card"><div class="card-head"><h2>'+tt('h.byCat')+'</h2></div><div class="cats">';
-    cats.forEach(function(e){
-      var lim=(m.limits[e[0]]||0)*r.months;
-      h+='<div><div class="cat-top"><span>'+esc(catL(e[0]))+'</span><span><b class="num">'+money(e[1])+'</b>'+(lim>0?' / '+money(lim):'')+'</span></div>'+bar(e[1],lim>0?lim:cats[0][1],lim>0?budCls(e[1],lim):'')+'</div>';
-    });
-    h+='</div></div>';
-  }
+  if(cats.length) h+='<div class="card"><div class="card-head"><h2>'+tt('h.byCat')+'</h2></div>'+catRows(cats,m,r)+'</div>';
   var gs=state.goals.filter(function(g){return g.m===mid;});
   if(gs.length){
     h+='<div class="card"><div class="card-head"><h2>'+tt('nav.goalsOnly')+'</h2><button class="link" type="button" data-act="go" data-tab="metas">'+tt('h.seeAll')+'</button></div><div class="cats">';
@@ -1366,7 +1555,8 @@ function renderHome(){
   var el=$('#home');
   if(!state.members.length){el.innerHTML=homeWelcome();return;}
   var r=rangeMonth(ui.month),A=aggregate(r);
-  el.innerHTML=(ui.mem==='all'||!member(ui.mem))?homeFamily(A,r):homeMember(A,r,ui.mem)+'<button class="btn ghost" type="button" data-act="go" data-tab="familia">'+tt('h.manage')+'</button>';
+  el.className=(ui.fx&&ui.tab==='inicio')?'fx':'';
+  el.innerHTML=((ui.mem==='all'||!member(ui.mem))?homeFamily(A,r):homeMember(A,r,ui.mem))+'<button class="btn ghost" type="button" data-act="go" data-tab="familia">'+tt('h.manage')+'</button>';
 }
 
 function viewTx(){
@@ -1495,6 +1685,7 @@ function fillSelects(){
   var cs=CATS.map(function(c){return {v:c,l:catL(c)};});
   fillSel($('#tx-cat'),cs);
   fillPaid();
+  syncChips();
   var lim=$('#mem-limits'),vals={};
   $$('input[data-lim]',lim).forEach(function(i){vals[i.getAttribute('data-lim')]=i.value;});
   lim.innerHTML=CATS.map(function(c){return '<label class="field"><span>'+esc(catL(c))+'</span><input type="number" inputmode="decimal" min="0" step="0.01" data-lim="'+esc(c)+'" placeholder="0.00" value="'+esc(vals[c]||'')+'"></label>';}).join('');
@@ -1510,6 +1701,7 @@ function fillPaid(){
   ui.paidFor=mid;
   $('#tx-paid-wrap').hidden=ui.tx!=='g';
   updateFlow();
+  syncChips();
 }
 function updateFlow(){
   var el=$('#tx-flow'),mid=$('#tx-m').value;
@@ -1519,14 +1711,55 @@ function updateFlow(){
   var pid=$('#tx-paid').value||mid;
   el.innerHTML=pid===mid?tt('flow.self',{n:'<b>'+esc(mname(mid))+'</b>'}):tt('flow.other',{n:'<b>'+esc(mname(mid))+'</b>',p:'<b>'+esc(mname(pid))+'</b>'});
 }
+function syncChips(){
+  $$('[data-chips]').forEach(function(host){
+    var id=host.getAttribute('data-chips'),sel=$('#'+id);if(!sel) return;
+    var withAv=(id==='tx-m'||id==='task-m'||id==='goal-m'||id==='sav-m'||id==='tx-paid'),h='';
+    $$('option',sel).forEach(function(o){
+      var m=withAv?member(o.value):null;
+      h+='<button type="button" data-act="chip" data-sel="'+id+'" data-v="'+esc(o.value)+'" aria-pressed="'+(sel.value===o.value)+'">'+(m?av(m,'sm'):'')+'<span>'+esc(o.textContent)+'</span></button>';
+    });
+    host.innerHTML=h;
+  });
+}
+function sheetTitle(n){
+  var t={tx:ui.tx==='g'?tt('sh.tx'):tt('sh.inc'),task:tt('sh.task'),goal:tt('sh.goal'),sav:ui.sav==='d'?tt('sh.dep'):tt('sh.wd'),mem:ui.editMem?tt('m.edit2'):tt('m.add')};
+  return t[n]||'';
+}
+function fabPane(){return {inicio:'tx',gastos:'tx',tareas:'task',metas:ui.gsv==='sav'?'sav':'goal',familia:'mem'}[ui.tab]||null;}
+function renderFab(){
+  var f=$('#fab'),pane=fabPane();
+  f.hidden=!pane||(!state.members.length&&ui.tab!=='familia');
+  if(pane) f.setAttribute('aria-label',tt('fab.'+pane));
+}
+function memAvatar(){
+  var el=$('#mem-av');if(!el) return;
+  var fake={name:$('#mem-name').value.trim()||'?',color:ui.color,photo:ui.memPhoto},u=photoUrl(fake);
+  if(u){el.style.background=ui.color+' url(\''+u+'\') center/cover';el.textContent='';}
+  else{el.style.background=ui.color;el.textContent=(fake.name.charAt(0)||'?').toUpperCase();}
+  $('#mem-photo-clear').hidden=!ui.memPhoto;
+}
 function refreshLabels(){
   $('#tx-btn').textContent=ui.tx==='g'?tt('btn.addExpense'):tt('btn.addIncome');
   $('#sav-btn').textContent=ui.sav==='d'?tt('btn.addDeposit'):tt('btn.addWithdraw');
-  var ed=!!ui.editMem;
-  $('#mem-btn').textContent=ed?tt('btn.saveMember'):tt('btn.addMember');
-  $('#mem-title').textContent=ed?tt('m.edit2'):tt('m.add');
-  $('#mem-cancel').hidden=!ed;
-  rcRefresh();
+  $('#mem-btn').textContent=ui.editMem?tt('btn.saveMember'):tt('btn.addMember');
+  if(ui.sheet) $('#sheet-title').textContent=sheetTitle(ui.sheet);
+  renderFab();memAvatar();rcRefresh();
+}
+function countUps(){
+  if(!ui.fx||ui.tab!=='inicio') return;
+  ui.fx=false;
+  if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  $$('[data-count]').forEach(function(el){
+    var v=parseFloat(el.getAttribute('data-count')),t0=null;
+    function step(t){
+      if(t0===null) t0=t;
+      var k=Math.min(1,(t-t0)/750),e=1-Math.pow(1-k,3);
+      el.textContent=k<1?money(v*e):money(v);
+      if(k<1) requestAnimationFrame(step);
+    }
+    el.textContent=money(0);requestAnimationFrame(step);
+  });
 }
 
 function renderReportPreview(){
@@ -1563,6 +1796,7 @@ function renderAll(){
   renderHome();renderTx();renderTasks();renderGoals();renderSav();renderMembers();renderReportPreview();
   refreshLabels();
   setSync(syncState);
+  countUps();
 }
 /* ===== Acciones, formularios, reportes PDF, respaldo e inicio ===== */
 function showErr(sel,msg){var e=$(sel);e.textContent=msg;e.hidden=false;}
@@ -1580,8 +1814,9 @@ function setTab(t){
   ui.tab=t;
   TABS.forEach(function(k){var p=$('#tab-'+k);if(p) p.hidden=k!==t;});
   $$('.tab').forEach(function(b){b.setAttribute('aria-selected',String(b.getAttribute('data-tab')===t));});
-  renderWho();renderMonthBar();saveUi();
-  if(t==='familia') setTimeout(function(){var n=$('#mem-name');if(n&&!ui.editMem&&!state.members.length) try{n.focus({preventScroll:true});}catch(e){}},0);
+  if(t==='inicio'){ui.fx=true;}
+  renderWho();renderMonthBar();renderFab();saveUi();
+  if(t==='inicio'){renderHome();countUps();}
   try{window.scrollTo(0,0);}catch(e){}
 }
 function pickLang(){
@@ -1649,7 +1884,7 @@ function dback(n){var d=new Date();d.setDate(d.getDate()-n);return ds(d);}
 function demoState(){
   var s=blank();s.demo=true;
   function M(name,role,budget,color,limits){return {id:uid(),name:name,role:role,budget:budget,color:color,limits:limits||{}};}
-  var c=M('Carlos','papa',900,COLORS[0],{Comida:350}),a=M('Ana','mama',700,COLORS[4]),m=M('Mateo','hijo',120,COLORS[2],{Ocio:30}),so=M('Sofía','hijo',80,COLORS[3]);
+  var c=M('Carlos','papa',900,COLORS[0],{Comida:350}),a=M('Ana','mama',700,COLORS[5]),m=M('Mateo','hijo',120,COLORS[1],{Ocio:30}),so=M('Sofía','hijo',80,COLORS[2]);
   s.members=[c,a,m,so];
   function T(mm,type,amount,cat,note,back,paid){s.tx.push({id:uid(),m:mm.id,type:type,amount:amount,cat:cat,note:note,date:dback(back),paid:type==='g'?paid.id:mm.id});}
   T(c,'g',85.40,'Comida','Supermercado',1,c);T(c,'g',40,'Transporte','Gasolina',3,c);T(c,'g',35,'Salud','Consulta médica',9,c);T(c,'i',1500,'Otros','Salario',5,c);
@@ -1682,14 +1917,14 @@ document.addEventListener('click',function(e){
   switch(act){
     case 'lang': setLang(el.getAttribute('data-lang'));break;
     case 'tab': case 'go': setTab(el.getAttribute('data-tab'));break;
-    case 'month': ui.month=addMonths(ui.month,+el.getAttribute('data-d'));renderAll();break;
+    case 'month': ui.month=addMonths(ui.month,+el.getAttribute('data-d'));ui.fx=true;renderAll();break;
     case 'who':
       ui.mem=id;
       if(id!=='all') ['#tx-m','#task-m','#goal-m','#sav-m','#rep-m'].forEach(function(s){$(s).value=id;});
       else $('#rep-m').value='fam';
-      saveUi();renderAll();break;
+      ui.fx=true;saveUi();renderAll();break;
     case 'seg': onSeg(el);break;
-    case 'color': ui.color=el.getAttribute('data-c');$$('#mem-colors button').forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-c')===ui.color));});break;
+    case 'color': ui.color=el.getAttribute('data-c');$$('#mem-colors button').forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-c')===ui.color));});memAvatar();break;
     case 'del': removeFrom(el.getAttribute('data-key'),id);break;
     case 'toggle-task':
       var t=state.tasks.find(function(x){return x.id===id;});if(t){t.done=!t.done;commit();}break;
@@ -1697,7 +1932,19 @@ document.addEventListener('click',function(e){
     case 'mem-del': ui.confirmMem=id;renderMembers();break;
     case 'mem-del-no': ui.confirmMem=null;renderMembers();break;
     case 'mem-del-yes': deleteMember(id);break;
-    case 'mem-cancel': ui.editMem=null;resetMemForm();refreshLabels();break;
+    case 'sheet': if(el.getAttribute('data-pane')==='mem'){ui.editMem=null;resetMemForm();} openSheet(el.getAttribute('data-pane'));break;
+    case 'fab': var fp=fabPane();if(fp){if(fp==='mem'){ui.editMem=null;resetMemForm();}openSheet(fp);}break;
+    case 'sheet-close': closeSheet();break;
+    case 'qdate': var qd=new Date();qd.setDate(qd.getDate()+(+el.getAttribute('data-off')));$('#'+el.getAttribute('data-target')).value=ds(qd);break;
+    case 'chip':
+      var sel=$('#'+el.getAttribute('data-sel'));
+      if(sel){sel.value=el.getAttribute('data-v');sel.dispatchEvent(new Event('change',{bubbles:true}));}
+      break;
+    case 'mem-photo': $('#mem-photo').click();break;
+    case 'mem-photo-clear': ui.memPhoto='';memAvatar();break;
+    case 'tip':
+      $$('.tcol').forEach(function(b){b.setAttribute('aria-pressed',String(b===el));});
+      $('#tip').innerHTML=el.getAttribute('data-tip');break;
     case 'rcpt-pick': $('#tx-photo').click();break;
     case 'rcpt-clear': rcClear();break;
     case 'rcpt-view': rcView(el.getAttribute('data-rid'));break;
@@ -1720,15 +1967,17 @@ document.addEventListener('click',function(e){
 function onSeg(el){
   var kind=el.getAttribute('data-kind'),val=el.getAttribute('data-val');
   $$('[data-act="seg"][data-kind="'+kind+'"]').forEach(function(b){b.setAttribute('aria-pressed',String(b===el));});
-  if(kind==='tx'){ui.tx=val;fillPaid();refreshLabels();}
+  if(kind==='tx'){ui.tx=val;fillPaid();refreshLabels();rcRefresh();}
   else if(kind==='sav'){ui.sav=val;refreshLabels();}
-  else if(kind==='gsv'){ui.gsv=val;$('#gsv-goals').hidden=val!=='goals';$('#gsv-sav').hidden=val!=='sav';}
+  else if(kind==='gsv'){ui.gsv=val;$('#gsv-goals').hidden=val!=='goals';$('#gsv-sav').hidden=val!=='sav';renderFab();}
   else if(kind==='rp'){ui.rp=val;$('#rp-month').hidden=val!=='month';$('#rp-year').hidden=val!=='year';$('#rp-range').hidden=val!=='range';renderReportPreview();}
 }
 $('#tx-m').addEventListener('change',fillPaid);
+document.addEventListener('change',function(e){if(e.target.classList&&e.target.classList.contains('sr')) syncChips();});
+$('#mem-name').addEventListener('input',memAvatar);
 $('#tx-paid').addEventListener('change',updateFlow);
 ['#rep-m','#rep-month','#rep-year','#rep-from','#rep-to'].forEach(function(s){$(s).addEventListener('change',renderReportPreview);});
-document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!$('#rcpt-viewer').hidden) rcCloseView();});
+document.addEventListener('keydown',function(e){if(e.key!=='Escape') return;if(!$('#rcpt-viewer').hidden) rcCloseView();else if(ui.sheet) closeSheet();});
 $('#rcpt-viewer').addEventListener('click',function(e){if(e.target===this) rcCloseView();});
 
 $('#tx-photo').addEventListener('change',function(){
@@ -1763,8 +2012,7 @@ $('#tx-form').addEventListener('submit',function(e){
   state.tx.push(rec);
   ui.month=date.slice(0,7);
   $('#tx-amount').value='';$('#tx-note').value='';
-  rcClear();commit();
-  $('#tx-amount').focus();
+  rcClear();closeSheet();commit();toast(tt(rec.type==='g'?'toast.expAdded':'toast.incAdded'));
 });
 $('#task-form').addEventListener('submit',function(e){
   e.preventDefault();clearErr('#task-err');
@@ -1775,7 +2023,7 @@ $('#task-form').addEventListener('submit',function(e){
     state.recs.push({id:uid(),m:mid,text:text,day:due?+due.split('-')[2]:1,prio:prio,skipped:[]});
   } else state.tasks.push({id:uid(),m:mid,text:text,due:due,prio:prio,done:false});
   $('#task-text').value='';$('#task-due').value='';$('#task-rec').checked=false;
-  commit();
+  closeSheet();commit();toast(tt('toast.taskAdded'));
 });
 $('#goal-form').addEventListener('submit',function(e){
   e.preventDefault();clearErr('#goal-err');
@@ -1785,7 +2033,7 @@ $('#goal-form').addEventListener('submit',function(e){
   if(!(target>0)){showErr('#goal-err',tt('err.target'));return;}
   state.goals.push({id:uid(),m:mid,name:name,target:round2(target),saved:0,due:$('#goal-due').value});
   $('#goal-name').value='';$('#goal-target').value='';$('#goal-due').value='';
-  commit();
+  closeSheet();commit();toast(tt('toast.goalAdded'));
 });
 document.addEventListener('submit',function(e){
   var f=e.target;if(!f.classList||!f.classList.contains('contrib')) return;
@@ -1803,24 +2051,45 @@ $('#sav-form').addEventListener('submit',function(e){
   if(ui.sav==='r'&&amount>savBalance(mid)){showErr('#sav-err',tt('err.savFunds',{b:money(savBalance(mid))}));return;}
   state.sav.push({id:uid(),m:mid,type:ui.sav,amount:round2(amount),note:$('#sav-note').value.trim(),date:$('#sav-date').value||today()});
   $('#sav-amount').value='';$('#sav-note').value='';
-  commit();
+  closeSheet();commit();toast(tt('toast.savAdded'));
 });
 function resetMemForm(){
   $('#mem-name').value='';$('#mem-role').value='hijo';$('#mem-budget').value='';
   $$('#mem-limits input').forEach(function(i){i.value='';});
-  ui.color=COLORS[state.members.length%COLORS.length];
+  ui.color=COLORS[state.members.length%COLORS.length];ui.memPhoto='';
   $$('#mem-colors button').forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-c')===ui.color));});
-  clearErr('#mem-err');
+  $('details.lim').open=false;
+  clearErr('#mem-err');syncChips();refreshLabels();
 }
 function startEditMember(id){
   var m=member(id);if(!m) return;
-  ui.editMem=id;ui.color=m.color;
+  ui.editMem=id;ui.color=m.color;ui.memPhoto=m.photo||'';
   $('#mem-name').value=m.name;$('#mem-role').value=m.role;$('#mem-budget').value=m.budget||'';
   $$('#mem-limits input').forEach(function(i){var v=m.limits[i.getAttribute('data-lim')];i.value=v?v:'';});
   $$('#mem-colors button').forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-c')===m.color));});
   $('details.lim').open=Object.keys(m.limits).length>0;
-  refreshLabels();setTab('familia');
+  clearErr('#mem-err');syncChips();refreshLabels();openSheet('mem');
 }
+function facePhoto(file){
+  return new Promise(function(res,rej){
+    var url=URL.createObjectURL(file),im=new Image();
+    im.onload=function(){
+      var w=im.naturalWidth,h=im.naturalHeight,sd=Math.min(w,h);
+      if(!sd){URL.revokeObjectURL(url);return rej(new Error('size'));}
+      var c=document.createElement('canvas');c.width=c.height=192;
+      var g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,192,192);
+      g.drawImage(im,(w-sd)/2,(h-sd)/2,sd,sd,0,0,192,192);
+      URL.revokeObjectURL(url);res(c.toDataURL('image/jpeg',0.82));
+    };
+    im.onerror=function(){URL.revokeObjectURL(url);rej(new Error('img'));};
+    im.src=url;
+  });
+}
+$('#mem-photo').addEventListener('change',function(){
+  var f=this.files&&this.files[0];this.value='';if(!f) return;
+  clearErr('#mem-err');
+  facePhoto(f).then(function(d){ui.memPhoto=d;memAvatar();}).catch(function(){showErr('#mem-err',tt('rc.err'));});
+});
 $('#mem-form').addEventListener('submit',function(e){
   e.preventDefault();clearErr('#mem-err');
   var name=$('#mem-name').value.trim();
@@ -1828,14 +2097,43 @@ $('#mem-form').addEventListener('submit',function(e){
   var budget=parseFloat($('#mem-budget').value);if(!(budget>0)) budget=0;
   var limits={};
   $$('#mem-limits input').forEach(function(i){var v=parseFloat(i.value);if(v>0) limits[i.getAttribute('data-lim')]=round2(v);});
+  var role=$('#mem-role').value;
   if(ui.editMem){
     var m=member(ui.editMem);
-    if(m){m.name=name;m.role=$('#mem-role').value;m.budget=round2(budget);m.color=ui.color;m.limits=limits;}
+    if(m){m.name=name;m.role=role;m.budget=round2(budget);m.color=ui.color;m.limits=limits;if(ui.memPhoto) m.photo=ui.memPhoto;else delete m.photo;}
     ui.editMem=null;
   } else {
-    state.members.push({id:uid(),name:name,role:$('#mem-role').value,budget:round2(budget),color:ui.color,limits:limits});
+    var nm={id:uid(),name:name,role:role,budget:round2(budget),color:ui.color,limits:limits};
+    if(ui.memPhoto) nm.photo=ui.memPhoto;
+    state.members.push(nm);
   }
-  resetMemForm();commit();
+  closeSheet();resetMemForm();commit();toast(tt('toast.memberSaved'));
+});
+
+/* ---- Hojas inferiores ---- */
+function openSheet(name){
+  if(!state.members.length&&name!=='mem') name='mem';
+  ui.sheet=name;
+  $$('.pane').forEach(function(p){p.hidden=p.id!=='pane-'+name;});
+  $('#sheet-title').textContent=sheetTitle(name);
+  var w=$('#sheet');w.hidden=false;document.body.classList.add('locked');
+  void w.offsetWidth;w.classList.add('open');
+  renderFab();rcRefresh();
+  var f={tx:'#tx-amount',task:'#task-text',goal:'#goal-name',sav:'#sav-amount',mem:ui.editMem?null:'#mem-name'}[name];
+  if(f) setTimeout(function(){try{$(f).focus({preventScroll:true});}catch(e){}},160);
+}
+function closeSheet(){
+  var w=$('#sheet');if(w.hidden&&!ui.sheet) return;
+  var n=ui.sheet;ui.sheet=null;
+  w.classList.remove('open');document.body.classList.remove('locked');
+  if(n==='tx') rcClear();
+  if(n==='mem'&&ui.editMem){ui.editMem=null;}
+  renderFab();
+  setTimeout(function(){if(!ui.sheet) w.hidden=true;},300);
+}
+document.addEventListener('pointerover',function(e){
+  var b=e.target.closest&&e.target.closest('.tcol');
+  if(b&&e.pointerType==='mouse') b.click();
 });
 
 /* ---- Reportes PDF ---- */

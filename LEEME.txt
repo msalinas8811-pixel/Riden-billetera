@@ -17,3 +17,10 @@ No se instala abriendo el archivo desde el telefono; necesita https.
 
 ACTUALIZAR: al cambiar index.html, sube el numero de VERSION en sw.js.
 RESPALDO: Familia > Descargar respaldo. Los datos viven solo en este telefono: haz respaldo antes de cambiar de telefono o borrar datos del navegador.
+
+
+NOVEDADES v3
+- Foto del integrante (cámara o galería; se recorta en círculo). Opcional.
+- Formularios como hojas inferiores con el botón +, opciones tocables y fechas rápidas.
+- Gráficos nuevos: anillo de presupuesto, barra de quién pagó, tendencia de 6 meses y categorías con límite.
+- Animaciones suaves (se desactivan si el teléfono tiene 'reducir movimiento').
