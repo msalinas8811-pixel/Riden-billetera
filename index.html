@@ -957,6 +957,9 @@ var PDFLIB=(function(){
 (function(){
 "use strict";
 var DICT=[
+ ["cl.e.domain","Esta dirección no está autorizada para iniciar sesión. Abre la app desde su dirección https publicada (por ejemplo rinde-familia-sv.web.app), no desde un archivo.","This address isn't authorized for sign-in. Open the app from its published https address (for example rinde-familia-sv.web.app), not from a file."],
+ ["cl.e.provider","Este método de acceso no está activado en Firebase.","This sign-in method isn't enabled in Firebase."],
+ ["cl.e.key","La configuración de Firebase no es válida.","The Firebase configuration isn't valid."],
  ["btn.back","Atrás","Back"],
  ["cl.offline","Sin conexión","Offline"],
  ["cl.synced","Sincronizado","Synced"],
@@ -2250,8 +2253,11 @@ function authMsg(e){
   if(c==='auth/too-many-requests') return tt('cl.e.many');
   if(c==='auth/network-request-failed'||c==='unavailable') return tt('cl.noNet');
   if(c==='permission-denied') return tt('cl.denied');
+  if(c==='auth/unauthorized-domain'||c==='auth/operation-not-supported-in-this-environment') return tt('cl.e.domain');
+  if(c==='auth/operation-not-allowed') return tt('cl.e.provider');
+  if(c==='auth/invalid-api-key'||c==='auth/api-key-not-valid.-please-pass-a-valid-api-key.') return tt('cl.e.key');
   if(c==='auth/popup-closed-by-user'||c==='auth/cancelled-popup-request') return '';
-  return tt('cl.e.generic');
+  return tt('cl.e.generic')+(c?' ('+c+')':(e&&e.message?' ('+String(e.message).slice(0,80)+')':''));
 }
 function fld(name,label,type,extra){
   return '<label class="field"><span>'+label+'</span><input name="'+name+'" type="'+(type||'text')+'" '+(extra||'')+'></label>';

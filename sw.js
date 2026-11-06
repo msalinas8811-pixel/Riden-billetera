@@ -1,5 +1,5 @@
 /* Rinde Familia: funciona sin conexión. Sube el número de VERSION cuando cambies index.html. */
-const VERSION = 'rinde-familia-v7';
+const VERSION = 'rinde-familia-v8';
 const CORE = ['./', './index.html', './manifest.webmanifest', './firebase-config.js', './icons/icon-192.png', './icons/icon-512.png'];
 
 self.addEventListener('install', (e) => {
